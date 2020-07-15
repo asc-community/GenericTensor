@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/GenericTensor/obj
+/GenericTensor/.vs/GenericTensor/v16
+/GenericTensor/.vs/GenericTensor/DesignTimeBuild
+/GenericTensor/bin/Debug/netstandard2.0
+/GenericTensor/packages
+/Sample/bin/Debug/netcoreapp3.1
+/Sample/obj
+/UnitTests/bin/Debug
+/UnitTests/obj/Debug
