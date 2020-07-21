@@ -2,17 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace GenericTensor.Core
 {
     public class Tensor<TWrapper, TPrimitive> where TWrapper : ITensorElement<TPrimitive>, new()
     {
-        private readonly DataArray<TWrapper> Data;
+        private readonly TWrapper[] Data;
         public List<int> Shape { get; }
         private readonly List<int> Blocks = new List<int>(); // 3 x 4 x 5
         private readonly List<int> AxesOrder = new List<int>();
-        public int Volume => Data.Count;
+        public int Volume => Data.Length;
+        private int LinOffset;
 
         private void BlockRecompute()
         {
@@ -26,7 +28,7 @@ namespace GenericTensor.Core
             Blocks.Reverse();
         }
 
-        protected Tensor(List<int> dimensions, List<int> blocks, List<int> axesOrder, DataArray<TWrapper> data)
+        protected Tensor(List<int> dimensions, List<int> blocks, List<int> axesOrder, TWrapper[] data)
         {
             Shape = dimensions;
             AxesOrder = axesOrder;
@@ -46,7 +48,8 @@ namespace GenericTensor.Core
             var data = new TWrapper[len];
             for (int i = 0; i < len; i++)
                 data[i] = new TWrapper();
-            Data = new DataArray<TWrapper>(data);
+            Data = data;
+            LinOffset = 0;
             BlockRecompute();
         }
 
@@ -55,7 +58,7 @@ namespace GenericTensor.Core
             var res = 0;
             for (int i = 0; i < indecies.Length; i++)
                 res += Blocks[AxesOrder[i]] * indecies[i];
-            return res;
+            return res + LinOffset;
         }
 
         public void Transpose(int axis1, int axis2)
@@ -69,45 +72,18 @@ namespace GenericTensor.Core
             if (indecies.Length == 0)
                 return this;
             var currIndex = indecies[0];
-            (int begin, int step, int end) inds;
-
-            inds.begin = GetFlattenedIndex(new int[] {currIndex}); // first element of the reduced tensor
-            var newIds = new List<int>{currIndex};
-            for (int i = 1; i < Shape.Count; i++)
-                newIds[i - 1] = Shape[i] - 1;
-            inds.end = GetFlattenedIndex(newIds.ToArray()) + 1; // last element of the reduced tensor
-            inds.step = (inds.begin - inds.end) / (Volume / Shape[0]);
-
-            var newDa = new DataArray<TWrapper>(Data, inds.begin, inds.step, inds.end);
-
-            // BEFORE
-            // Axes:   1   0   2
-            // Blocks: 20  5   1
-            // Shape:  6   4   5
-
-            // AFTER
-            // Axes:   0   2
-            // Blocks: 20  1
-            // Shape:  6   5
-            // AxesOrder[0] points to the first axis
-
-            var newShape = new ArraySegment<int>(Shape.ToArray(), 1, Shape.Count - 1);
-            
+            var newLinIndexDelta = GetFlattenedIndex(new []{currIndex});
             var newBlocks = Blocks.Select(c => c).ToList();
+            var rootAxis = AxesOrder[0];
+            newBlocks.RemoveAt(rootAxis);
             var newAxesOrder = AxesOrder.Select(c => c).ToList();
-            var badAxis = AxesOrder.IndexOf(0);
-            for (int i = 0; i < badAxis; i++)
-                newBlocks[i] /= newBlocks[badAxis];
-            newBlocks.RemoveAt(badAxis);
-            newAxesOrder.RemoveAt(badAxis);
-            newAxesOrder = newAxesOrder.Select(c => c - 1).ToList();
-            
-            
-            //var newAxesOrder = ;
-            // 0, 2, 1
-            // 2, 1
-
-            var aff = new Tensor<TWrapper, TPrimitive>(newShape.ToList(), newBlocks, newAxesOrder, newDa);
+            for (int i = 0; i < newAxesOrder.Count; i++)
+                if (newAxesOrder[i] > rootAxis)
+                    newAxesOrder[i] -= 1;
+            newAxesOrder.RemoveAt(0);
+            var newShape = new ArraySegment<int>(Shape.ToArray(), 1, Shape.Count - 1).ToList();
+            var aff = new Tensor<TWrapper, TPrimitive>(newShape, newBlocks, newAxesOrder, Data);
+            aff.LinOffset = LinOffset + newLinIndexDelta;
             if (indecies.Length == 1)
                 return aff;
             else
@@ -124,7 +100,7 @@ namespace GenericTensor.Core
                 if (indecies.Length == Shape.Count)
                 {
                     var actualIndex = GetFlattenedIndex(indecies);
-                    if (actualIndex >= Data.Count)
+                    if (actualIndex >= Data.Length)
                         throw new IndexOutOfRangeException();
                     return Data[actualIndex].GetValue();
                 }
@@ -137,7 +113,7 @@ namespace GenericTensor.Core
                 if (indecies.Length == Shape.Count)
                 {
                     var actualIndex = GetFlattenedIndex(indecies);
-                    if (actualIndex >= Data.Count)
+                    if (actualIndex >= Data.Length)
                         throw new IndexOutOfRangeException();
                     Data[actualIndex].SetValue(value);
                     return;
@@ -172,7 +148,12 @@ namespace GenericTensor.Core
                 return string.Join("\n", rows);
             }
             if (IsVector)
-                return string.Join(" ", Data.Select(c => c.ToString()));
+            {
+                var els = new List<string>();
+                for (int i = 0; i < Shape[0]; i++)
+                    els.Add(this[i].ToString());
+                return string.Join(" ", els);
+            }
             return "<T>";
         }
     }
