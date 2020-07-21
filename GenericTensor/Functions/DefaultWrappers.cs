@@ -12,6 +12,13 @@ namespace GenericTensor.Functions
         public void SetValue(int newValue) => this.val = newValue;
         public override string ToString()
             => val.ToString();
+
+        public ITensorElement<int> Copy()
+        {
+            var res = new TensorIntWrapper();
+            res.SetValue(val);
+            return res;
+        }
     }
 
     public class TensorInt : Tensor<TensorIntWrapper, int>
