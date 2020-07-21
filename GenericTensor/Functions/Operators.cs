@@ -26,12 +26,6 @@ namespace GenericTensor.Core
         public static bool operator !=(Tensor<TWrapper, TPrimitive> a, Tensor<TWrapper, TPrimitive> b)
             => a.Equals(b);
 
-        public static Tensor<TWrapper, TPrimitive> CreateVector(params TPrimitive[] elements)
-        {
-            var res = new Tensor<TWrapper, TPrimitive>(elements.Length);
-            for (int i = 0; i < elements.Length; i++)
-                res[i] = elements[i];
-            return res;
-        }
+        
     }
 }

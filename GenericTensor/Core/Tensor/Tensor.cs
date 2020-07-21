@@ -69,23 +69,5 @@ namespace GenericTensor.Core
 
         public Tensor(params int[] dimensions)
             => Init(new TensorShape(dimensions));
-
-        public TPrimitive this[params int[] indecies]
-        {
-            get
-            {
-                var actualIndex = GetFlattenedIndexWithCheck(indecies);
-                if (actualIndex >= Data.Length)
-                    throw new IndexOutOfRangeException();
-                return Data[actualIndex].GetValue();
-            }
-            set
-            {
-                var actualIndex = GetFlattenedIndexWithCheck(indecies);
-                if (actualIndex >= Data.Length)
-                    throw new IndexOutOfRangeException();
-                Data[actualIndex].SetValue(value);
-            }
-        }
     }
 }

@@ -18,7 +18,7 @@ namespace GenericTensor.Core
             }
         }
 
-        public IEnumerable<(int[] index, TPrimitive value)> Iterate()
+        public IEnumerable<(int[] index, TPrimitive value)> Iterate(int offsetFromLeft = 0)
         {
             int Sum(int[] arr)
             {
@@ -28,12 +28,33 @@ namespace GenericTensor.Core
                 return s;
             }
 
-            var indecies = new int[Shape.Count];
+
+            var indecies = new int[Shape.Count - offsetFromLeft];
             do
             {
-                yield return (indecies, this[indecies]);
+                yield return (indecies, this.GetWrapperSilent(indecies).GetValue());
                 NextIndex(indecies, indecies.Length - 1);
             } while (Sum(indecies) != 0); // for tensor 4 x 3 x 2 the first violating index would be 5  0  0 
+        }
+
+        internal TWrapper GetWrapper(params int[] indecies)
+        {
+            var actualIndex = GetFlattenedIndexWithCheck(indecies);
+            if (actualIndex >= Data.Length)
+                throw new IndexOutOfRangeException();
+            return Data[actualIndex];
+        }
+
+        internal TWrapper GetWrapperSilent(params int[] indecies)
+        {
+            var actualIndex = GetFlattenedIndexSilent(indecies);
+            return Data[actualIndex];
+        }
+
+        public TPrimitive this[params int[] indecies]
+        {
+            get => GetWrapper(indecies).GetValue();
+            set => GetWrapper(indecies).SetValue(value);
         }
     }
 }

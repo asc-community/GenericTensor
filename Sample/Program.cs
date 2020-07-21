@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Sample
 {
+    /*
     public class TensorStringWrapper : ITensorElement<string>
     {
         private string val;
@@ -20,7 +21,7 @@ namespace Sample
             return res;
         }
     }
-
+    */
     class Program
     {
         static void Main(string[] args)
@@ -53,7 +54,7 @@ namespace Sample
             Console.WriteLine();
             a.Transpose(0, 1);
             Console.WriteLine(a);*/
-
+            /*
 
             var A = new Tensor<TensorStringWrapper, string>(4, 2, 3);
             for (int i = 0; i < 4; i++)
@@ -102,11 +103,14 @@ namespace Sample
                 Console.WriteLine(A.GetSubtensor(i));
                 Console.WriteLine();Console.WriteLine();
             }
-
+            */
             //var sub = a.GetSubtensor(1);
             //Console.WriteLine(sub.ToString());
 
             //var dfgd = a[3];
+            //var t = Tensor<TensorIntWrapper, int>.CreateIdentityTensor(new []{4, 5, 6}, 8);
+            var t = Tensor<TensorIntWrapper, int>.CreateIdentityTensor(new []{2, 2}, 3);
+            Console.WriteLine(t.GetSubtensor(0, 1));
         }
     }
 }
