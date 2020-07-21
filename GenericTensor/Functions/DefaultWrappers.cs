@@ -10,6 +10,12 @@ namespace GenericTensor.Functions
         private int val;
         public int GetValue() => val;
         public void SetValue(int newValue) => this.val = newValue;
+        public override string ToString()
+            => val.ToString();
     }
-    public class TensorInt : Tensor<TensorIntWrapper, int> { }
+
+    public class TensorInt : Tensor<TensorIntWrapper, int>
+    {
+        public TensorInt(params int[] dimensions) : base(dimensions) { }
+    }
 }

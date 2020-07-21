@@ -91,5 +91,13 @@ namespace UnitTests
             Assert.AreEqual(sl2[0], 6);
             Assert.AreEqual(sl2[1], 12);
         }
+
+        [TestMethod]
+        public void Enum()
+        {
+            var d = da.Slice(30, 50, 15);
+            foreach (var f in d)
+                Assert.IsTrue(true);
+        }
     }
 }

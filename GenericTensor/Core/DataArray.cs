@@ -13,7 +13,8 @@ namespace GenericTensor.Core
         private readonly int End;
         private readonly int Step;
 
-        public int Count => (End - Begin) / Step + ((End - Begin) % Step == 0 ? 0 : 1);
+        public int Count => Begin > End ? 0 : 
+            ((End - Begin) / Step + ((End - Begin) % Step == 0 ? 0 : 1));
 
         public bool IsReadOnly => false;
 
