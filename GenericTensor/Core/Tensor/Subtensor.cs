@@ -13,7 +13,7 @@ namespace GenericTensor.Core
             if (indecies.Length == 0)
                 return this;
             var currIndex = indecies[0];
-            var newLinIndexDelta = GetFlattenedIndexWithCheck(new []{currIndex});
+            var newLinIndexDelta = GetFlattenedIndexSilent(new []{currIndex});
             var newBlocks = Blocks.Select(c => c).ToList();
             var rootAxis = AxesOrder[0];
             newBlocks.RemoveAt(rootAxis);

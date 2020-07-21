@@ -12,6 +12,13 @@ namespace Sample
         public void SetValue(string newValue) => this.val = newValue;
         public override string ToString()
             => val;
+
+        public ITensorElement<string> Copy()
+        {
+            var res = new TensorStringWrapper();
+            res.val = val;
+            return res;
+        }
     }
 
     class Program

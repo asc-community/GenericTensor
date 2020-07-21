@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="SetGet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subtensor.cs" />
     <Compile Include="Transposition.cs" />
   </ItemGroup>
   <ItemGroup>

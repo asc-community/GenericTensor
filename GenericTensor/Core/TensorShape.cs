@@ -12,7 +12,7 @@ namespace GenericTensor.Core
         public int DimensionCount => shape.Length;
         public int Count => shape.Length;
 
-        internal TensorShape(int[] shape)
+        public TensorShape(params int[] shape)
         {
             this.shape = shape;
         }
@@ -28,7 +28,7 @@ namespace GenericTensor.Core
         internal void Swap(int id1, int id2)
             => (shape[id1], shape[id2]) = (shape[id2], shape[id1]);
 
-        internal int this[int axisId] => shape[axisId];
+        public int this[int axisId] => shape[axisId];
 
         internal int[] ToArray() => shape;
 

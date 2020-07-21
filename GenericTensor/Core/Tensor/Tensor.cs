@@ -12,8 +12,21 @@ namespace GenericTensor.Core
         private TWrapper[] Data { get; set; }
         
         private readonly List<int> Blocks = new List<int>(); // 3 x 4 x 5
-        public int Volume => Data.Length;
-        
+        private int _volume = -1;
+        public int Volume
+        {
+            get
+            {
+                if (_volume == -1)
+                {
+                    _volume = 1;
+                    for (var i = 0; i < Shape.Length; i++)
+                        _volume *= Shape[i];
+                }
+                return _volume;
+            }
+        }
+
         private void BlockRecompute()
         {
             int len = 1;
@@ -61,30 +74,17 @@ namespace GenericTensor.Core
         {
             get
             {
-                if (indecies.Length == Shape.Count)
-                {
-                    var actualIndex = GetFlattenedIndexWithCheck(indecies);
-                    if (actualIndex >= Data.Length)
-                        throw new IndexOutOfRangeException();
-                    return Data[actualIndex].GetValue();
-                }
-                if (indecies.Length > Shape.Count)
+                var actualIndex = GetFlattenedIndexWithCheck(indecies);
+                if (actualIndex >= Data.Length)
                     throw new IndexOutOfRangeException();
-                throw new NotImplementedException();
+                return Data[actualIndex].GetValue();
             }
             set
             {
-                if (indecies.Length == Shape.Count)
-                {
-                    var actualIndex = GetFlattenedIndexWithCheck(indecies);
-                    if (actualIndex >= Data.Length)
-                        throw new IndexOutOfRangeException();
-                    Data[actualIndex].SetValue(value);
-                    return;
-                }
-                if (indecies.Length > Shape.Count)
+                var actualIndex = GetFlattenedIndexWithCheck(indecies);
+                if (actualIndex >= Data.Length)
                     throw new IndexOutOfRangeException();
-                throw new NotImplementedException();
+                Data[actualIndex].SetValue(value);
             }
         }
     }

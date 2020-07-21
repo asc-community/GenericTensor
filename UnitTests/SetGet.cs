@@ -1,5 +1,4 @@
 ﻿using System;
-using GenericTensor.Core;
 using GenericTensor.Functions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

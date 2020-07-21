@@ -29,5 +29,15 @@ namespace GenericTensor.Core
             return res + LinOffset;
         }
 
+        private int GetFlattenedIndexSilent(int[] indecies)
+        {
+            var res = 0;
+            for (int i = 0; i < indecies.Length; i++)
+            {
+                res += Blocks[AxesOrder[i]] * indecies[i];
+            }
+            return res + LinOffset;
+        }
+
     }
 }
