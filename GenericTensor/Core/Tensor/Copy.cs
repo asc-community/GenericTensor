@@ -16,5 +16,11 @@ namespace GenericTensor.Core
                 res.Data = Data.Select(c => (TWrapper) c.Copy()).ToArray(); 
             return res;
         }
+
+        internal void Assign(Tensor<TWrapper, TPrimitive> tensor)
+        {
+            foreach (var (index, value) in tensor.Iterate())
+                this[index] = value;
+        }
     }
 }

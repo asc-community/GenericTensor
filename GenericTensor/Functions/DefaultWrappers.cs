@@ -19,6 +19,12 @@ namespace GenericTensor.Functions
             res.SetValue(val);
             return res;
         }
+
+        public void SetZero()
+            => SetValue(0);
+
+        public void SetOne()
+            => SetValue(1);
     }
 
     public class TensorInt : Tensor<TensorIntWrapper, int>

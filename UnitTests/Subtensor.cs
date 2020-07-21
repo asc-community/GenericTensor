@@ -65,5 +65,15 @@ namespace UnitTests
             Assert.AreEqual(t.GetSubtensor(0, 1), Tensor<TensorIntWrapper, int>.CreateVector(12 + 0, 12 + 1, 12 + 2, 12 + 3));
         }
 
+        [TestMethod]
+        public void SubMatrixSet()
+        {
+            var t = GetSmall();
+            t.SetSubtensor(Tensor<TensorIntWrapper, int>.CreateVector(10, 10, 10), 1);
+            var k = t.ToString();
+            t.Transpose(0, 1);
+            Assert.AreEqual(t.GetSubtensor(0), Tensor<TensorIntWrapper, int>.CreateVector(0, 10));
+            Assert.AreEqual(t.GetSubtensor(1), Tensor<TensorIntWrapper, int>.CreateVector(1, 10));
+        }
     }
 }

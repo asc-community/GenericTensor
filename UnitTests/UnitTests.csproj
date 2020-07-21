@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Identity.cs" />
     <Compile Include="SetGet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Subtensor.cs" />
