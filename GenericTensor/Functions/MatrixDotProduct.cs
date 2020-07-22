@@ -18,7 +18,7 @@ namespace GenericTensor.Core
                 throw new InvalidShapeException($"{nameof(a)}'s height must be equal to {nameof(b)}'s width");
             var width = a.Shape[0];
             var height = b.Shape[1];
-            var res = Tensor<TWrapper, TPrimitive>.CreateMatrix(width, height,((int, int) _) => Constants<TWrapper, TPrimitive>.CreateZero());
+            var res = Tensor<TWrapper, TPrimitive>.CreateMatrix(width, height,((int, int) _) => ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero());
             b.Transpose(0, 1);
             for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)

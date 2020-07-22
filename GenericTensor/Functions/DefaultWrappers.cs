@@ -35,6 +35,11 @@ namespace GenericTensor.Functions
         {
             val *= other.GetValue();
         }
+
+        void ITensorElement<int>.Subtract(ITensorElement<int> other)
+        {
+            val -= other.GetValue();
+        }
     }
 
     public class TensorInt : Tensor<TensorIntWrapper, int>

@@ -5,7 +5,7 @@ using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    internal static class Constants<TWrapper, TPrimitive> where TWrapper : ITensorElement<TPrimitive>, new()
+    internal static class ConstantsAndFunctions<TWrapper, TPrimitive> where TWrapper : ITensorElement<TPrimitive>, new()
     {
         public static TWrapper Create(TPrimitive value)
         {
@@ -26,6 +26,22 @@ namespace GenericTensor.Functions
             var res = new TWrapper();
             res.SetZero();
             return res;
+        }
+
+        public static TPrimitive Multiply(TPrimitive a, TPrimitive b)
+        {
+            var c = Create(a);
+            var d = Create(b);
+            c.Multiply(d);
+            return c.GetValue();
+        }
+
+        public static TPrimitive Subtract(TPrimitive a, TPrimitive b)
+        {
+            var c = Create(a);
+            var d = Create(b);
+            c.Subtract(d);
+            return c.GetValue();
         }
     }
 }

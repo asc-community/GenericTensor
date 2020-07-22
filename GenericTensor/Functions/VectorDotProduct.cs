@@ -30,10 +30,10 @@ namespace GenericTensor.Core
             if (a.Shape[0] != b.Shape[0])
                 throw new InvalidShapeException($"{nameof(a)}'s length should be the same as {nameof(b)}'s");
 
-            var res = Constants<TWrapper, TPrimitive>.CreateZero();
+            var res = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
             for (int i = 0; i < a.Shape[0]; i++)
             {
-                var term = Constants<TWrapper, TPrimitive>.Create(a[i]);
+                var term = ConstantsAndFunctions<TWrapper, TPrimitive>.Create(a[i]);
                 term.Multiply(b.GetCell(i));
                 res.Add(term);
             }
