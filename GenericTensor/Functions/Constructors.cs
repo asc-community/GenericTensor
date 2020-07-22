@@ -34,6 +34,11 @@ namespace GenericTensor.Core
 {
     public partial class Tensor<TWrapper, TPrimitive>
     {
+        /// <summary>
+        /// Creates a tensor whose all matrices are identity matrices
+        /// 1 is achieved with TWrapper.SetOne()
+        /// 0 is achieved with TWrapper.SetZero()
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> CreateIdentityTensor(int[] dimensions, int finalMatrixDiag)
         {
             var newDims = new int[dimensions.Length + 2];
@@ -49,7 +54,11 @@ namespace GenericTensor.Core
             return res;
         }
 
-
+        /// <summary>
+        /// Creates an indentity matrix whose width and height are equal to diag
+        /// 1 is achieved with TWrapper.SetOne()
+        /// 0 is achieved with TWrapper.SetZero()
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> CreateIdentityMatrix(int diag)
         {
             var res = new Tensor<TWrapper, TPrimitive>(diag, diag);
@@ -62,7 +71,10 @@ namespace GenericTensor.Core
             return res;
         }
 
-
+        /// <summary>
+        /// Creates a vector from an array of primitives
+        /// Its length will be equal to elements.Length
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> CreateVector(params TPrimitive[] elements)
         {
             var res = new Tensor<TWrapper, TPrimitive>(elements.Length);
@@ -82,6 +94,17 @@ namespace GenericTensor.Core
             return (width, height);
         }
 
+        /// <summary>
+        /// Creates a matrix from a two-dimensional array of primitives
+        /// for example
+        /// var M = Tensor.CreateMatrix(new[,]
+        /// {
+        ///     {1, 2},
+        ///     {3, 4}
+        /// });
+        /// where yourData.GetLength(0) is Shape[0]
+        /// yourData.GetLength(1) is Shape[1]
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> CreateMatrix(TPrimitive[,] data)
         {
             var (width, height) = Tensor<TWrapper, TPrimitive>.ExtractAndCheck(data);
@@ -92,6 +115,9 @@ namespace GenericTensor.Core
             return res;
         }
 
+        /// <summary>
+        /// Creates a matrix from a two-dimensional array of wrappers
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> CreateMatrix(TWrapper[,] data)
         {
             var (width, height) = Tensor<TWrapper, TPrimitive>.ExtractAndCheck(data);
@@ -102,6 +128,10 @@ namespace GenericTensor.Core
             return res;
         }
 
+        /// <summary>
+        /// Creates a matrix of width and height size
+        /// and iterator for each pair of coordinate
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> CreateMatrix(int width, int height, Func<(int x, int y), TWrapper> stepper)
         {
             var data = new TWrapper[width, height];
@@ -111,6 +141,13 @@ namespace GenericTensor.Core
             return CreateMatrix(data);
         }
 
+        /// <summary>
+        /// Creates a tensor of given size with iterator over its indecies
+        /// (its only argument is an array of integers which are indecies of the tensor)
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="operation"></param>
+        /// <returns></returns>
         public static Tensor<TWrapper, TPrimitive> CreateTensor(TensorShape shape, Func<int[], TPrimitive> operation)
         {
             var res = new Tensor<TWrapper, TPrimitive>(shape);

@@ -34,13 +34,33 @@ namespace GenericTensor.Core
 {
     public partial class Tensor<TWrapper, TPrimitive>
     {
+        /// <summary>
+        /// Copies a tensor calling each cell with a .Copy()
+        /// </summary>
         public Tensor<TWrapper, TPrimitive> Copy(bool copyElements)
         {
             var res = new Tensor<TWrapper, TPrimitive>(Shape);
             if (!copyElements)
-                res.Data = Data.Clone() as TWrapper[];
+            {
+                foreach (var index in res.IterateOverElements())
+                    res.SetCell((TWrapper)this.GetCell(index).Forward(), index);
+            }
             else
-                res.Data = Data.Select(c => (TWrapper) c.Copy()).ToArray(); 
+                foreach (var index in res.IterateOverElements())
+                    res.SetCell((TWrapper)this.GetCell(index).Copy(), index);
+            return res;
+        }
+
+        /// <summary>
+        /// Forwards the tensor so TPrimitives are not copied,
+        /// but TWrappers are
+        /// </summary>
+        /// <returns></returns>
+        public Tensor<TWrapper, TPrimitive> Forward()
+        {
+            var res = new Tensor<TWrapper, TPrimitive>(Shape);
+            foreach (var index in res.IterateOverElements())
+                res.SetCell((TWrapper)this.GetCell(index).Forward(), index);
             return res;
         }
 

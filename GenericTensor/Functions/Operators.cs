@@ -33,8 +33,20 @@ namespace GenericTensor.Core
 {
     public partial class Tensor<TWrapper, TPrimitive>
     {
+        /// <summary>
+        /// A tensor is a matrix if has two dimensions, e. g. [3 x 4]
+        /// </summary>
         public bool IsMatrix => Shape.Count == 2;
+
+        /// <summary>
+        /// A tensor is a vector if has one dimension
+        /// </summary>
         public bool IsVector => Shape.Count == 1;
+
+        /// <summary>
+        /// Calls your TWrapper.Equals
+        /// Be sure to override it when using this function or ==, != operators
+        /// </summary>
         public override bool Equals(object obj)
         {
             if (obj is null || !(obj is Tensor<TWrapper, TPrimitive> ten))

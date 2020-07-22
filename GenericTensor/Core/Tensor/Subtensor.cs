@@ -35,6 +35,12 @@ namespace GenericTensor.Core
     public partial class Tensor<TWrapper, TPrimitive>
     {
         private int LinOffset;
+
+        /// <summary>
+        /// Get a subtensor of a tensor
+        /// If you have a t = Tensor[2 x 3 x 4],
+        /// t.GetSubtensor(0) will return the proper matrix [3 x 4]
+        /// </summary>
         public Tensor<TWrapper, TPrimitive> GetSubtensor(params int[] indecies)
         {
             if (indecies.Length == 0)
@@ -59,6 +65,14 @@ namespace GenericTensor.Core
                 return aff.GetSubtensor(new ArraySegment<int>(indecies, 1, indecies.Length - 1).ToArray());
         }
 
+        /// <summary>
+        /// Suppose you have t = tensor [2 x 3 x 4]
+        /// and m = matrix[3 x 4]
+        /// You need to set this matrix to t's second matrix
+        /// t.SetSubtensor(m, 1);
+        /// </summary>
+        /// <param name="sub"></param>
+        /// <param name="indecies"></param>
         public void SetSubtensor(Tensor<TWrapper, TPrimitive> sub, params int[] indecies)
         {
             if (indecies.Length >= Shape.Count)

@@ -32,6 +32,10 @@ namespace GenericTensor.Core
 {
     public partial class Tensor<TWrapper, TPrimitive>
     {
+        /// <summary>
+        /// [i, j, k...]th element of the resulting tensor is
+        /// operation(a[i, j, k...], b[i, j, k...])
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> Zip(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b, Func<TWrapper, TWrapper, TWrapper> operation)
         {

@@ -32,13 +32,32 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
+    /// <summary>
+    /// This structure represents a shape of a tensor
+    /// </summary>
     public struct TensorShape
     {
         private int[] shape;
+        /// <summary>
+        /// Length of a shape is basically number of dimensions
+        /// </summary>
         public int Length => shape.Length;
+
+        /// <summary>
+        /// Synonym for Length
+        /// </summary>
         public int DimensionCount => shape.Length;
+
+        /// <summary>
+        /// Synonym for Length
+        /// </summary>
         public int Count => shape.Length;
 
+        /// <summary>
+        /// Create a TensorShape for further operations
+        /// just listing necessary dimensions
+        /// </summary>
+        /// <param name="shape"></param>
         public TensorShape(params int[] shape)
         {
             this.shape = shape;
@@ -63,6 +82,12 @@ namespace GenericTensor.Core
         internal void Swap(int id1, int id2)
             => (shape[id1], shape[id2]) = (shape[id2], shape[id1]);
 
+        /// <summary>
+        /// You can only read some dimensions,
+        /// otherwise it will cause unintended behaviour
+        /// </summary>
+        /// <param name="axisId"></param>
+        /// <returns></returns>
         public int this[int axisId] => shape[axisId];
 
         internal int[] ToArray() => shape;

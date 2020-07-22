@@ -35,6 +35,14 @@ namespace GenericTensor.Core
 
     public partial class Tensor<TWrapper, TPrimitive>
     {
+        /// <summary>
+        /// Applies scalar product to every vector in a tensor so that
+        /// you will get a one-reduced dimensional tensor
+        /// (e. g. TensorVectorDotProduct([4 x 3 x 2], [4 x 3 x 2]) -> [4 x 3]
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static Tensor<TWrapper, TPrimitive> TensorVectorDotProduct(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b)
         {
@@ -49,6 +57,9 @@ namespace GenericTensor.Core
             return resTensor;
         }
 
+        /// <summary>
+        /// Finds the scalar product of two vectors
+        /// </summary>
         public static TPrimitive VectorDotProduct(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b)
         {

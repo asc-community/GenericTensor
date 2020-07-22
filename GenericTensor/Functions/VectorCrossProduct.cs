@@ -34,6 +34,10 @@ namespace GenericTensor.Core
 {
     public partial class Tensor<TWrapper, TPrimitive>
     {
+        /// <summary>
+        /// Finds a perpendicular vector to two given
+        /// TODO: So far only implemented for 3D vectors
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> VectorCrossProduct(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b)
         {
@@ -58,6 +62,9 @@ namespace GenericTensor.Core
             );
         }
 
+        /// <summary>
+        /// Calls VectorCrossProduct for every vector in the tensor
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> TensorVectorCrossProduct(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b)
         {

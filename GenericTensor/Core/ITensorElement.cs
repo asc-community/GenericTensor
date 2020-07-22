@@ -31,6 +31,14 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
+    /// <summary>
+    /// This is the interface you are to inherit from
+    /// Your class will be the main element of a tensor,
+    /// it will be appealed every time you perform any operations
+    /// on tensor. You do not have to implement all methods though. For example,
+    /// if you are only planning to use matrix product, you might
+    /// not need to implement Divide at all
+    /// </summary>
     public interface ITensorElement<T>
     {
         public T GetValue();

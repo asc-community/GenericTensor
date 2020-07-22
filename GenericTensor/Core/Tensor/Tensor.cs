@@ -40,6 +40,9 @@ namespace GenericTensor.Core
         
         private readonly List<int> Blocks = new List<int>(); // 3 x 4 x 5
         private int _volume = -1;
+        /// <summary>
+        /// Number of elements in tensor overall
+        /// </summary>
         public int Volume
         {
             get
@@ -91,9 +94,15 @@ namespace GenericTensor.Core
             BlockRecompute();
         }
 
+        /// <summary>
+        /// Creates an empty tensor where each element is just created wrapper
+        /// </summary>
         public Tensor(TensorShape dimensions)
             => Init(dimensions);
 
+        /// <summary>
+        /// Creates an empty tensor where each element is just created wrapper
+        /// </summary>
         public Tensor(params int[] dimensions)
             => Init(new TensorShape(dimensions));
     }

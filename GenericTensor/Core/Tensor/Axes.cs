@@ -33,15 +33,25 @@ namespace GenericTensor.Core
 {
     public partial class Tensor<TWrapper, TPrimitive>
     {
+        /// <summary>
+        /// Shape represents axes' lengths of the tensor
+        /// </summary>
         public TensorShape Shape { get; private set; }
         private readonly List<int> AxesOrder = new List<int>();
 
+        /// <summary>
+        /// Swaps axes in tensor.
+        /// 0 - the first dimension
+        /// </summary>
         public void Transpose(int axis1, int axis2)
         {
             (AxesOrder[axis1], AxesOrder[axis2]) = (AxesOrder[axis2], AxesOrder[axis1]);
             Shape.Swap(axis1, axis2);
         }
 
+        /// <summary>
+        /// Swaps two last axes or throws InvalidShapeException if a tensor is too low-dimensional
+        /// </summary>
         public void TransposeMatrix()
         {
             if (Shape.Count < 2)

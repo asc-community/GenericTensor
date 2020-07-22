@@ -31,6 +31,9 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
+    /// <summary>
+    /// Occurs when an axis mismatch happens
+    /// </summary>
     public class InvalidShapeException : ArgumentException
     {
         public InvalidShapeException(string msg) : base(msg) {}

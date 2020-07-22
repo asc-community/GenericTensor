@@ -61,27 +61,83 @@ namespace GenericTensor.Functions
         public void SetOne()
             => SetValue(1);
 
-        void ITensorElement<int>.Add(ITensorElement<int> other)
+        public void Add(ITensorElement<int> other)
         {
             val += other.GetValue();
         }
 
-        void ITensorElement<int>.Multiply(ITensorElement<int> other)
+        public void Multiply(ITensorElement<int> other)
         {
             val *= other.GetValue();
         }
 
-        void ITensorElement<int>.Subtract(ITensorElement<int> other)
+        public void Subtract(ITensorElement<int> other)
         {
             val -= other.GetValue();
         }
 
-        void ITensorElement<int>.Divide(ITensorElement<int> other)
+        public void Divide(ITensorElement<int> other)
         {
             val /= other.GetValue();
         }
 
-        void ITensorElement<int>.Negate()
+        public void Negate()
+        {
+            val *= -1;
+        }
+
+    }
+
+    public class TensorFloatWrapper : ITensorElement<float>
+    {
+        private float val;
+        public float GetValue() => val;
+        public void SetValue(float newValue) => this.val = newValue;
+
+        public override string ToString()
+            => val.ToString();
+
+        public ITensorElement<float> Copy()
+        {
+            var res = new TensorFloatWrapper();
+            res.SetValue(val);
+            return res;
+        }
+
+        public ITensorElement<float> Forward()
+        {
+            var res = new TensorFloatWrapper();
+            res.SetValue(val);
+            return res;
+        }
+
+        public void SetZero()
+            => SetValue(0);
+
+        public void SetOne()
+            => SetValue(1);
+
+        public void Add(ITensorElement<float> other)
+        {
+            val += other.GetValue();
+        }
+
+        public void Multiply(ITensorElement<float> other)
+        {
+            val *= other.GetValue();
+        }
+
+        public void Subtract(ITensorElement<float> other)
+        {
+            val -= other.GetValue();
+        }
+
+        public void Divide(ITensorElement<float> other)
+        {
+            val /= other.GetValue();
+        }
+
+        public void Negate()
         {
             val *= -1;
         }

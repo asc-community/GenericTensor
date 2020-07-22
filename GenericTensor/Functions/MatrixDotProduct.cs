@@ -35,6 +35,15 @@ namespace GenericTensor.Core
 
     public partial class Tensor<TWrapper, TPrimitive>
     {
+        /// <summary>
+        /// Finds matrix multiplication result
+        /// a and b are matrices
+        /// a.Shape[1] should be equal to b.Shape[0]
+        /// the resulting matrix is [a.Shape[0] x b.Shape[1]] shape
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static Tensor<TWrapper, TPrimitive> MatrixDotProduct(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b)
         {
@@ -58,6 +67,10 @@ namespace GenericTensor.Core
             return res;
         }
 
+        /// <summary>
+        /// Applies matrix dot product operation for
+        /// all matrices in tensors
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> TensorMatrixDotProduct(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b)
         {

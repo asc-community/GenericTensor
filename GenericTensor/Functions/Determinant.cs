@@ -35,9 +35,7 @@ namespace GenericTensor.Core
     public partial class Tensor<TWrapper, TPrimitive>
     {
         #region Laplace
-        /// <summary>
-        /// Borrowed from here: https://github.com/ZacharyPatten/Towel/blob/master/Sources/Towel/Mathematics/Matrix.cs#L528
-        /// </summary>
+        
         internal TPrimitive DeterminantLaplace(int diagLength)
         {
             if (diagLength == 1)
@@ -62,6 +60,12 @@ namespace GenericTensor.Core
             return det.GetValue();
         }
 
+        /// <summary>
+        /// Finds Determinant with the 100% precision for O(N!) where
+        /// N is your matrix' width
+        /// The matrix should be square
+        /// Borrowed from here: https://github.com/ZacharyPatten/Towel/blob/master/Sources/Towel/Mathematics/Matrix.cs#L528
+        /// </summary>
         public TPrimitive DeterminantLaplace()
         {
             if (!this.IsMatrix)
@@ -180,7 +184,12 @@ namespace GenericTensor.Core
         }
         #endregion
 
-        public TPrimitive DeterminantGaussian()
+        /// <summary>
+        /// Finds Determinant with possible overflow
+        /// because it uses fractions for avoiding division
+        /// Works for O(N^3)
+        /// </summary>
+        public TPrimitive DeterminantGaussianSafeDivision()
         {
             if (!IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
@@ -220,6 +229,59 @@ namespace GenericTensor.Core
             }
 
             return det.GetValue().GetValue();
+        }
+
+        /// <summary>
+        /// Performs simple Gaussian elimination method on a tensor
+        /// if you do not change TPrimitives in your TWrapper but
+        /// call its methods or change fields,
+        /// Rather use DeterminantGaussian(copy: true) so that its
+        /// temporarily tensor will not change tensor's values
+        /// </summary>
+        public TPrimitive DeterminantGaussianSimple()
+            => DeterminantGaussianSimple(copy: false);
+
+        // TODO: how to avoid code duplication?
+        /// <summary>
+        /// Copy = true will slower the performance, but is necessary if your
+        /// TPrimitive's pointer does not change through operators
+        /// </summary>
+        public TPrimitive DeterminantGaussianSimple(bool copy)
+        {
+            if (!IsMatrix)
+                throw new InvalidShapeException("this should be matrix");
+            if (Shape[0] != Shape[1])
+                throw new InvalidShapeException("this should be square matrix");
+
+            if (Shape[0] == 1)
+                return this[0, 0];
+
+            var n = Shape[0];
+
+            var elemMatrix = this.Forward();
+            for (int k = 1; k < n; k++)
+            for (int j = k; j < n; j++)
+            {
+                var m = ConstantsAndFunctions<TWrapper, TPrimitive>.DivideSaveWrapper(
+                    elemMatrix.GetCell(j, k - 1),
+                    elemMatrix.GetCell(k - 1, k - 1)
+                );
+                for (int i = 0; i < n; i++)
+                    elemMatrix.GetCell(j, i).Subtract(
+                        ConstantsAndFunctions<TWrapper, TPrimitive>.MultiplySaveWrapper(
+                            m,
+                            elemMatrix.GetCell(k - 1, i)
+                        )
+                    );
+            }
+
+            var det = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateOne();
+            for (int i = 0; i < n; i++)
+            {
+                det.Multiply(elemMatrix.GetCell(i, i));
+            }
+
+            return det.GetValue();
         }
 
         #endregion

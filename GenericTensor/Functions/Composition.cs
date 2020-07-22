@@ -29,6 +29,14 @@ namespace GenericTensor.Core
 {
     public partial class Tensor<TWrapper, TPrimitive>
     {
+        /// <summary>
+        /// Creates a new axis that is put backward
+        /// and then sets all elements as children
+        /// e. g.
+        /// say you have a bunch of tensors {t1, t2, t3} with shape of [2 x 4]
+        /// Stack(t1, t2, t3) => T
+        /// where T is a tensor of shape of [3 x 2 x 4]
+        /// </summary>
         public static Tensor<TWrapper, TPrimitive> Stack(params Tensor<TWrapper, TPrimitive>[] elements)
         {
             if (elements.Length < 1)

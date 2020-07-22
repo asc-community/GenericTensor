@@ -60,6 +60,10 @@ namespace UnitTests
             Assert.AreEqual(-306, M.DeterminantLaplace());
         }
 
+
+        // safe division
+
+
         [TestMethod]
         public void SimpleGaussian1()
         {
@@ -68,7 +72,7 @@ namespace UnitTests
                 {1, 2},
                 {3, 4}
             });
-            Assert.AreEqual(-2, M.DeterminantGaussian());
+            Assert.AreEqual(-2, M.DeterminantGaussianSafeDivision());
         }
 
         [TestMethod]
@@ -80,7 +84,35 @@ namespace UnitTests
                 {4, -2, 5},
                 {2,  8, 7}
             });
-            Assert.AreEqual(-306, M.DeterminantGaussian());
+            Assert.AreEqual(-306, M.DeterminantGaussianSafeDivision());
         }
+
+
+        // unsafe
+
+
+        [TestMethod]
+        public void SimpleGaussian3()
+        {
+            var M = Tensor<TensorFloatWrapper, float>.CreateMatrix(new float[,]
+            {
+                {1, 2},
+                {3, 4}
+            });
+            Assert.AreEqual(-2, M.DeterminantGaussianSimple());
+        }
+
+        [TestMethod]
+        public void SimpleGaussian4()
+        {
+            var M = Tensor<TensorFloatWrapper, float>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+            Assert.AreEqual(-306, M.DeterminantGaussianSimple());
+        }
+
     }
 }
