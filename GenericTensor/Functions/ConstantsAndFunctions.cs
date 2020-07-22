@@ -36,6 +36,20 @@ namespace GenericTensor.Functions
             return c.GetValue();
         }
 
+        public static TPrimitive Multiply(TWrapper a, TWrapper b)
+        {
+            var r = a.Forward();
+            r.Multiply(b);
+            return r.GetValue();
+        }
+
+        public static TWrapper MultiplySaveWrapper(TWrapper a, TWrapper b)
+        {
+            var r = a.Forward();
+            r.Multiply(b);
+            return (TWrapper)r;
+        }
+
         public static TPrimitive Subtract(TPrimitive a, TPrimitive b)
         {
             var c = Create(a);
@@ -50,6 +64,21 @@ namespace GenericTensor.Functions
             var d = Create(b);
             c.Add(d);
             return c.GetValue();
+        }
+
+        public static TPrimitive Divide(TPrimitive a, TPrimitive b)
+        {
+            var c = Create(a);
+            var d = Create(b);
+            c.Divide(d);
+            return c.GetValue();
+        }
+
+        public static TWrapper DivideSaveWrapper(TWrapper a, TWrapper b)
+        {
+            var c = a.Forward();
+            c.Divide(b);
+            return (TWrapper)c;
         }
     }
 }

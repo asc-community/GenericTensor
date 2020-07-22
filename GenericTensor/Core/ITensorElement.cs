@@ -9,6 +9,7 @@ namespace GenericTensor.Core
         public T GetValue();
         public void SetValue(T newValue);
         public ITensorElement<T> Copy();
+        public ITensorElement<T> Forward();
         public void SetZero();
         public void SetOne();
         public void Add(ITensorElement<T> other);

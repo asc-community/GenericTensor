@@ -11,7 +11,7 @@ namespace UnitTests
     public class Determinant
     {
         [TestMethod]
-        public void Simple()
+        public void SimpleLaplace1()
         {
             var M = Tensor<TensorIntWrapper, int>.CreateMatrix(new[,]
             {
@@ -22,7 +22,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void Simple2()
+        public void SimpleLaplace2()
         {
             var M = Tensor<TensorIntWrapper, int>.CreateMatrix(new[,]
             {
@@ -31,6 +31,29 @@ namespace UnitTests
                 {2,  8, 7}
             });
             Assert.AreEqual(-306, M.DeterminantLaplace());
+        }
+
+        [TestMethod]
+        public void SimpleGaussian1()
+        {
+            var M = Tensor<TensorIntWrapper, int>.CreateMatrix(new[,]
+            {
+                {1, 2},
+                {3, 4}
+            });
+            Assert.AreEqual(-2, M.DeterminantGaussian());
+        }
+
+        [TestMethod]
+        public void SimpleGaussian2()
+        {
+            var M = Tensor<TensorIntWrapper, int>.CreateMatrix(new int[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+            Assert.AreEqual(-306, M.DeterminantGaussian());
         }
     }
 }

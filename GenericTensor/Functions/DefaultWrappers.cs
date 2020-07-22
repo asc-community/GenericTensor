@@ -21,6 +21,13 @@ namespace GenericTensor.Functions
             return res;
         }
 
+        public ITensorElement<int> Forward()
+        {
+            var res = new TensorIntWrapper();
+            res.SetValue(val);
+            return res;
+        }
+
         public void SetZero()
             => SetValue(0);
 
@@ -51,7 +58,9 @@ namespace GenericTensor.Functions
         {
             val *= -1;
         }
+
     }
+
 
     public class TensorInt : Tensor<TensorIntWrapper, int>
     {
