@@ -23,5 +23,29 @@ namespace GenericTensor.Core
                 res.SetSubtensor(elements[i], i);
             return res;
         }
+
+        /// <summary>
+        /// Borrowed from here: https://github.com/ZacharyPatten/Towel/blob/master/Sources/Towel/Mathematics/Matrix.cs#L365
+        /// </summary>
+        private static void GetCofactor(Tensor<TWrapper, TPrimitive> a, Tensor<TWrapper, TPrimitive> temp, int rowId,
+            int colId, int diagLength)
+        {
+            int i = 0, j = 0;
+            for (int row = 0; row < diagLength; row++)
+            {
+                for (int col = 0; col < diagLength; col++)
+                {
+                    if (row != rowId && col != colId)
+                    {
+                        temp[i, j++] = a[row, col];
+                        if (j == diagLength - 1)
+                        {
+                            j = 0;
+                            i++;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

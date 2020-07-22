@@ -14,5 +14,7 @@ namespace GenericTensor.Core
         public void Add(ITensorElement<T> other);
         public void Multiply(ITensorElement<T> other);
         public void Subtract(ITensorElement<T> other);
+        public void Divide(ITensorElement<T> other);
+        public void Negate();
     }
 }

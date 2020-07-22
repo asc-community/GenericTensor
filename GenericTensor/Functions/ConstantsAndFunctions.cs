@@ -43,5 +43,13 @@ namespace GenericTensor.Functions
             c.Subtract(d);
             return c.GetValue();
         }
+
+        public static TPrimitive Add(TPrimitive a, TPrimitive b)
+        {
+            var c = Create(a);
+            var d = Create(b);
+            c.Add(d);
+            return c.GetValue();
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace GenericTensor.Functions
         private int val;
         public int GetValue() => val;
         public void SetValue(int newValue) => this.val = newValue;
+
         public override string ToString()
             => val.ToString();
 
@@ -39,6 +40,16 @@ namespace GenericTensor.Functions
         void ITensorElement<int>.Subtract(ITensorElement<int> other)
         {
             val -= other.GetValue();
+        }
+
+        void ITensorElement<int>.Divide(ITensorElement<int> other)
+        {
+            val /= other.GetValue();
+        }
+
+        void ITensorElement<int>.Negate()
+        {
+            val *= -1;
         }
     }
 
