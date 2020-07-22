@@ -82,8 +82,8 @@ namespace GenericTensor.Core
             public ITensorElement<W> Forward()
             {
                 var res = new SafeDivisionWrapper<W, P>();
-                res.num = (W)num.Copy();
-                res.den = (W)den.Copy();
+                res.num = (W)num.Forward();
+                res.den = (W)den.Forward();
                 return res;
             }
 

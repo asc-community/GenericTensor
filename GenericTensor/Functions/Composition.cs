@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GenericTensor.Core
+﻿namespace GenericTensor.Core
 {
     public partial class Tensor<TWrapper, TPrimitive>
     {

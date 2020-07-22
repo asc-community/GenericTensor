@@ -83,5 +83,13 @@ namespace GenericTensor.Core
                 data[x, y] = stepper((x, y));
             return CreateMatrix(data);
         }
+
+        public static Tensor<TWrapper, TPrimitive> CreateTensor(TensorShape shape, Func<int[], TPrimitive> operation)
+        {
+            var res = new Tensor<TWrapper, TPrimitive>(shape);
+            foreach (var ind in res.IterateOverElements())
+                res[ind] = operation(ind);
+            return res;
+        }
     }
 }
