@@ -22,7 +22,7 @@ namespace GenericTensor.Core
                 if (newAxesOrder[i] > rootAxis)
                     newAxesOrder[i] -= 1;
             newAxesOrder.RemoveAt(0);
-            var newShape = new TensorShape(new ArraySegment<int>(Shape.ToArray(), 1, Shape.Count - 1).ToArray());
+            var newShape = Shape.CutOffset1();
             var aff = new Tensor<TWrapper, TPrimitive>(newShape, newBlocks, newAxesOrder, Data);
             aff.LinOffset = newLinIndexDelta;
             var sfdgd = aff.ToString();

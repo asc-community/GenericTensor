@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace GenericTensor.Core
 {
@@ -33,7 +34,11 @@ namespace GenericTensor.Core
                     els.Add(this[i].ToString());
                 return string.Join(" ", els);
             }
-            return "<T>";
+            var sb = new StringBuilder();
+            sb.Append("Tensor[" + Shape + "] {\n");
+            foreach (var index in IterateOverMatrices())
+                sb.Append(GetSubtensor(index).ToString().Replace("\n", "\n  "));
+            return sb.ToString();
         }
     }
 }

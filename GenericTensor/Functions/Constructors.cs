@@ -14,7 +14,7 @@ namespace GenericTensor.Core
                 newDims[i] = dimensions[i];
             newDims[newDims.Length - 2] = newDims[newDims.Length - 1] = finalMatrixDiag;
             var res = new Tensor<TWrapper, TPrimitive>(newDims);
-            foreach (var (index, _) in res.Iterate(2))
+            foreach (var index in res.IterateOverMatrices())
             {
                 var iden = CreateIdentityMatrix(finalMatrixDiag);
                 res.SetSubtensor(iden, index);

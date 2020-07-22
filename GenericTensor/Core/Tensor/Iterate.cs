@@ -20,21 +20,8 @@ namespace GenericTensor.Core
 
         public IEnumerable<(int[] index, TPrimitive value)> Iterate(int offsetFromLeft = 0)
         {
-            int Sum(int[] arr)
-            {
-                int s = 0;
-                for (int i = 0; i < arr.Length; i++)
-                    s += arr[i];
-                return s;
-            }
-
-
-            var indecies = new int[Shape.Count - offsetFromLeft];
-            do
-            {
-                yield return (indecies, this.GetWrapperSilent(indecies).GetValue());
-                NextIndex(indecies, indecies.Length - 1);
-            } while (Sum(indecies) != 0); // for tensor 4 x 3 x 2 the first violating index would be 5  0  0 
+            foreach (var ind in IterateOver(0))
+                yield return (ind, this[ind]);
         }
 
         internal TWrapper GetFlattenedWrapper(params int[] indecies)
@@ -66,5 +53,33 @@ namespace GenericTensor.Core
             var actualIndex = GetFlattenedIndexWithCheck(indecies);
             return Data[actualIndex];
         }
+
+        public IEnumerable<int[]> IterateOver(int offsetFromLeft)
+        {
+            int Sum(int[] arr)
+            {
+                int s = 0;
+                for (int i = 0; i < arr.Length; i++)
+                    s += arr[i];
+                return s;
+            }
+
+
+            var indecies = new int[Shape.Count - offsetFromLeft];
+            do
+            {
+                yield return indecies;
+                NextIndex(indecies, indecies.Length - 1);
+            } while (Sum(indecies) != 0); // for tensor 4 x 3 x 2 the first violating index would be 5  0  0 
+        }
+
+        public IEnumerable<int[]> IterateOverMatrices()
+            => IterateOver(2);
+
+        public IEnumerable<int[]> IterateOverVectors()
+            => IterateOver(1);
+
+        public IEnumerable<int[]> IterateOverElements()
+            => IterateOver(0);
     }
 }

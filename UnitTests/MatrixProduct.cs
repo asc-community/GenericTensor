@@ -37,5 +37,63 @@ namespace UnitTests
                 }
             ));
         }
+
+        [TestMethod]
+        public void MatrixTensorMp()
+        {
+            var a = Tensor<TensorIntWrapper, int>.CreateMatrix(
+                new [,]
+                {
+                    { 1, 2 },
+                    { 3, 4 }
+                }
+                );
+            var b = Tensor<TensorIntWrapper, int>.CreateMatrix(
+                new [,]
+                {
+                    { 5, 7 },
+                    { 6, 8 }
+                }
+            );
+            var T1 = Tensor<TensorIntWrapper, int>.Stack(a, b);
+
+            var c = Tensor<TensorIntWrapper, int>.CreateMatrix(
+                new [,]
+                {
+                    { -3, 2 },
+                    { 3, 5 }
+                }
+            );
+
+            var d = Tensor<TensorIntWrapper, int>.CreateMatrix(
+                new [,]
+                {
+                    { -3, 2 },
+                    { 23, 5 }
+                }
+            );
+
+            var T2 = Tensor<TensorIntWrapper, int>.Stack(c, d);
+
+            var exp1 = Tensor<TensorIntWrapper, int>.CreateMatrix(
+                new [,]
+                {
+                    { 3, 12 },
+                    { 3, 26 }
+                }
+            );
+
+            var exp2 = Tensor<TensorIntWrapper, int>.CreateMatrix(
+                new [,]
+                {
+                    { 146, 45 },
+                    { 166, 52 }
+                }
+            );
+
+            var exp = Tensor<TensorIntWrapper, int>.Stack(exp1, exp2);
+
+            Assert.AreEqual(exp, Tensor<TensorIntWrapper, int>.TensorMatrixDotProduct(T1, T2));
+        }
     }
 }

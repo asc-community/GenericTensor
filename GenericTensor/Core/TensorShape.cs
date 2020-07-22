@@ -17,11 +17,19 @@ namespace GenericTensor.Core
             this.shape = shape;
         }
 
-        internal TensorShape Subshape()
+        internal TensorShape CutOffset1()
         {
             var newShape = new int[Length - 1];
             for (int i = 0; i < newShape.Length; i++)
                 newShape[i] = shape[i + 1];
+            return new TensorShape(newShape);
+        }
+
+        internal TensorShape SubShape(int offsetFromLeft, int offsetFromRight)
+        {
+            var newShape = new int[Length - offsetFromLeft - offsetFromRight];
+            for (int i = offsetFromLeft; i < Length - offsetFromRight; i++)
+                newShape[i - offsetFromLeft] = shape[i];
             return new TensorShape(newShape);
         }
 
