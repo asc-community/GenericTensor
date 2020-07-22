@@ -11,5 +11,7 @@ namespace GenericTensor.Core
         public ITensorElement<T> Copy();
         public void SetZero();
         public void SetOne();
+        public void Add(ITensorElement<T> other);
+        public void Multiply(ITensorElement<T> other);
     }
 }

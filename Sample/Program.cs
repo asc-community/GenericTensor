@@ -109,8 +109,35 @@ namespace Sample
 
             //var dfgd = a[3];
             //var t = Tensor<TensorIntWrapper, int>.CreateIdentityTensor(new []{4, 5, 6}, 8);
-            var t = Tensor<TensorIntWrapper, int>.CreateIdentityTensor(new []{2, 2}, 3);
-            Console.WriteLine(t.GetSubtensor(0, 1));
+            //var t = Tensor<TensorIntWrapper, int>.CreateIdentityTensor(new []{2, 2}, 3);
+            //Console.WriteLine(t.GetSubtensor(0, 1));
+            var A = Tensor<TensorIntWrapper, int>.CreateMatrix(
+                new [,]
+                {
+                    { 12, -1, 1 },
+                    { 0, 1, 4 },
+                });
+            var B = Tensor<TensorIntWrapper, int>.CreateMatrix(
+                new [,]
+                {
+                    { 1, -1 },
+                    { 0, 1 },
+                    { 3, 0 },
+                    { 0, 3 },
+                });
+            A.TransposeMatrix();
+            B.TransposeMatrix();
+
+            Console.WriteLine(A);
+            Console.WriteLine();
+            Console.WriteLine("Multiplied by ");
+            Console.WriteLine();
+            Console.WriteLine(B);
+            Console.WriteLine();
+            Console.WriteLine(" = ");
+            Console.WriteLine();
+
+            Console.WriteLine(Tensor<TensorIntWrapper, int>.MatrixDotProduct(A, B));
         }
     }
 }

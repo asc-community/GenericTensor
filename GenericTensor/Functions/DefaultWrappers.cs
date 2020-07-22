@@ -25,6 +25,16 @@ namespace GenericTensor.Functions
 
         public void SetOne()
             => SetValue(1);
+
+        void ITensorElement<int>.Add(ITensorElement<int> other)
+        {
+            val += other.GetValue();
+        }
+
+        void ITensorElement<int>.Multiply(ITensorElement<int> other)
+        {
+            val *= other.GetValue();
+        }
     }
 
     public class TensorInt : Tensor<TensorIntWrapper, int>

@@ -50,10 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Identity.cs" />
+    <Compile Include="MatrixProduct.cs" />
     <Compile Include="SetGet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Subtensor.cs" />
     <Compile Include="Transposition.cs" />
+    <Compile Include="VectorProduct.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

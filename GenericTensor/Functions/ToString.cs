@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace GenericTensor.Core
 {
@@ -11,6 +10,7 @@ namespace GenericTensor.Core
             if (IsMatrix)
             {
                 var rows = new List<string>();
+                rows.Add("Matrix[" + Shape + "]");
                 for (int i = 0; i < Shape[0]; i++)
                 {
                     var s = "";

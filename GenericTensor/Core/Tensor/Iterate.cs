@@ -37,11 +37,9 @@ namespace GenericTensor.Core
             } while (Sum(indecies) != 0); // for tensor 4 x 3 x 2 the first violating index would be 5  0  0 
         }
 
-        internal TWrapper GetWrapper(params int[] indecies)
+        internal TWrapper GetFlattenedWrapper(params int[] indecies)
         {
             var actualIndex = GetFlattenedIndexWithCheck(indecies);
-            if (actualIndex >= Data.Length)
-                throw new IndexOutOfRangeException();
             return Data[actualIndex];
         }
 
@@ -53,8 +51,20 @@ namespace GenericTensor.Core
 
         public TPrimitive this[params int[] indecies]
         {
-            get => GetWrapper(indecies).GetValue();
-            set => GetWrapper(indecies).SetValue(value);
+            get => GetFlattenedWrapper(indecies).GetValue();
+            set => GetFlattenedWrapper(indecies).SetValue(value);
+        }
+
+        public void SetCell(TWrapper newWrapper, params int[] indecies)
+        {
+            var actualIndex = GetFlattenedIndexWithCheck(indecies);
+            Data[actualIndex] = newWrapper;
+        }
+
+        public TWrapper GetCell(params int[] indecies)
+        {
+            var actualIndex = GetFlattenedIndexWithCheck(indecies);
+            return Data[actualIndex];
         }
     }
 }

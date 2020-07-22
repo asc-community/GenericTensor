@@ -29,7 +29,10 @@ namespace UnitTests
         [TestMethod]
         public void IdenTensor()
         {
-            var t = TS.CreateIdentityTensor(new []{4, 5, 6}, 8);
+            var t = TS.CreateIdentityTensor(new []{4, 5}, 8);
+            var k = t.Copy(false);
+            k.TransposeMatrix();
+            Assert.AreEqual(t, k);
         }
     }
 }
