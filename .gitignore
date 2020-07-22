@@ -12,3 +12,5 @@
 /UnitTests/bin/Debug
 /UnitTests/obj/Debug
 /UnitTests/obj
+/Benchmark/bin/Debug/netcoreapp3.1
+/Benchmark/obj
