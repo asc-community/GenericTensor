@@ -32,7 +32,6 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-
     public partial class Tensor<TWrapper, TPrimitive>
     {
         /// <summary>
@@ -56,15 +55,22 @@ namespace GenericTensor.Core
 
             var width = a.Shape[0];
             var height = b.Shape[1];
-            var res = Tensor<TWrapper, TPrimitive>.CreateMatrix(width, height,((int, int) _) => ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero());
-            b.Transpose(0, 1);
+            var row = a.Shape[1];
+            var res = CreateMatrix(width, height);
             for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
             {
-                var v1 = a.GetSubtensor(x);
-                var v2 = b.GetSubtensor(y);
-                var scalar = Tensor<TWrapper, TPrimitive>.VectorDotProduct(v1, v2);
-                res[x, y] = scalar;
+                for (int y = 0; y < height; y++)
+                {
+                    
+                    var s = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
+                    for (int i = 0; i < row; i++)
+                    {
+                        var v1 = a.GetCell(x, i);
+                        var v2 = b.GetCell(i, y);
+                        s.Add(ConstantsAndFunctions<TWrapper, TPrimitive>.MultiplySaveWrapper((TWrapper)v1, (TWrapper)v2));
+                    }
+                    res.SetCell(s, x, y);
+                }
             }
             return res;
         }

@@ -150,6 +150,15 @@ namespace GenericTensor.Core
         }
 
         /// <summary>
+        /// Creates a matrix of width and height size
+        /// </summary>
+        public static Tensor<TWrapper, TPrimitive> CreateMatrix(int width, int height)
+        {
+            var data = new TWrapper[width, height];
+            return CreateMatrix(data);
+        }
+
+        /// <summary>
         /// Creates a tensor of given size with iterator over its indecies
         /// (its only argument is an array of integers which are indecies of the tensor)
         /// </summary>
