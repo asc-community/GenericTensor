@@ -188,6 +188,11 @@ namespace GenericTensor.Core
             {
                 throw new NotImplementedException();
             }
+
+            public bool EqualsTo(ITensorElement<W> other)
+            {
+                throw new NotImplementedException();
+            }
         }
         #endregion
 

@@ -53,5 +53,6 @@ namespace GenericTensor.Core
         public void Divide(ITensorElement<T> other);
         public void Negate();
         public bool IsZero(); // if you can't implement it, return false
+        public bool EqualsTo(ITensorElement<T> other); // a separate method to force the user to implement it
     }
 }

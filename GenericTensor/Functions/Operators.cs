@@ -54,7 +54,7 @@ namespace GenericTensor.Core
             if (ten.Shape != Shape)
                 return false;
             foreach (var (index, _) in ten.Iterate())
-                if (!this[index].Equals(ten[index]))
+                if (!GetFlattenedWrapper(index).EqualsTo(ten.GetFlattenedWrapper(index)))
                     return false;
             return true;
         }

@@ -18,3 +18,5 @@
 /Benchmark/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts
 /Benchmark/bin/Release/netcoreapp3.1
 /GenericTensor/bin/Release/netstandard2.0
+/Sample/bin/Release/netcoreapp3.1
+/UnitTests/bin/Release/netcoreapp3.0

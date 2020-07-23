@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
@@ -64,7 +65,8 @@ namespace GenericTensor.Core
         {
             var res = new Tensor<TWrapper, TPrimitive>(diag, diag);
             for (int i = 0; i < res.Data.Length; i++)
-                res.Data[i].SetZero();
+                res.Data[i] = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
+
             for (int i = 0; i < diag; i++)
             {
                 res.GetFlattenedWrapper(i, i).SetOne();

@@ -91,6 +91,8 @@ namespace GenericTensor.Functions
             return val == 0;
         }
 
+        public bool EqualsTo(ITensorElement<int> other)
+            => val == other.GetValue();
     }
 
     public class TensorFloatWrapper : ITensorElement<float>
@@ -151,6 +153,9 @@ namespace GenericTensor.Functions
         {
             return Math.Abs(val) < 1e-6;
         }
+
+        public bool EqualsTo(ITensorElement<float> other)
+            => (val - other.GetValue()) < 1e-6;
     }
 
 
