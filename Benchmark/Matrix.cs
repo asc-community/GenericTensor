@@ -20,6 +20,8 @@ namespace Benchmark
                 }
         );
 
+        private static TS createdMatrix = CreateMatrix(6);
+        
         [Params(3, 20, 50)] public int MatrixSize;
 
         [Benchmark] public void CreatingMatrix()
@@ -28,18 +30,19 @@ namespace Benchmark
         [Benchmark] public void CreatingMatrixAndTranspose()
             => CreateMatrix(MatrixSize).TransposeMatrix();
 
-        [Params(2, 4, 6)] public int LowMatrixSize;
+        [Benchmark] public void Transpose()
+            => createdMatrix.TransposeMatrix();
 
-        [Benchmark] public void CreatingMatrixAndLaplace()
-            => CreateMatrix(LowMatrixSize).DeterminantLaplace();
+        [Benchmark] public void MatrixAndLaplace()
+            => createdMatrix.DeterminantLaplace();
 
-        [Benchmark] public void CreatingMatrixAndGaussian()
-            => CreateMatrix(LowMatrixSize).DeterminantGaussianSafeDivision();
+        [Benchmark] public void MatrixAndGaussian()
+            => createdMatrix.DeterminantGaussianSafeDivision();
 
-        [Benchmark] public void CreatingMatrixAndMultiply()
-            => TS.MatrixDotProduct(CreateMatrix(MatrixSize), CreateMatrix(MatrixSize));
+        [Benchmark] public void MatrixAndMultiply()
+            => TS.MatrixDotProduct(createdMatrix, createdMatrix);
 
-        [Benchmark] public void CreatingMatrixAndAdd()
-            => TS.PiecewiseAdd(CreateMatrix(MatrixSize), CreateMatrix(MatrixSize));
+        [Benchmark] public void MatrixAndAdd()
+            => TS.PiecewiseAdd(createdMatrix, createdMatrix);
     }
 }

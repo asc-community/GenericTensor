@@ -14,3 +14,7 @@
 /UnitTests/obj
 /Benchmark/bin/Debug/netcoreapp3.1
 /Benchmark/obj
+/Benchmark/bin/Release/netcoreapp3.1/amd64
+/Benchmark/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts
+/Benchmark/bin/Release/netcoreapp3.1
+/GenericTensor/bin/Release/netstandard2.0

@@ -52,5 +52,6 @@ namespace GenericTensor.Core
         public void Subtract(ITensorElement<T> other);
         public void Divide(ITensorElement<T> other);
         public void Negate();
+        public bool IsZero(); // if you can't implement it, return false
     }
 }

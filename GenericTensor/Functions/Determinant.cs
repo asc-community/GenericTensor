@@ -181,6 +181,11 @@ namespace GenericTensor.Core
             {
                 return num.ToString() + " / " + den.ToString();
             }
+
+            public bool IsZero()
+            {
+                throw new NotImplementedException();
+            }
         }
         #endregion
 
@@ -228,6 +233,8 @@ namespace GenericTensor.Core
                 det.Multiply(elemMatrix.GetCell(i, i));
             }
 
+            if (det.den.IsZero())
+                return ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero().GetValue();
             return det.GetValue().GetValue();
         }
 

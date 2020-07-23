@@ -86,6 +86,11 @@ namespace GenericTensor.Functions
             val *= -1;
         }
 
+        public bool IsZero()
+        {
+            return val == 0;
+        }
+
     }
 
     public class TensorFloatWrapper : ITensorElement<float>
@@ -142,6 +147,10 @@ namespace GenericTensor.Functions
             val *= -1;
         }
 
+        public bool IsZero()
+        {
+            return Math.Abs(val) < 1e-6;
+        }
     }
 
 
