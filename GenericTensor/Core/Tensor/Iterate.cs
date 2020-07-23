@@ -31,7 +31,7 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         private void NextIndex(int[] indecies, int id)
         {
@@ -48,18 +48,10 @@ namespace GenericTensor.Core
         /// <summary>
         /// Iterate over array of indecies and a value in TPrimitive
         /// </summary>
-        public IEnumerable<(int[] index, TPrimitive value)> Iterate()
+        public IEnumerable<(int[] index, T value)> Iterate()
         {
             foreach (var ind in IterateOver(0))
                 yield return (ind, this[ind]);
-        }
-
-        internal TWrapper GetFlattenedWrapper(params int[] indecies)
-        {
-            var actualIndex = GetFlattenedIndexWithCheck(indecies);
-            if (Data[actualIndex] is null)
-                Data[actualIndex] = new TWrapper();
-            return Data[actualIndex];
         }
 
         /// <summary>
@@ -69,16 +61,25 @@ namespace GenericTensor.Core
         /// t[0, 0, 1] or t[1, 2, 3],
         /// but neither of t[0, 1] (Use GetSubtensor for this) and t[4, 5, 6] (IndexOutOfRange)
         /// </summary>
-        public TPrimitive this[params int[] indecies]
+        public T this[params int[] indecies]
         {
-            get => GetFlattenedWrapper(indecies).GetValue();
-            set => GetFlattenedWrapper(indecies).SetValue(value);
+            get => Data[GetFlattenedIndexWithCheck(indecies)];
+            set => Data[GetFlattenedIndexWithCheck(indecies)] = value;
         }
+
+        public T GetValueNoCheck(params int[] indecies)
+         => Data[GetFlattenedIndexSilent(indecies)];
+
+        public void SetValueNoCheck(T value, params int[] indecies)
+            => Data[GetFlattenedIndexSilent(indecies)] = value;
+
+        public void SetValueNoCheck(Func<T> valueCreator, params int[] indecies)
+            => Data[GetFlattenedIndexSilent(indecies)] = valueCreator();
 
         /// <summary>
         /// If you need to set your wrapper to the tensor directly, use this function
         /// </summary>
-        public void SetCell(TWrapper newWrapper, params int[] indecies)
+        public void SetCell(T newWrapper, params int[] indecies)
         {
             var actualIndex = GetFlattenedIndexWithCheck(indecies);
             Data[actualIndex] = newWrapper;
@@ -88,7 +89,7 @@ namespace GenericTensor.Core
         /// Get a pointer to the wrapper in your tensor
         /// You can call its methods or set its fields, so that it will be applied to the tensor's element
         /// </summary>
-        public TWrapper GetCell(params int[] indecies)
+        public T GetCell(params int[] indecies)
         {
             var actualIndex = GetFlattenedIndexWithCheck(indecies);
             return Data[actualIndex];

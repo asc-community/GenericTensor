@@ -14,7 +14,7 @@ you could use not only built-in types like int, float, etc., but also your own t
 
 Class's definition:
 ```cs
-public class Tensor<TWrapper, TPrimitive> where TWrapper : ITensorElement<TPrimitive>, new()
+public class Tensor<T> where TWrapper : ITensorElement<TPrimitive>, new()
 ```
 
 We need to use a primitive type and a wrapper for it. For example, you can use built-in types:

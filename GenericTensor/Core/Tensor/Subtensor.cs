@@ -32,7 +32,7 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         private int LinOffset;
 
@@ -41,7 +41,7 @@ namespace GenericTensor.Core
         /// If you have a t = Tensor[2 x 3 x 4],
         /// t.GetSubtensor(0) will return the proper matrix [3 x 4]
         /// </summary>
-        public Tensor<TWrapper, TPrimitive> GetSubtensor(params int[] indecies)
+        public Tensor<T> GetSubtensor(params int[] indecies)
         {
             if (indecies.Length == 0)
                 return this;
@@ -56,7 +56,7 @@ namespace GenericTensor.Core
                     newAxesOrder[i] -= 1;
             newAxesOrder.RemoveAt(0);
             var newShape = Shape.CutOffset1();
-            var result = new Tensor<TWrapper, TPrimitive>(newShape, newBlocks, newAxesOrder, Data);
+            var result = new Tensor<T>(newShape, newBlocks, newAxesOrder, Data);
             result.LinOffset = newLinIndexDelta;
             if (indecies.Length == 1)
                 return result;
@@ -72,7 +72,7 @@ namespace GenericTensor.Core
         /// </summary>
         /// <param name="sub"></param>
         /// <param name="indecies"></param>
-        public void SetSubtensor(Tensor<TWrapper, TPrimitive> sub, params int[] indecies)
+        public void SetSubtensor(Tensor<T> sub, params int[] indecies)
         {
             #if ALLOW_EXCEPTIONS
             if (indecies.Length >= Shape.Count)

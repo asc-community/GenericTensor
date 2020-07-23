@@ -32,7 +32,7 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         /// <summary>
         /// Finds matrix multiplication result
@@ -43,8 +43,8 @@ namespace GenericTensor.Core
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Tensor<TWrapper, TPrimitive> MatrixDotProduct(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b)
+        public static Tensor<T> MatrixDotProduct(Tensor<T> a,
+            Tensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (!a.IsMatrix || !b.IsMatrix)
@@ -62,12 +62,12 @@ namespace GenericTensor.Core
                 for (int y = 0; y < height; y++)
                 {
                     
-                    var s = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
+                    var s = ConstantsAndFunctions<T>.CreateZero();
                     for (int i = 0; i < row; i++)
                     {
                         var v1 = a.GetCell(x, i);
                         var v2 = b.GetCell(i, y);
-                        s.Add(ConstantsAndFunctions<TWrapper, TPrimitive>.MultiplySaveWrapper((TWrapper)v1, (TWrapper)v2));
+                        s = ConstantsAndFunctions<T>.Add(s, ConstantsAndFunctions<T>.Multiply(v1, v2));
                     }
                     res.SetCell(s, x, y);
                 }
@@ -79,8 +79,8 @@ namespace GenericTensor.Core
         /// Applies matrix dot product operation for
         /// all matrices in tensors
         /// </summary>
-        public static Tensor<TWrapper, TPrimitive> TensorMatrixDotProduct(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b)
+        public static Tensor<T> TensorMatrixDotProduct(Tensor<T> a,
+            Tensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape.Count < 2 || b.Shape.Count < 2)
@@ -94,7 +94,7 @@ namespace GenericTensor.Core
                 newShape[i] = oldShape[i];
             newShape[newShape.Length - 2] = a.Shape[a.Shape.Length - 2];
             newShape[newShape.Length - 1] = b.Shape[b.Shape.Length - 1];
-            var resTensor = new Tensor<TWrapper, TPrimitive>(newShape);
+            var resTensor = new Tensor<T>(newShape);
             foreach (var subDimensions in a.IterateOverMatrices())
             {
                 var product = MatrixDotProduct(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions));

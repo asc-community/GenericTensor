@@ -30,69 +30,69 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         /// <summary>
         /// [i, j, k...]th element of the resulting tensor is
         /// operation(a[i, j, k...], b[i, j, k...])
         /// </summary>
-        public static Tensor<TWrapper, TPrimitive> Zip(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b, Func<TWrapper, TWrapper, TWrapper> operation)
+        public static Tensor<T> Zip(Tensor<T> a,
+            Tensor<T> b, Func<T, T, T> operation)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException("Arguments should be of the same shape");
             #endif
-            var res = new Tensor<TWrapper, TPrimitive>(a.Shape);
+            var res = new Tensor<T>(a.Shape);
             foreach (var index in res.IterateOverElements())
                 res.SetCell(operation(a.GetCell(index), b.GetCell(index)), index);
             return res;
         }
 
-        public static Tensor<TWrapper, TPrimitive> PiecewiseAdd(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b)
-            => Zip(a, b, ConstantsAndFunctions<TWrapper, TPrimitive>.AddSaveWrapper);
+        public static Tensor<T> PiecewiseAdd(Tensor<T> a,
+            Tensor<T> b)
+            => Zip(a, b, ConstantsAndFunctions<T>.Add);
 
-        public static Tensor<TWrapper, TPrimitive> PiecewiseSubtract(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b)
-            => Zip(a, b, ConstantsAndFunctions<TWrapper, TPrimitive>.SubtractSaveWrapper);
+        public static Tensor<T> PiecewiseSubtract(Tensor<T> a,
+            Tensor<T> b)
+            => Zip(a, b, ConstantsAndFunctions<T>.Subtract);
 
-        public static Tensor<TWrapper, TPrimitive> PiecewiseMultiply(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b)
-            => Zip(a, b, ConstantsAndFunctions<TWrapper, TPrimitive>.MultiplySaveWrapper);
+        public static Tensor<T> PiecewiseMultiply(Tensor<T> a,
+            Tensor<T> b)
+            => Zip(a, b, ConstantsAndFunctions<T>.Multiply);
 
-        public static Tensor<TWrapper, TPrimitive> PiecewiseDivide(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b)
-            => Zip(a, b, ConstantsAndFunctions<TWrapper, TPrimitive>.DivideSaveWrapper);
+        public static Tensor<T> PiecewiseDivide(Tensor<T> a,
+            Tensor<T> b)
+            => Zip(a, b, ConstantsAndFunctions<T>.Divide);
 
-        public static Tensor<TWrapper, TPrimitive> PiecewiseAdd(Tensor<TWrapper, TPrimitive> a,
-            TPrimitive b)
+        public static Tensor<T> PiecewiseAdd(Tensor<T> a,
+            T b)
             => CreateTensor(a.Shape, ind => 
-                ConstantsAndFunctions<TWrapper, TPrimitive>.Add(a[ind], b));
+                ConstantsAndFunctions<T>.Add(a[ind], b));
 
-        public static Tensor<TWrapper, TPrimitive> PiecewiseSubtract(Tensor<TWrapper, TPrimitive> a,
-            TPrimitive b)
+        public static Tensor<T> PiecewiseSubtract(Tensor<T> a,
+            T b)
             => CreateTensor(a.Shape, ind => 
-                ConstantsAndFunctions<TWrapper, TPrimitive>.Subtract(a[ind], b));
+                ConstantsAndFunctions<T>.Subtract(a[ind], b));
 
-        public static Tensor<TWrapper, TPrimitive> PiecewiseSubtract(
-            TPrimitive a, Tensor<TWrapper, TPrimitive> b)
+        public static Tensor<T> PiecewiseSubtract(
+            T a, Tensor<T> b)
             => CreateTensor(b.Shape, ind => 
-                ConstantsAndFunctions<TWrapper, TPrimitive>.Subtract(a, b[ind]));
+                ConstantsAndFunctions<T>.Subtract(a, b[ind]));
 
-        public static Tensor<TWrapper, TPrimitive> PiecewiseMultiply(Tensor<TWrapper, TPrimitive> a,
-            TPrimitive b)
+        public static Tensor<T> PiecewiseMultiply(Tensor<T> a,
+            T b)
             => CreateTensor(a.Shape, ind => 
-                ConstantsAndFunctions<TWrapper, TPrimitive>.Multiply(a[ind], b));
+                ConstantsAndFunctions<T>.Multiply(a[ind], b));
 
-        public static Tensor<TWrapper, TPrimitive> PiecewiseDivide(Tensor<TWrapper, TPrimitive> a,
-            TPrimitive b)
+        public static Tensor<T> PiecewiseDivide(Tensor<T> a,
+            T b)
             => CreateTensor(a.Shape, ind => 
-                ConstantsAndFunctions<TWrapper, TPrimitive>.Divide(a[ind], b));
+                ConstantsAndFunctions<T>.Divide(a[ind], b));
 
-        public static Tensor<TWrapper, TPrimitive> PiecewiseDivide(
-            TPrimitive a, Tensor<TWrapper, TPrimitive> b)
+        public static Tensor<T> PiecewiseDivide(
+            T a, Tensor<T> b)
             => CreateTensor(b.Shape, ind => 
-                ConstantsAndFunctions<TWrapper, TPrimitive>.Divide(a, b[ind]));
+                ConstantsAndFunctions<T>.Divide(a, b[ind]));
     }
 }

@@ -28,10 +28,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         /// <summary>
         /// A tensor is a matrix if has two dimensions, e. g. [3 x 4]
@@ -49,20 +50,20 @@ namespace GenericTensor.Core
         /// </summary>
         public override bool Equals(object obj)
         {
-            if (obj is null || !(obj is Tensor<TWrapper, TPrimitive> ten))
+            if (obj is null || !(obj is Tensor<T> ten))
                 return false;
             if (ten.Shape != Shape)
                 return false;
             foreach (var (index, _) in ten.Iterate())
-                if (!GetFlattenedWrapper(index).EqualsTo(ten.GetFlattenedWrapper(index)))
+                if (!ConstantsAndFunctions<T>.AreEqual(this.GetValueNoCheck(index), ten.GetValueNoCheck(index)))
                     return false;
             return true;
         }
 
-        public static bool operator ==(Tensor<TWrapper, TPrimitive> a, Tensor<TWrapper, TPrimitive> b)
+        public static bool operator ==(Tensor<T> a, Tensor<T> b)
             => a.Equals(b);
 
-        public static bool operator !=(Tensor<TWrapper, TPrimitive> a, Tensor<TWrapper, TPrimitive> b)
+        public static bool operator !=(Tensor<T> a, Tensor<T> b)
             => a.Equals(b);
 
         

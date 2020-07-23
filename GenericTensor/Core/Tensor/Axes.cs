@@ -31,7 +31,7 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         /// <summary>
         /// Shape represents axes' lengths of the tensor

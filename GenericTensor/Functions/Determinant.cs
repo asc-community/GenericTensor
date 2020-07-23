@@ -32,7 +32,7 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         #region Laplace
         
@@ -42,7 +42,7 @@ namespace GenericTensor.Core
                 return this[0, 0];
             var det = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
             var sign = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateOne();
-            var temp = new Tensor<TWrapper, TPrimitive>(diagLength, diagLength);
+            var temp = new Tensor<T>(diagLength, diagLength);
             for (int i = 0; i < diagLength; i++)
             {
                 GetCofactor(this, temp, 0, i, diagLength);
