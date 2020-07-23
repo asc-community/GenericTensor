@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace GenericTensor.Core
@@ -67,13 +68,64 @@ namespace GenericTensor.Core
             set => Data[GetFlattenedIndexWithCheck(indecies)] = value;
         }
 
-        public T GetValueNoCheck(params int[] indecies)
-         => Data[GetFlattenedIndexSilent(indecies)];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T GetValueNoCheck(int x)
+         => Data[GetFlattenedIndexSilent(x)];
 
-        public void SetValueNoCheck(T value, params int[] indecies)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T GetValueNoCheck(int x, int y)
+            => Data[GetFlattenedIndexSilent(x, y)];
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T GetValueNoCheck(int x, int y, int z)
+            => Data[GetFlattenedIndexSilent(x, y, z)];
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T GetValueNoCheck(int x, int y, int z, int[] indecies)
+            => Data[GetFlattenedIndexSilent(x, y, z, indecies)];
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T GetValueNoCheck(int[] indecies)
+            => Data[GetFlattenedIndexSilent(indecies)];
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetValueNoCheck(T value, int x)
+            => Data[GetFlattenedIndexSilent(x)] = value;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetValueNoCheck(T value, int x, int y)
+            => Data[GetFlattenedIndexSilent(x, y)] = value;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetValueNoCheck(T value, int x, int y, int z)
+            => Data[GetFlattenedIndexSilent(x, y, z)] = value;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetValueNoCheck(T value, int x, int y, int z, int[] other)
+            => Data[GetFlattenedIndexSilent(x, y, z, other)] = value;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetValueNoCheck(T value, int[] indecies)
             => Data[GetFlattenedIndexSilent(indecies)] = value;
 
-        public void SetValueNoCheck(Func<T> valueCreator, params int[] indecies)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetValueNoCheck(Func<T> valueCreator, int x)
+            => Data[GetFlattenedIndexSilent(x)] = valueCreator();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetValueNoCheck(Func<T> valueCreator, int x, int y)
+            => Data[GetFlattenedIndexSilent(x, y)] = valueCreator();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetValueNoCheck(Func<T> valueCreator, int x, int y, int z)
+            => Data[GetFlattenedIndexSilent(x, y, z)] = valueCreator();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetValueNoCheck(Func<T> valueCreator, int x, int y, int z, int[] indecies)
+            => Data[GetFlattenedIndexSilent(x, y, z, indecies)] = valueCreator();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetValueNoCheck(Func<T> valueCreator, int[] indecies)
             => Data[GetFlattenedIndexSilent(indecies)] = valueCreator();
 
         /// <summary>

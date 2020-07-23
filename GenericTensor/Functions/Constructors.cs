@@ -127,13 +127,13 @@ namespace GenericTensor.Core
         /// and iterator for each pair of coordinate
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Tensor<T> CreateMatrix(int width, int height, Func<(int x, int y), T> stepper)
+        public static Tensor<T> CreateMatrix(int width, int height, Func<int, int, T> stepper)
         {
-            var data = new T[width, height];
+            var res = Tensor<T>.CreateMatrix(width, height);
             for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
-                data[x, y] = stepper((x, y));
-            return CreateMatrix(data);
+                res.SetValueNoCheck(stepper(x, y), x, y);
+            return res;
         }
 
         /// <summary>

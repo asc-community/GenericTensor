@@ -46,7 +46,7 @@ namespace GenericTensor.Core
             if (indecies.Length == 0)
                 return this;
             var currIndex = indecies[0];
-            var newLinIndexDelta = GetFlattenedIndexSilent(new []{currIndex});
+            var newLinIndexDelta = GetFlattenedIndexSilent(currIndex);
             var newBlocks = Blocks.ToList();
             var rootAxis = AxesOrder[0];
             newBlocks.RemoveAt(rootAxis);
@@ -56,7 +56,7 @@ namespace GenericTensor.Core
                     newAxesOrder[i] -= 1;
             newAxesOrder.RemoveAt(0);
             var newShape = Shape.CutOffset1();
-            var result = new Tensor<T>(newShape, newBlocks, newAxesOrder, Data);
+            var result = new Tensor<T>(newShape, newBlocks.ToArray(), newAxesOrder.ToArray(), Data);
             result.LinOffset = newLinIndexDelta;
             if (indecies.Length == 1)
                 return result;

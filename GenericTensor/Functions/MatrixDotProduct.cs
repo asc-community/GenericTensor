@@ -65,11 +65,11 @@ namespace GenericTensor.Core
                     var s = ConstantsAndFunctions<T>.CreateZero();
                     for (int i = 0; i < row; i++)
                     {
-                        var v1 = a.GetCell(x, i);
-                        var v2 = b.GetCell(i, y);
+                        var v1 = a.GetValueNoCheck(x, i);
+                        var v2 = b.GetValueNoCheck(i, y);
                         s = ConstantsAndFunctions<T>.Add(s, ConstantsAndFunctions<T>.Multiply(v1, v2));
                     }
-                    res.SetCell(s, x, y);
+                    res.SetValueNoCheck(s, x, y);
                 }
             }
             return res;

@@ -46,7 +46,7 @@ namespace GenericTensor.Core
                     {
                         var count = 8 - this[i, j].ToString().Length;
                         count = Math.Max(0, count);
-                        s += this.GetCell(i, j).ToString();
+                        s += this.GetValueNoCheck(i, j).ToString();
                         for (int k = 0; k < count; k++)
                             s += " ";
                     }
@@ -58,7 +58,7 @@ namespace GenericTensor.Core
             {
                 var els = new List<string>();
                 for (int i = 0; i < Shape[0]; i++)
-                    els.Add(this.GetCell(i).ToString());
+                    els.Add(this.GetValueNoCheck(i).ToString());
                 return string.Join(" ", els);
             }
             var sb = new StringBuilder();

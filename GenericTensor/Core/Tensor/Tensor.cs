@@ -38,7 +38,7 @@ namespace GenericTensor.Core
     {
         private T[] Data { get; set; }
         
-        private readonly List<int> Blocks = new List<int>(); // 3 x 4 x 5
+        private int[] Blocks; // 3 x 4 x 5
         private int _volume = -1;
         /// <summary>
         /// Number of elements in tensor overall
@@ -60,16 +60,15 @@ namespace GenericTensor.Core
         private void BlockRecompute()
         {
             int len = 1;
-            Blocks.Clear();
             for (int i = Shape.Count - 1; i >= 0; i--)
             {
-                Blocks.Add(len);
+                Blocks[i] = len;
                 len *= Shape[i];
             }
             Blocks.Reverse();
         }
 
-        protected Tensor(TensorShape dimensions, List<int> blocks, List<int> axesOrder, T[] data)
+        protected Tensor(TensorShape dimensions, int[] blocks, int[] axesOrder, T[] data)
         {
             Shape = dimensions;
             AxesOrder = axesOrder;
@@ -81,15 +80,17 @@ namespace GenericTensor.Core
         {
             Shape = dimensions;
             int len = 1;
+            AxesOrder = new int[dimensions.Count];
             for (int i = 0; i < dimensions.Length; i++)
             {
                 len *= dimensions[i];
-                AxesOrder.Add(i);
+                AxesOrder[i] = i;
             }
             var data = new T[len];
 
             Data = data;
             LinOffset = 0;
+            Blocks = new int[dimensions.Count];
             BlockRecompute();
         }
 

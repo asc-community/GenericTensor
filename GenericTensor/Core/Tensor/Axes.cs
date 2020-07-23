@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace GenericTensor.Core
@@ -37,7 +38,7 @@ namespace GenericTensor.Core
         /// Shape represents axes' lengths of the tensor
         /// </summary>
         public TensorShape Shape { get; private set; }
-        private readonly List<int> AxesOrder = new List<int>();
+        private int[] AxesOrder;
 
         /// <summary>
         /// Swaps axes in tensor.
@@ -83,15 +84,41 @@ namespace GenericTensor.Core
             return res + LinOffset;
         }
 
-        private int GetFlattenedIndexSilent(int[] indecies)
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private int GetFlattenedIndexSilent(int x) 
+            => Blocks[AxesOrder[0]] * x + 
+               LinOffset;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private int GetFlattenedIndexSilent(int x, int y) 
+            => Blocks[AxesOrder[0]] * x +
+               Blocks[AxesOrder[1]] * y +
+               LinOffset;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private int GetFlattenedIndexSilent(int x, int y, int z) 
+            => Blocks[AxesOrder[0]] * x +
+               Blocks[AxesOrder[1]] * y +
+               Blocks[AxesOrder[2]] * z +
+               LinOffset;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private int GetFlattenedIndexSilent(int x, int y, int z, int[] other)
         {
-            var res = 0;
-            for (int i = 0; i < indecies.Length; i++)
-            {
-                res += Blocks[AxesOrder[i]] * indecies[i];
-            }
-            return res + LinOffset;
+            var res = GetFlattenedIndexSilent(x, y, z);
+            for (int i = 0; i < other.Length; i++)
+                res += other[i] * Blocks[AxesOrder[i + 3]];
+            return res;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private int GetFlattenedIndexSilent(int[] other)
+        {
+            var res = 0;
+            for (int i = 0; i < other.Length; i++)
+                res += other[i] * Blocks[AxesOrder[i]];
+            return res + LinOffset;
+        }
     }
 }

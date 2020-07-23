@@ -45,7 +45,7 @@ namespace GenericTensor.Core
             #endif
             var res = new Tensor<T>(a.Shape);
             foreach (var index in res.IterateOverElements())
-                res.SetCell(operation(a.GetCell(index), b.GetCell(index)), index);
+                res.SetValueNoCheck(operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index)), index);
             return res;
         }
 

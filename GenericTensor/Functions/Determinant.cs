@@ -169,7 +169,7 @@ namespace GenericTensor.Core
 
             var elemMatrix = Tensor<SafeDivisionWrapper<T>>
                 .CreateMatrix(n, n,
-                k => new SafeDivisionWrapper<T>(this.GetValueNoCheck(k.x, k.y))
+                (x, y) => new SafeDivisionWrapper<T>(this.GetValueNoCheck(x, y))
                 );
             for (int k = 1; k < n; k++)
             for (int j = k; j < n; j++)
@@ -226,8 +226,8 @@ namespace GenericTensor.Core
             for (int j = k; j < n; j++)
             {
                 var m = ConstantsAndFunctions<T>.Divide(
-                    elemMatrix.GetCell(j, k - 1),
-                    elemMatrix.GetCell(k - 1, k - 1)
+                    elemMatrix.GetValueNoCheck(j, k - 1),
+                    elemMatrix.GetValueNoCheck(k - 1, k - 1)
                 );
                 for (int i = 0; i < n; i++)
                 {

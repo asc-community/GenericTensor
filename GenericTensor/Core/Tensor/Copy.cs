@@ -44,11 +44,11 @@ namespace GenericTensor.Core
             if (!copyElements)
             {
                 foreach (var index in res.IterateOverElements())
-                    res.SetCell(GetCell(index), index);
+                    res.SetValueNoCheck(GetValueNoCheck(index), index);
             }
             else
                 foreach (var index in res.IterateOverElements())
-                    res.SetCell(ConstantsAndFunctions<T>.Copy(GetCell(index)), index);
+                    res.SetValueNoCheck(ConstantsAndFunctions<T>.Copy(GetValueNoCheck(index)), index);
             return res;
         }
 

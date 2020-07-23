@@ -37,6 +37,8 @@ namespace Sample
         static void Main(string[] args)
         {
             BuiltinTypeInitter.InitForInt();
+            for (int i = 0; i < 10000000; i++)
+                Tensor<int>.CreateMatrix(30, 30, (x, y) => x + y);
         }
     }
 }

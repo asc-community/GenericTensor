@@ -16,8 +16,11 @@ namespace Benchmark
             BuiltinTypeInitter.InitForInt();
         }
 
+        static TS CreateMatrixPure(int size)
+            => TS.CreateMatrix(size, size);
+
         static TS CreateMatrix(int size)
-            => TS.CreateMatrix(size, size, (k) => k.x + k.y);
+            => TS.CreateMatrix(size, size, (x, y) => x + y);
 
         private static TS createdMatrix = CreateMatrix(6);
         
@@ -25,6 +28,9 @@ namespace Benchmark
 
         [Benchmark] public void CreatingMatrix()
             => CreateMatrix(MatrixSize);
+
+        [Benchmark] public void CreatingPureMatrix()
+            => CreateMatrixPure(MatrixSize);
 
         [Benchmark] public void CreatingMatrixAndTranspose()
             => CreateMatrix(MatrixSize).TransposeMatrix();

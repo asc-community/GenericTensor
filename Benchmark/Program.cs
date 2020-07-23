@@ -9,7 +9,7 @@ namespace Benchmark
     class Program
     {
         static TS CreateMatrix(int size)
-            => TS.CreateMatrix(size, size, (k) => k.x + k.y);
+            => TS.CreateMatrix(size, size, (x, y) => x + y);
         static void Main(string[] args)
         {
             BuiltinTypeInitter.InitForInt();
