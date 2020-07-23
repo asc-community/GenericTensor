@@ -55,7 +55,6 @@ namespace GenericTensor.Core
             var height = b.Shape[1];
             var row = a.Shape[1];
             var res = CreateMatrix(width, height);
-            b.Transpose(0, 1);
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -64,17 +63,11 @@ namespace GenericTensor.Core
                     var s = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
                     for (int i = 0; i < row; i++)
                     {
-                        var v1 = a.GetCell(x, i).Copy();
-                        var v2 = b.GetCell(i, y).Copy();
+                        var v1 = a.GetCell(x, i);
+                        var v2 = b.GetCell(i, y);
                         s.Add(ConstantsAndFunctions<TWrapper, TPrimitive>.MultiplySaveWrapper((TWrapper)v1, (TWrapper)v2));
                     }
                     res.SetCell(s, x, y);
-                    
-                    /*
-                    var v1 = a.GetSubtensor(x);
-                    var v2 = b.GetSubtensor(y);
-                    var scalar = Tensor<TWrapper, TPrimitive>.VectorDotProduct(v1, v2);
-                    res.SetCell(ConstantsAndFunctions<TWrapper, TPrimitive>.Create(scalar), x, y);*/
                 }
             }
             return res;
