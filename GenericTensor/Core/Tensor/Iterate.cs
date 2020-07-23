@@ -57,12 +57,8 @@ namespace GenericTensor.Core
         internal TWrapper GetFlattenedWrapper(params int[] indecies)
         {
             var actualIndex = GetFlattenedIndexWithCheck(indecies);
-            return Data[actualIndex];
-        }
-
-        internal TWrapper GetWrapperSilent(params int[] indecies)
-        {
-            var actualIndex = GetFlattenedIndexSilent(indecies);
+            if (Data[actualIndex] is null)
+                Data[actualIndex] = new TWrapper();
             return Data[actualIndex];
         }
 

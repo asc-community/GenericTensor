@@ -75,6 +75,7 @@ namespace GenericTensor.Core
         /// <param name="indecies"></param>
         public void SetSubtensor(Tensor<TWrapper, TPrimitive> sub, params int[] indecies)
         {
+            #if ALLOW_EXCEPTIONS
             if (indecies.Length >= Shape.Count)
                 throw new InvalidShapeException($"{nameof(indecies.Length)} should be less than {nameof(Shape.Length)}");
             for (int i = 0; i < indecies.Length; i++)
@@ -82,9 +83,12 @@ namespace GenericTensor.Core
                     throw new IndexOutOfRangeException();
             if (Shape.Count - indecies.Length != sub.Shape.Count)
                 throw new InvalidShapeException($"Number of {nameof(sub.Shape.Length)} + {nameof(indecies.Length)} should be equal to {Shape.Count}");
+            #endif
             var thisSub = GetSubtensor(indecies);
+            #if ALLOW_EXCEPTIONS
             if (thisSub.Shape != sub.Shape)
                 throw new InvalidShapeException($"{nameof(sub.Shape)} must be equal to {nameof(Shape)}");
+            #endif
             thisSub.Assign(sub);
         }
     }

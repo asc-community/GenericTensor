@@ -39,8 +39,10 @@ namespace GenericTensor.Core
         public static Tensor<TWrapper, TPrimitive> Zip(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b, Func<TWrapper, TWrapper, TWrapper> operation)
         {
+            #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException("Arguments should be of the same shape");
+            #endif
             var res = new Tensor<TWrapper, TPrimitive>(a.Shape);
             foreach (var index in res.IterateOverElements())
                 res.SetCell(operation(a.GetCell(index), b.GetCell(index)), index);

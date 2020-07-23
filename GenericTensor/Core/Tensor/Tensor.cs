@@ -24,13 +24,13 @@
  */
 #endregion
 
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+
 
 namespace GenericTensor.Core
 {
@@ -87,8 +87,12 @@ namespace GenericTensor.Core
                 AxesOrder.Add(i);
             }
             var data = new TWrapper[len];
+
+            /*
+             We do not need to init it
             for (int i = 0; i < len; i++)
                 data[i] = new TWrapper();
+                */
             Data = data;
             LinOffset = 0;
             BlockRecompute();

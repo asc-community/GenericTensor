@@ -54,24 +54,32 @@ namespace GenericTensor.Core
         /// </summary>
         public void TransposeMatrix()
         {
+            #if ALLOW_EXCEPTIONS
             if (Shape.Count < 2)
                 throw new InvalidShapeException("this should be at least matrix");
+            #endif
             Transpose(Shape.Count - 2, Shape.Count - 1);
         }
 
         private int GetFlattenedIndexWithCheck(int[] indecies)
         {
+            #if ALLOW_EXCEPTIONS
             if (indecies.Length != Shape.Count)
                 throw new ArgumentException($"There should be {Shape.Count} indecies, not {indecies.Length}");
+            #endif
             var res = 0;
             for (int i = 0; i < indecies.Length; i++)
             {
+                #if ALLOW_EXCEPTIONS
                 if (indecies[i] < 0 || indecies[i] >= Shape[i])
                     throw new IndexOutOfRangeException($"Bound vialoting: axis {i} is {Shape[i]} long, your input is {indecies[i]}");
+                #endif
                 res += Blocks[AxesOrder[i]] * indecies[i];
             }
+            #if ALLOW_EXCEPTIONS
             if (res >= Data.Length)
                 throw new IndexOutOfRangeException();
+            #endif
             return res + LinOffset;
         }
 

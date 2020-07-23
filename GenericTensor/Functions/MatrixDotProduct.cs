@@ -47,11 +47,13 @@ namespace GenericTensor.Core
         public static Tensor<TWrapper, TPrimitive> MatrixDotProduct(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b)
         {
+            #if ALLOW_EXCEPTIONS
             if (!a.IsMatrix || !b.IsMatrix)
                 throw new InvalidShapeException($"Both {nameof(a)} and {nameof(b)} should be matrices");
-
             if (a.Shape[1] != b.Shape[0])
                 throw new InvalidShapeException($"{nameof(a)}'s height must be equal to {nameof(b)}'s width");
+            #endif
+
             var width = a.Shape[0];
             var height = b.Shape[1];
             var res = Tensor<TWrapper, TPrimitive>.CreateMatrix(width, height,((int, int) _) => ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero());
@@ -74,10 +76,12 @@ namespace GenericTensor.Core
         public static Tensor<TWrapper, TPrimitive> TensorMatrixDotProduct(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b)
         {
+            #if ALLOW_EXCEPTIONS
             if (a.Shape.Count < 2 || b.Shape.Count < 2)
                 throw new InvalidShapeException($"Arguments should be at least matrices while their shapes are {a.Shape} and {b.Shape}");
             if (a.Shape.SubShape(0, 2) != b.Shape.SubShape(0, 2))
                 throw new InvalidShapeException("Other dimensions of tensors should be equal");
+            #endif
             var oldShape = a.Shape.SubShape(0, 2).ToArray();
             var newShape = new int[oldShape.Length + 2];
             for (int i = 0; i < oldShape.Length; i++)

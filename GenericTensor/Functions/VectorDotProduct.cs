@@ -46,8 +46,10 @@ namespace GenericTensor.Core
         public static Tensor<TWrapper, TPrimitive> TensorVectorDotProduct(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b)
         {
+            #if ALLOW_EXCEPTIONS
             if (a.Shape.SubShape(0, 1) != b.Shape.SubShape(0, 1))
                 throw new InvalidShapeException("Other dimensions of tensors should be equal");
+            #endif
             var resTensor = new Tensor<TWrapper, TPrimitive>(a.Shape.SubShape(0, 1));
             foreach (var index in resTensor.IterateOverElements())
             {
@@ -63,11 +65,12 @@ namespace GenericTensor.Core
         public static TPrimitive VectorDotProduct(Tensor<TWrapper, TPrimitive> a,
             Tensor<TWrapper, TPrimitive> b)
         {
+            #if ALLOW_EXCEPTIONS
             if (!a.IsVector || !b.IsVector)
                 throw new InvalidShapeException($"{nameof(a)} and {nameof(b)} should be vectors");
             if (a.Shape[0] != b.Shape[0])
                 throw new InvalidShapeException($"{nameof(a)}'s length should be the same as {nameof(b)}'s");
-
+            #endif
             var res = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
             for (int i = 0; i < a.Shape[0]; i++)
             {

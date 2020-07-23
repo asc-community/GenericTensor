@@ -68,10 +68,12 @@ namespace GenericTensor.Core
         /// </summary>
         public TPrimitive DeterminantLaplace()
         {
+            #if ALLOW_EXCEPTIONS
             if (!this.IsMatrix)
                 throw new InvalidShapeException("Determinant function should be only called from a matrix");
             if (Shape[0] != Shape[1])
                 throw new InvalidShapeException("Matrix should be square");
+            #endif
             return DeterminantLaplace(Shape[0]);
         }
         #endregion
@@ -196,10 +198,12 @@ namespace GenericTensor.Core
         /// </summary>
         public TPrimitive DeterminantGaussianSafeDivision()
         {
+            #if ALLOW_EXCEPTIONS
             if (!IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
             if (Shape[0] != Shape[1])
                 throw new InvalidShapeException("this should be square matrix");
+            #endif
 
             if (Shape[0] == 1)
                 return this[0, 0];
@@ -255,11 +259,12 @@ namespace GenericTensor.Core
         /// </summary>
         public TPrimitive DeterminantGaussianSimple(bool copy)
         {
+            #if ALLOW_EXCEPTIONS
             if (!IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
             if (Shape[0] != Shape[1])
                 throw new InvalidShapeException("this should be square matrix");
-
+            #endif
             if (Shape[0] == 1)
                 return this[0, 0];
 

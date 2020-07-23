@@ -5,4 +5,8 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;ALLOW_EXCEPTIONS</DefineConstants>
+  </PropertyGroup>
+
 </Project>

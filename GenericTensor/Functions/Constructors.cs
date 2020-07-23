@@ -28,6 +28,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace GenericTensor.Core
@@ -86,11 +87,15 @@ namespace GenericTensor.Core
         private static (int height, int width) ExtractAndCheck<T>(T[,] data)
         {
             var width = data.GetLength(0);
+            #if ALLOW_EXCEPTIONS
             if (width <= 0)
                 throw new InvalidShapeException();
+            #endif
             var height = data.GetLength(1);
+            #if ALLOW_EXCEPTIONS
             if (height <= 0)
                 throw new InvalidShapeException();
+            #endif
             return (width, height);
         }
 
@@ -105,6 +110,7 @@ namespace GenericTensor.Core
         /// where yourData.GetLength(0) is Shape[0]
         /// yourData.GetLength(1) is Shape[1]
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Tensor<TWrapper, TPrimitive> CreateMatrix(TPrimitive[,] data)
         {
             var (width, height) = Tensor<TWrapper, TPrimitive>.ExtractAndCheck(data);
@@ -118,6 +124,7 @@ namespace GenericTensor.Core
         /// <summary>
         /// Creates a matrix from a two-dimensional array of wrappers
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Tensor<TWrapper, TPrimitive> CreateMatrix(TWrapper[,] data)
         {
             var (width, height) = Tensor<TWrapper, TPrimitive>.ExtractAndCheck(data);
@@ -132,6 +139,7 @@ namespace GenericTensor.Core
         /// Creates a matrix of width and height size
         /// and iterator for each pair of coordinate
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Tensor<TWrapper, TPrimitive> CreateMatrix(int width, int height, Func<(int x, int y), TWrapper> stepper)
         {
             var data = new TWrapper[width, height];
@@ -148,6 +156,7 @@ namespace GenericTensor.Core
         /// <param name="shape"></param>
         /// <param name="operation"></param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Tensor<TWrapper, TPrimitive> CreateTensor(TensorShape shape, Func<int[], TPrimitive> operation)
         {
             var res = new Tensor<TWrapper, TPrimitive>(shape);

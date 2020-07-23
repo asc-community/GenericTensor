@@ -39,12 +39,16 @@ namespace GenericTensor.Core
         /// </summary>
         public static Tensor<TWrapper, TPrimitive> Stack(params Tensor<TWrapper, TPrimitive>[] elements)
         {
+            #if ALLOW_EXCEPTIONS
             if (elements.Length < 1)
                 throw new InvalidShapeException("Shoud be at least one element to stack");
+            #endif
             var desiredShape = elements[0].Shape;
+            #if ALLOW_EXCEPTIONS
             for (int i = 1; i < elements.Length; i++)
                 if (elements[i].Shape != desiredShape)
                     throw new InvalidShapeException($"Tensors in {nameof(elements)} should be of the same shape");
+            #endif
             var newShape = new int[desiredShape.Count + 1];
             newShape[0] = elements.Length;
             for (int i = 1; i < newShape.Length; i++)
