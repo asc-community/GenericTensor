@@ -32,14 +32,19 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = Tensor<TensorIntWrapper, int>;
+    using TS = Tensor<int>;
 
     [TestClass]
     public class Piecewise
     {
-        Tensor<TensorIntWrapper, int> GetA()
+        public Piecewise()
         {
-            var res = Tensor<TensorIntWrapper, int>.CreateMatrix(
+            BuiltinTypeInitter.InitForInt();
+        }
+
+        Tensor<int> GetA()
+        {
+            var res = Tensor<int>.CreateMatrix(
                 new [,]
                 {
                     {1, 2},
@@ -49,9 +54,9 @@ namespace UnitTests
             return res;
         }
 
-        Tensor<TensorIntWrapper, int> GetB()
+        Tensor<int> GetB()
         {
-            var res = Tensor<TensorIntWrapper, int>.CreateMatrix(
+            var res = Tensor<int>.CreateMatrix(
                 new [,]
                 {
                     {6, 7},
@@ -65,8 +70,8 @@ namespace UnitTests
         public void AddMat()
         {
             Assert.AreEqual(
-                Tensor<TensorIntWrapper, int>.PiecewiseAdd(GetA(), GetB()),
-                Tensor<TensorIntWrapper, int>.CreateMatrix(
+                Tensor<int>.PiecewiseAdd(GetA(), GetB()),
+                Tensor<int>.CreateMatrix(
                     new [,]
                     {
                         {7,  9},
@@ -80,8 +85,8 @@ namespace UnitTests
         public void SubMat()
         {
             Assert.AreEqual(
-                Tensor<TensorIntWrapper, int>.PiecewiseSubtract(GetA(), GetB()),
-                Tensor<TensorIntWrapper, int>.CreateMatrix(
+                Tensor<int>.PiecewiseSubtract(GetA(), GetB()),
+                Tensor<int>.CreateMatrix(
                     new [,]
                     {
                         {-5,  -5},
@@ -95,8 +100,8 @@ namespace UnitTests
         public void MpMat()
         {
             Assert.AreEqual(
-                Tensor<TensorIntWrapper, int>.PiecewiseMultiply(GetA(), GetB()),
-                Tensor<TensorIntWrapper, int>.CreateMatrix(
+                Tensor<int>.PiecewiseMultiply(GetA(), GetB()),
+                Tensor<int>.CreateMatrix(
                     new [,]
                     {
                         {6,  14},
@@ -110,8 +115,8 @@ namespace UnitTests
         public void DivMat()
         {
             Assert.AreEqual(
-                Tensor<TensorIntWrapper, int>.PiecewiseDivide(GetA(), GetB()),
-                Tensor<TensorIntWrapper, int>.CreateMatrix(
+                Tensor<int>.PiecewiseDivide(GetA(), GetB()),
+                Tensor<int>.CreateMatrix(
                     new [,]
                     {
                         {0, 0},
@@ -125,8 +130,8 @@ namespace UnitTests
         public void AddEl()
         {
             Assert.AreEqual(
-                Tensor<TensorIntWrapper, int>.PiecewiseAdd(GetA(), 2),
-                Tensor<TensorIntWrapper, int>.CreateMatrix(
+                Tensor<int>.PiecewiseAdd(GetA(), 2),
+                Tensor<int>.CreateMatrix(
                     new [,]
                     {
                         {3, 4},
@@ -139,8 +144,8 @@ namespace UnitTests
         public void SubEl()
         {
             Assert.AreEqual(
-                Tensor<TensorIntWrapper, int>.PiecewiseSubtract(GetA(), 2),
-                Tensor<TensorIntWrapper, int>.CreateMatrix(
+                Tensor<int>.PiecewiseSubtract(GetA(), 2),
+                Tensor<int>.CreateMatrix(
                     new [,]
                     {
                         {-1, 0},
@@ -153,8 +158,8 @@ namespace UnitTests
         public void MulEl()
         {
             Assert.AreEqual(
-                Tensor<TensorIntWrapper, int>.PiecewiseMultiply(GetA(), 2),
-                Tensor<TensorIntWrapper, int>.CreateMatrix(
+                Tensor<int>.PiecewiseMultiply(GetA(), 2),
+                Tensor<int>.CreateMatrix(
                     new [,]
                     {
                         {2, 4},
@@ -167,8 +172,8 @@ namespace UnitTests
         public void DivEl()
         {
             Assert.AreEqual(
-                Tensor<TensorIntWrapper, int>.PiecewiseDivide(GetA(), 2),
-                Tensor<TensorIntWrapper, int>.CreateMatrix(
+                Tensor<int>.PiecewiseDivide(GetA(), 2),
+                Tensor<int>.CreateMatrix(
                     new [,]
                     {
                         {0, 1},

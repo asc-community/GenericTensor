@@ -32,10 +32,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = Tensor<TensorIntWrapper, int>;
+    using TS = Tensor<int>;
     [TestClass]
     public class Identity
     {
+        public Identity()
+        {
+            BuiltinTypeInitter.InitForInt();
+        }
+
         [TestMethod]
         public void IdenMatrix1()
         {

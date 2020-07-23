@@ -61,7 +61,7 @@ namespace GenericTensor.Core
         {
             var res = new Tensor<T>(Shape);
             foreach (var index in res.IterateOverElements())
-                res.SetCell(ConstantsAndFunctions<T>.Copy(GetCell(index)), index);
+                res.SetValueNoCheck(ConstantsAndFunctions<T>.Copy(GetValueNoCheck(index)), index);
             return res;
         }
 
