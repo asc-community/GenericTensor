@@ -11,6 +11,11 @@ namespace Benchmark
 
     public class MatrixBenchmark
     {
+        public MatrixBenchmark()
+        {
+            BuiltinTypeInitter.InitForInt();
+        }
+
         static TS CreateMatrix(int size)
             => TS.CreateMatrix(size, size, (k) => k.x + k.y);
 

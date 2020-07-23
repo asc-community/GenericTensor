@@ -8,11 +8,21 @@ namespace Benchmark
     using TS = Tensor<int>;
     class Program
     {
-
+        static TS CreateMatrix(int size)
+            => TS.CreateMatrix(size, size, (k) => k.x + k.y);
         static void Main(string[] args)
         {
-            //CreateMatrix(5).DeterminantGaussianSafeDivision();
+            BuiltinTypeInitter.InitForInt();
+            //CreateMatrix(5).DeterminantGaussianSafeDivision()
             BenchmarkRunner.Run<MatrixBenchmark>();
+            //TS.MatrixDotProduct(CreateMatrix(3), CreateMatrix(3));
+            /*
+            var mat = CreateMatrix(6);
+            mat.DeterminantGaussianSafeDivision();
+            mat.DeterminantGaussianSafeDivision();
+            TS.MatrixDotProduct(mat, mat);
+            TS.PiecewiseAdd(mat, mat);
+            */
         }
     }
 }

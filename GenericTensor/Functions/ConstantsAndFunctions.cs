@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using GenericTensor.Core;
 
@@ -34,43 +35,45 @@ namespace GenericTensor.Functions
 {
     public static class ConstantsAndFunctions<T>
     {
-        static Y AskForDefining<Y>()
+        static Y AskForDefining<Y>(string methodName)
         {
+            StackTrace stackTrace = new StackTrace();
             throw new NotImplementedException(
-                $"This operation requires this function to be defined");
+                $"This operation requires ConstantsAndFunctions<{typeof(T)}>." +
+                $"{methodName} to be defined.");
         }
 
         // 1
-        public static Func<T> CreateOne = AskForDefining<T>;
+        public static Func<T> CreateOne = () => AskForDefining<T>("CreateOne");
 
         // 0
-        public static Func<T> CreateZero = AskForDefining<T>;
+        public static Func<T> CreateZero = () => AskForDefining<T>("CreateZero");
 
         // +
-        public static Func<T, T, T> Add = (a, b) => AskForDefining<T>();
+        public static Func<T, T, T> Add = (a, b) => AskForDefining<T>("Add");
 
         // -
-        public static Func<T, T, T> Subtract = (a, b) => AskForDefining<T>();
+        public static Func<T, T, T> Subtract = (a, b) => AskForDefining<T>("Sutbract");
 
         // *
-        public static Func<T, T, T> Multiply = (a, b) => AskForDefining<T>();
+        public static Func<T, T, T> Multiply = (a, b) => AskForDefining<T>("Multiply");
 
         // /
-        public static Func<T, T, T> Divide = (a, b) => AskForDefining<T>();
+        public static Func<T, T, T> Divide = (a, b) => AskForDefining<T>("Divide");
 
         // copying
-        public static Func<T, T> Copy = a => AskForDefining<T>();
+        public static Func<T, T> Copy = a => AskForDefining<T>("Copy");
 
         // new
-        public static Func<T> Default = AskForDefining<T>;
+        public static Func<T> Default = () => AskForDefining<T>("Default");
 
         // ==
-        public static Func<T, T, bool> AreEqual = (a, b) => AskForDefining<bool>();
+        public static Func<T, T, bool> AreEqual = (a, b) => AskForDefining<bool>("Are equal");
 
         // -
-        public static Func<T, T> Negate = a => AskForDefining<T>();
+        public static Func<T, T> Negate = a => AskForDefining<T>("Negate");
 
         // == 0
-        public static Func<T, bool> IsZero = a => AskForDefining<bool>();
+        public static Func<T, bool> IsZero = a => AskForDefining<bool>("IsZero");
     }
 }

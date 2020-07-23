@@ -203,22 +203,12 @@ namespace GenericTensor.Core
             return det.Count();
         }
 
-        /// <summary>
-        /// Performs simple Gaussian elimination method on a tensor
-        /// if you do not change TPrimitives in your TWrapper but
-        /// call its methods or change fields,
-        /// Rather use DeterminantGaussian(copy: true) so that its
-        /// temporarily tensor will not change tensor's values
-        /// </summary>
-        public T DeterminantGaussianSimple()
-            => DeterminantGaussianSimple(copy: false);
-
+        
         // TODO: how to avoid code duplication?
         /// <summary>
-        /// Copy = true will slower the performance, but is necessary if your
-        /// TPrimitive's pointer does not change through operators
+        /// Performs simple Gaussian elimination method on a tensor
         /// </summary>
-        public T DeterminantGaussianSimple(bool copy)
+        public T DeterminantGaussianSimple()
         {
             #if ALLOW_EXCEPTIONS
             if (!IsMatrix)
