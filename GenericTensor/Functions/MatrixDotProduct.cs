@@ -32,7 +32,6 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-
     public partial class Tensor<TWrapper, TPrimitive>
     {
         /// <summary>
@@ -54,15 +53,29 @@ namespace GenericTensor.Core
                 throw new InvalidShapeException($"{nameof(a)}'s height must be equal to {nameof(b)}'s width");
             var width = a.Shape[0];
             var height = b.Shape[1];
-            var res = Tensor<TWrapper, TPrimitive>.CreateMatrix(width, height,((int, int) _) => ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero());
+            var row = a.Shape[1];
+            var res = CreateMatrix(width, height);
             b.Transpose(0, 1);
             for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
             {
-                var v1 = a.GetSubtensor(x);
-                var v2 = b.GetSubtensor(y);
-                var scalar = Tensor<TWrapper, TPrimitive>.VectorDotProduct(v1, v2);
-                res[x, y] = scalar;
+                for (int y = 0; y < height; y++)
+                {
+                    
+                    var s = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
+                    for (int i = 0; i < row; i++)
+                    {
+                        var v1 = a.GetCell(x, i); // короче с .Copy() робит, а без - нет, видимо что
+                        var v2 = b.GetCell(i, y); // -то с указателями, попа болит, отдохну немного
+                        s.Add(ConstantsAndFunctions<TWrapper, TPrimitive>.MultiplySaveWrapper(v1, v2));
+                    }
+                    res.SetCell(s, x, y);
+                    
+                    /*
+                    var v1 = a.GetSubtensor(x);
+                    var v2 = b.GetSubtensor(y);
+                    var scalar = Tensor<TWrapper, TPrimitive>.VectorDotProduct(v1, v2);
+                    res.SetCell(ConstantsAndFunctions<TWrapper, TPrimitive>.Create(scalar), x, y);*/
+                }
             }
             return res;
         }

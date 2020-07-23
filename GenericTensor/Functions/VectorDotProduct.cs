@@ -71,7 +71,7 @@ namespace GenericTensor.Core
             var res = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
             for (int i = 0; i < a.Shape[0]; i++)
             {
-                var term = ConstantsAndFunctions<TWrapper, TPrimitive>.Create(a[i]);
+                var term = a.GetCell(i).Forward();
                 term.Multiply(b.GetCell(i));
                 res.Add(term);
             }

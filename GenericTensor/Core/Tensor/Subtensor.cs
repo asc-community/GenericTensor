@@ -47,22 +47,21 @@ namespace GenericTensor.Core
                 return this;
             var currIndex = indecies[0];
             var newLinIndexDelta = GetFlattenedIndexSilent(new []{currIndex});
-            var newBlocks = Blocks.Select(c => c).ToList();
+            var newBlocks = Blocks.ToList();
             var rootAxis = AxesOrder[0];
             newBlocks.RemoveAt(rootAxis);
-            var newAxesOrder = AxesOrder.Select(c => c).ToList();
+            var newAxesOrder = AxesOrder.ToList();
             for (int i = 0; i < newAxesOrder.Count; i++)
                 if (newAxesOrder[i] > rootAxis)
                     newAxesOrder[i] -= 1;
             newAxesOrder.RemoveAt(0);
             var newShape = Shape.CutOffset1();
-            var aff = new Tensor<TWrapper, TPrimitive>(newShape, newBlocks, newAxesOrder, Data);
-            aff.LinOffset = newLinIndexDelta;
-            var sfdgd = aff.ToString();
+            var result = new Tensor<TWrapper, TPrimitive>(newShape, newBlocks, newAxesOrder, Data);
+            result.LinOffset = newLinIndexDelta;
             if (indecies.Length == 1)
-                return aff;
+                return result;
             else
-                return aff.GetSubtensor(new ArraySegment<int>(indecies, 1, indecies.Length - 1).ToArray());
+                return result.GetSubtensor(new ArraySegment<int>(indecies, 1, indecies.Length - 1).ToArray());
         }
 
         /// <summary>
