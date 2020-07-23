@@ -39,7 +39,7 @@ namespace GenericTensor.Core
         internal T DeterminantLaplace(int diagLength)
         {
             if (diagLength == 1)
-                return this[0, 0];
+                return this.GetValueNoCheck(0, 0);
             var det = ConstantsAndFunctions<T>.CreateZero();
             var sign = ConstantsAndFunctions<T>.CreateOne();
             var temp = new Tensor<T>(diagLength, diagLength);
@@ -50,7 +50,7 @@ namespace GenericTensor.Core
                     ConstantsAndFunctions<T>.Multiply(
                         sign,
                         ConstantsAndFunctions<T>.Multiply(
-                            this[0, i],
+                            this.GetValueNoCheck(0, i),
                             temp.DeterminantLaplace(diagLength - 1)
                         ))
                 );
@@ -163,7 +163,7 @@ namespace GenericTensor.Core
             #endif
 
             if (Shape[0] == 1)
-                return this[0, 0];
+                return this.GetValueNoCheck(0, 0);
 
             var n = Shape[0];
 
@@ -217,7 +217,7 @@ namespace GenericTensor.Core
                 throw new InvalidShapeException("this should be square matrix");
             #endif
             if (Shape[0] == 1)
-                return this[0, 0];
+                return this.GetValueNoCheck(0, 0);
 
             var n = Shape[0];
 

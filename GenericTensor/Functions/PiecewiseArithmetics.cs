@@ -44,8 +44,30 @@ namespace GenericTensor.Core
                 throw new InvalidShapeException("Arguments should be of the same shape");
             #endif
             var res = new Tensor<T>(a.Shape);
-            foreach (var index in res.IterateOverElements())
-                res.SetValueNoCheck(operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index)), index);
+            if (res.Shape.Length == 1)
+                res.IterateOver1(x =>
+                    res.SetValueNoCheck(
+                        operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)),
+                        x
+                    )
+                );
+            else if (res.Shape.Length == 2)
+                res.IterateOver2((x, y) =>
+                    res.SetValueNoCheck(
+                        operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)),
+                        x, y
+                    )
+                );
+            else if (res.Shape.Length == 3)
+                res.IterateOver3((x, y, z) =>
+                    res.SetValueNoCheck(
+                        operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z)),
+                        x, y, z
+                    )
+                );
+            else
+                foreach (var index in res.IterateOverElements())
+                    res.SetValueNoCheck(operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index)), index);
             return res;
         }
 

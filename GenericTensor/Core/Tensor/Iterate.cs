@@ -52,7 +52,7 @@ namespace GenericTensor.Core
         public IEnumerable<(int[] index, T value)> Iterate()
         {
             foreach (var ind in IterateOver(0))
-                yield return (ind, this[ind]);
+                yield return (ind, this.GetValueNoCheck(ind));
         }
 
         /// <summary>
@@ -171,7 +171,6 @@ namespace GenericTensor.Core
                 return s;
             }
 
-
             var indecies = new int[Shape.Count - offsetFromLeft];
             do
             {
@@ -197,5 +196,26 @@ namespace GenericTensor.Core
         /// </summary>
         public IEnumerable<int[]> IterateOverElements()
             => IterateOver(0);
+
+        public void IterateOver1(Action<int> react)
+        {
+            for (int x = 0; x < Shape[0]; x++)
+                react(x);
+        }
+
+        public void IterateOver2(Action<int, int> react)
+        {
+            for (int x = 0; x < Shape[0]; x++)
+            for (int y = 0; y < Shape[1]; y++)
+                react(x, y);
+        }
+
+        public void IterateOver3(Action<int, int, int> react)
+        {
+            for (int x = 0; x < Shape[0]; x++)
+            for (int y = 0; y < Shape[1]; y++)
+            for (int z = 0; z < Shape[2]; z++)
+                react(x, y, z);
+        }
     }
 }

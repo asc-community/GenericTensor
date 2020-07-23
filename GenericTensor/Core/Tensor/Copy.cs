@@ -68,7 +68,7 @@ namespace GenericTensor.Core
         internal void Assign(Tensor<T> tensor)
         {
             foreach (var (index, value) in tensor.Iterate())
-                this[index] = value;
+                this.SetValueNoCheck(value, index);
         }
     }
 }
