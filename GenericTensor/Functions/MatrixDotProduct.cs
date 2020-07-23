@@ -64,9 +64,9 @@ namespace GenericTensor.Core
                     var s = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
                     for (int i = 0; i < row; i++)
                     {
-                        var v1 = a.GetCell(x, i); // короче с .Copy() робит, а без - нет, видимо что
-                        var v2 = b.GetCell(i, y); // -то с указателями, попа болит, отдохну немного
-                        s.Add(ConstantsAndFunctions<TWrapper, TPrimitive>.MultiplySaveWrapper(v1, v2));
+                        var v1 = a.GetCell(x, i).Copy();
+                        var v2 = b.GetCell(i, y).Copy();
+                        s.Add(ConstantsAndFunctions<TWrapper, TPrimitive>.MultiplySaveWrapper((TWrapper)v1, (TWrapper)v2));
                     }
                     res.SetCell(s, x, y);
                     
