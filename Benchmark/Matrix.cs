@@ -7,18 +7,17 @@ using GenericTensor.Core;
 
 namespace Benchmark
 {
-    using TS = Tensor<TensorIntWrapper, int>;
+    using TS = Tensor<int>;
 
     public class MatrixBenchmark
     {
+        public MatrixBenchmark()
+        {
+            BuiltinTypeInitter.InitForInt();
+        }
+
         static TS CreateMatrix(int size)
-            => TS.CreateMatrix(size, size, (k) =>
-                {
-                    var res = new TensorIntWrapper();
-                    res.SetValue(k.x + k.y);
-                    return res;
-                }
-        );
+            => TS.CreateMatrix(size, size, (k) => k.x + k.y);
 
         private static TS createdMatrix = CreateMatrix(6);
         

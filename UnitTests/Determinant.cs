@@ -32,15 +32,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = Tensor<TensorIntWrapper, int>;
+    using TS = Tensor<int>;
 
     [TestClass]
     public class Determinant
     {
+        public Determinant()
+        {
+            BuiltinTypeInitter.InitForInt();
+            BuiltinTypeInitter.InitForFloat();
+        }
+
         [TestMethod]
         public void SimpleLaplace1()
         {
-            var M = Tensor<TensorIntWrapper, int>.CreateMatrix(new[,]
+            var M = Tensor<int>.CreateMatrix(new[,]
             {
                 {1, 2},
                 {3, 4}
@@ -51,7 +57,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleLaplace2()
         {
-            var M = Tensor<TensorIntWrapper, int>.CreateMatrix(new[,]
+            var M = Tensor<int>.CreateMatrix(new[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
@@ -67,7 +73,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleGaussian1()
         {
-            var M = Tensor<TensorIntWrapper, int>.CreateMatrix(new[,]
+            var M = Tensor<int>.CreateMatrix(new[,]
             {
                 {1, 2},
                 {3, 4}
@@ -78,7 +84,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleGaussian2()
         {
-            var M = Tensor<TensorIntWrapper, int>.CreateMatrix(new int[,]
+            var M = Tensor<int>.CreateMatrix(new int[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
@@ -94,7 +100,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleGaussian3()
         {
-            var M = Tensor<TensorFloatWrapper, float>.CreateMatrix(new float[,]
+            var M = Tensor<float>.CreateMatrix(new float[,]
             {
                 {1, 2},
                 {3, 4}
@@ -105,7 +111,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleGaussian4()
         {
-            var M = Tensor<TensorFloatWrapper, float>.CreateMatrix(new float[,]
+            var M = Tensor<float>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},

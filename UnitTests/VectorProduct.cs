@@ -35,28 +35,33 @@ namespace UnitTests
     [TestClass]
     public class VectorProduct
     {
+        public VectorProduct()
+        {
+            BuiltinTypeInitter.InitForInt();
+        }
+
         [TestMethod]
         public void TestVectorDotProduct1()
         {
-            var v1 = Tensor<TensorIntWrapper, int>.CreateVector(1, 2, 3);
-            var v2 = Tensor<TensorIntWrapper, int>.CreateVector(-3, 5, 3);
-            Assert.AreEqual(16, Tensor<TensorIntWrapper, int>.VectorDotProduct(v1, v2));
+            var v1 = Tensor<int>.CreateVector(1, 2, 3);
+            var v2 = Tensor<int>.CreateVector(-3, 5, 3);
+            Assert.AreEqual(16, Tensor<int>.VectorDotProduct(v1, v2));
         }
 
         [TestMethod]
         public void TestVectorDotProduct2()
         {
-            var v1 = Tensor<TensorIntWrapper, int>.CreateVector(1, 2, 3);
-            var v2 = Tensor<TensorIntWrapper, int>.CreateVector(-3, 5);
-            Assert.ThrowsException<InvalidShapeException>(() => Tensor<TensorIntWrapper, int>.VectorDotProduct(v1, v2));
+            var v1 = Tensor<int>.CreateVector(1, 2, 3);
+            var v2 = Tensor<int>.CreateVector(-3, 5);
+            Assert.ThrowsException<InvalidShapeException>(() => Tensor<int>.VectorDotProduct(v1, v2));
         }
 
         [TestMethod]
         public void TestVectorCrossProduct1()
         {
-            var v1 = Tensor<TensorIntWrapper, int>.CreateVector(1, 2, 3);
-            var v2 = Tensor<TensorIntWrapper, int>.CreateVector(-3, 5, 3);
-            Assert.AreEqual(Tensor<TensorIntWrapper, int>.CreateVector(-9, -12, 11), Tensor<TensorIntWrapper, int>.VectorCrossProduct(v1, v2));
+            var v1 = Tensor<int>.CreateVector(1, 2, 3);
+            var v2 = Tensor<int>.CreateVector(-3, 5, 3);
+            Assert.AreEqual(Tensor<int>.CreateVector(-9, -12, 11), Tensor<int>.VectorCrossProduct(v1, v2));
         }
     }
 }

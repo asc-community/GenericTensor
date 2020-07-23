@@ -36,9 +36,14 @@ namespace UnitTests
     [TestClass]
     public class Transposition
     {
-        private TensorInt GetBig()
+        public Transposition()
         {
-            var res = new TensorInt(2, 3, 4);
+            BuiltinTypeInitter.InitForInt();
+        }
+
+        private Tensor<int> GetBig()
+        {
+            var res = new Tensor<int>(2, 3, 4);
             foreach (var (index, _) in res.Iterate())
             {
                 res[index] = index[0] * 12 + index[1] * 4 + index[2];
@@ -46,9 +51,9 @@ namespace UnitTests
             return res;
         }
 
-        private TensorInt GetSmall()
+        private Tensor<int> GetSmall()
         {
-            var res = new TensorInt(2, 3);
+            var res = new Tensor<int>(2, 3);
             foreach (var (index, _) in res.Iterate())
             {
                 res[index] = 3 * index[0] + index[1];

@@ -34,9 +34,9 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive> where TWrapper : ITensorElement<TPrimitive>, new()
+    public partial class Tensor<T>
     {
-        private TWrapper[] Data { get; set; }
+        private T[] Data { get; set; }
         
         private readonly List<int> Blocks = new List<int>(); // 3 x 4 x 5
         private int _volume = -1;
@@ -69,7 +69,7 @@ namespace GenericTensor.Core
             Blocks.Reverse();
         }
 
-        protected Tensor(TensorShape dimensions, List<int> blocks, List<int> axesOrder, TWrapper[] data)
+        protected Tensor(TensorShape dimensions, List<int> blocks, List<int> axesOrder, T[] data)
         {
             Shape = dimensions;
             AxesOrder = axesOrder;
@@ -86,13 +86,8 @@ namespace GenericTensor.Core
                 len *= dimensions[i];
                 AxesOrder.Add(i);
             }
-            var data = new TWrapper[len];
+            var data = new T[len];
 
-            /*
-             We do not need to init it
-            for (int i = 0; i < len; i++)
-                data[i] = new TWrapper();
-                */
             Data = data;
             LinOffset = 0;
             BlockRecompute();

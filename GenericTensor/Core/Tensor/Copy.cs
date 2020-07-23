@@ -29,25 +29,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         /// <summary>
         /// Copies a tensor calling each cell with a .Copy()
         /// </summary>
-        public Tensor<TWrapper, TPrimitive> Copy(bool copyElements)
+        public Tensor<T> Copy(bool copyElements)
         {
-            var res = new Tensor<TWrapper, TPrimitive>(Shape);
+            var res = new Tensor<T>(Shape);
             if (!copyElements)
             {
                 foreach (var index in res.IterateOverElements())
-                    res.SetCell((TWrapper)this.GetCell(index).Forward(), index);
+                    res.SetCell(GetCell(index), index);
             }
             else
                 foreach (var index in res.IterateOverElements())
-                    res.SetCell((TWrapper)this.GetCell(index).Copy(), index);
+                    res.SetCell(ConstantsAndFunctions<T>.Copy(GetCell(index)), index);
             return res;
         }
 
@@ -56,15 +57,15 @@ namespace GenericTensor.Core
         /// but TWrappers are
         /// </summary>
         /// <returns></returns>
-        public Tensor<TWrapper, TPrimitive> Forward()
+        public Tensor<T> Forward()
         {
-            var res = new Tensor<TWrapper, TPrimitive>(Shape);
+            var res = new Tensor<T>(Shape);
             foreach (var index in res.IterateOverElements())
-                res.SetCell((TWrapper)this.GetCell(index).Forward(), index);
+                res.SetValueNoCheck(ConstantsAndFunctions<T>.Copy(GetValueNoCheck(index)), index);
             return res;
         }
 
-        internal void Assign(Tensor<TWrapper, TPrimitive> tensor)
+        internal void Assign(Tensor<T> tensor)
         {
             foreach (var (index, value) in tensor.Iterate())
                 this[index] = value;

@@ -32,135 +32,36 @@ using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    public class TensorIntWrapper : ITensorElement<int>
+    public static class BuiltinTypeInitter
     {
-        private int val;
-        public int GetValue() => val;
-        public void SetValue(int newValue) => this.val = newValue;
-
-        public override string ToString()
-            => val.ToString();
-
-        public ITensorElement<int> Copy()
+        public static void InitForInt()
         {
-            var res = new TensorIntWrapper();
-            res.SetValue(val);
-            return res;
+            ConstantsAndFunctions<int>.Add = (a, b) => a + b;
+            ConstantsAndFunctions<int>.Subtract = (a, b) => a - b;
+            ConstantsAndFunctions<int>.Multiply = (a, b) => a * b;
+            ConstantsAndFunctions<int>.Divide = (a, b) => a / b;
+            ConstantsAndFunctions<int>.CreateZero = () => 0;
+            ConstantsAndFunctions<int>.CreateOne = () => 1;
+            ConstantsAndFunctions<int>.Default = () => 0;
+            ConstantsAndFunctions<int>.AreEqual = (a, b) => a == b;
+            ConstantsAndFunctions<int>.Negate = a => -a;
+            ConstantsAndFunctions<int>.IsZero = a => a == 0;
+            ConstantsAndFunctions<int>.Copy = a => a;
         }
 
-        public ITensorElement<int> Forward()
+        public static void InitForFloat()
         {
-            var res = new TensorIntWrapper();
-            res.SetValue(val);
-            return res;
+            ConstantsAndFunctions<float>.Add = (a, b) => a + b;
+            ConstantsAndFunctions<float>.Subtract = (a, b) => a - b;
+            ConstantsAndFunctions<float>.Multiply = (a, b) => a * b;
+            ConstantsAndFunctions<float>.Divide = (a, b) => a / b;
+            ConstantsAndFunctions<float>.CreateZero = () => 0;
+            ConstantsAndFunctions<float>.CreateOne = () => 1;
+            ConstantsAndFunctions<float>.Default = () => 0;
+            ConstantsAndFunctions<float>.AreEqual = (a, b) => a == b;
+            ConstantsAndFunctions<float>.Negate = a => -a;
+            ConstantsAndFunctions<float>.IsZero = a => a == 0;
+            ConstantsAndFunctions<float>.Copy = a => a;
         }
-
-        public void SetZero()
-            => SetValue(0);
-
-        public void SetOne()
-            => SetValue(1);
-
-        public void Add(ITensorElement<int> other)
-        {
-            val += other.GetValue();
-        }
-
-        public void Multiply(ITensorElement<int> other)
-        {
-            val *= other.GetValue();
-        }
-
-        public void Subtract(ITensorElement<int> other)
-        {
-            val -= other.GetValue();
-        }
-
-        public void Divide(ITensorElement<int> other)
-        {
-            val /= other.GetValue();
-        }
-
-        public void Negate()
-        {
-            val *= -1;
-        }
-
-        public bool IsZero()
-        {
-            return val == 0;
-        }
-
-        public bool EqualsTo(ITensorElement<int> other)
-            => val == other.GetValue();
-    }
-
-    public class TensorFloatWrapper : ITensorElement<float>
-    {
-        private float val;
-        public float GetValue() => val;
-        public void SetValue(float newValue) => this.val = newValue;
-
-        public override string ToString()
-            => val.ToString();
-
-        public ITensorElement<float> Copy()
-        {
-            var res = new TensorFloatWrapper();
-            res.SetValue(val);
-            return res;
-        }
-
-        public ITensorElement<float> Forward()
-        {
-            var res = new TensorFloatWrapper();
-            res.SetValue(val);
-            return res;
-        }
-
-        public void SetZero()
-            => SetValue(0);
-
-        public void SetOne()
-            => SetValue(1);
-
-        public void Add(ITensorElement<float> other)
-        {
-            val += other.GetValue();
-        }
-
-        public void Multiply(ITensorElement<float> other)
-        {
-            val *= other.GetValue();
-        }
-
-        public void Subtract(ITensorElement<float> other)
-        {
-            val -= other.GetValue();
-        }
-
-        public void Divide(ITensorElement<float> other)
-        {
-            val /= other.GetValue();
-        }
-
-        public void Negate()
-        {
-            val *= -1;
-        }
-
-        public bool IsZero()
-        {
-            return Math.Abs(val) < 1e-6;
-        }
-
-        public bool EqualsTo(ITensorElement<float> other)
-            => (val - other.GetValue()) < 1e-6;
-    }
-
-
-    public class TensorInt : Tensor<TensorIntWrapper, int>
-    {
-        public TensorInt(params int[] dimensions) : base(dimensions) { }
     }
 }

@@ -32,32 +32,31 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         #region Laplace
         
-        internal TPrimitive DeterminantLaplace(int diagLength)
+        internal T DeterminantLaplace(int diagLength)
         {
             if (diagLength == 1)
                 return this[0, 0];
-            var det = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
-            var sign = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateOne();
-            var temp = new Tensor<TWrapper, TPrimitive>(diagLength, diagLength);
+            var det = ConstantsAndFunctions<T>.CreateZero();
+            var sign = ConstantsAndFunctions<T>.CreateOne();
+            var temp = new Tensor<T>(diagLength, diagLength);
             for (int i = 0; i < diagLength; i++)
             {
                 GetCofactor(this, temp, 0, i, diagLength);
-                det.Add(
-                    ConstantsAndFunctions<TWrapper, TPrimitive>.Create(
-                        ConstantsAndFunctions<TWrapper, TPrimitive>.Multiply(
-                            sign.GetValue(),
-                            ConstantsAndFunctions<TWrapper, TPrimitive>.Multiply(
-                                this[0, i],
-                                temp.DeterminantLaplace(diagLength - 1)
-                            )))
+                det = ConstantsAndFunctions<T>.Add(det,
+                    ConstantsAndFunctions<T>.Multiply(
+                        sign,
+                        ConstantsAndFunctions<T>.Multiply(
+                            this[0, i],
+                            temp.DeterminantLaplace(diagLength - 1)
+                        ))
                 );
-                sign.Negate();
+                sign = ConstantsAndFunctions<T>.Negate(sign);
             }
-            return det.GetValue();
+            return det;
         }
 
         /// <summary>
@@ -66,7 +65,7 @@ namespace GenericTensor.Core
         /// The matrix should be square
         /// Borrowed from here: https://github.com/ZacharyPatten/Towel/blob/master/Sources/Towel/Mathematics/Matrix.cs#L528
         /// </summary>
-        public TPrimitive DeterminantLaplace()
+        public T DeterminantLaplace()
         {
             #if ALLOW_EXCEPTIONS
             if (!this.IsMatrix)
@@ -81,119 +80,71 @@ namespace GenericTensor.Core
         #region Gaussian
 
         #region Safe division wrapper
-        internal sealed class SafeDivisionWrapper<W, P> : ITensorElement<W> where W : ITensorElement<P>, new()
+        internal struct SafeDivisionWrapper<W>
         {
             internal W num;
             internal W den;
 
-            public SafeDivisionWrapper(){}
-
-            public SafeDivisionWrapper(P v)
+            public SafeDivisionWrapper(W val)
             {
-                SetValue(ConstantsAndFunctions<W, P>.Create(v));
+                num = val;
+                den = ConstantsAndFunctions<W>.CreateOne();
             }
 
-            public W GetValue()
+            public SafeDivisionWrapper(W num, W den)
             {
-                var res = new W();
-                res.SetValue(num.GetValue());
-                res.Divide(den);
-                return res;
+                this.num = num;
+                this.den = den;
             }
 
-            public void SetValue(W newValue)
-            {
-                num = newValue;
-                den = ConstantsAndFunctions<W, P>.CreateOne();
-            }
-
-            public ITensorElement<W> Copy()
-            {
-                throw new NotImplementedException();
-            }
-
-            public ITensorElement<W> Forward()
-            {
-                var res = new SafeDivisionWrapper<W, P>();
-                res.num = (W)num.Forward();
-                res.den = (W)den.Forward();
-                return res;
-            }
-
-            public void SetZero()
-            {
-                SetValue(ConstantsAndFunctions<W, P>.CreateZero());
-            }
-
-            public void SetOne()
-            {
-                SetValue(ConstantsAndFunctions<W, P>.CreateOne());
-            }
-
-            public void Add(ITensorElement<W> other)
-            {
-                var frac = other as SafeDivisionWrapper<W, P>;
-                var newNum = ConstantsAndFunctions<W, P>.Add(
-                    ConstantsAndFunctions<W, P>.Multiply(num, frac.den),
-                    ConstantsAndFunctions<W, P>.Multiply(den, frac.num)
-                );
-                var newDen = ConstantsAndFunctions<W, P>.Multiply(
-                    frac.den,
-                    den
-                );
-                num = ConstantsAndFunctions<W, P>.Create(newNum);
-                den = ConstantsAndFunctions<W, P>.Create(newDen);
-            }
-
-            public void Multiply(ITensorElement<W> other)
-            {
-                var frac = other as SafeDivisionWrapper<W, P>;
-                num.Multiply(frac.num);
-                den.Multiply(frac.den);
-            }
-
-            public void Subtract(ITensorElement<W> other)
-            {
-                var frac = other as SafeDivisionWrapper<W, P>;
-                var newNum = ConstantsAndFunctions<W, P>.Subtract(
-                    ConstantsAndFunctions<W, P>.Multiply(num, frac.den),
-                    ConstantsAndFunctions<W, P>.Multiply(den, frac.num)
-                );
-                var newDen = ConstantsAndFunctions<W, P>.Multiply(
-                    frac.den,
-                    den
-                );
-                num = ConstantsAndFunctions<W, P>.Create(newNum);
-                den = ConstantsAndFunctions<W, P>.Create(newDen);
-            }
-
-            public void Divide(ITensorElement<W> other)
-            {
-                var frac = other as SafeDivisionWrapper<W, P>;
-                num.Multiply(frac.den);
-                den.Multiply(frac.num);
-            }
-
-            public void Negate()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override string ToString()
-            {
-                return num.ToString() + " / " + den.ToString();
-            }
-
-            public bool IsZero()
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool EqualsTo(ITensorElement<W> other)
-            {
-                throw new NotImplementedException();
-            }
+            public W Count() => ConstantsAndFunctions<W>.Divide(num, den);
         }
+
+        private static bool isFracInitted = false;
+        private static void InitIfNotInitted()
+        {
+            if (isFracInitted)
+                return;
+            isFracInitted = true;
+
+            ConstantsAndFunctions<SafeDivisionWrapper<T>>.Add =
+                (a, b) =>
+                    new SafeDivisionWrapper<T>(
+                        ConstantsAndFunctions<T>.Add(
+                            ConstantsAndFunctions<T>.Multiply(a.num, b.den),
+                            ConstantsAndFunctions<T>.Multiply(a.den, b.num)
+                            ),
+                        ConstantsAndFunctions<T>.Multiply(a.den, b.den)
+                        );
+
+            ConstantsAndFunctions<SafeDivisionWrapper<T>>.Subtract =
+                (a, b) =>
+                    new SafeDivisionWrapper<T>(
+                        ConstantsAndFunctions<T>.Subtract(
+                            ConstantsAndFunctions<T>.Multiply(a.num, b.den),
+                            ConstantsAndFunctions<T>.Multiply(a.den, b.num)
+                        ),
+                        ConstantsAndFunctions<T>.Multiply(a.den, b.den)
+                    );
+
+            ConstantsAndFunctions<SafeDivisionWrapper<T>>.Multiply =
+                (a, b) =>
+                    new SafeDivisionWrapper<T>(
+                        ConstantsAndFunctions<T>.Multiply(a.num, b.num),
+                        ConstantsAndFunctions<T>.Multiply(a.den, b.den)
+                    );
+
+            ConstantsAndFunctions<SafeDivisionWrapper<T>>.Divide =
+                (a, b) =>
+                    new SafeDivisionWrapper<T>(
+                        ConstantsAndFunctions<T>.Multiply(a.num, b.den),
+                        ConstantsAndFunctions<T>.Multiply(a.den, b.num)
+                    );
+
+            ConstantsAndFunctions<SafeDivisionWrapper<T>>.CreateOne = () =>
+                new SafeDivisionWrapper<T>(ConstantsAndFunctions<T>.CreateOne());
+        }
+
         #endregion
 
         /// <summary>
@@ -201,8 +152,9 @@ namespace GenericTensor.Core
         /// because it uses fractions for avoiding division
         /// Works for O(N^3)
         /// </summary>
-        public TPrimitive DeterminantGaussianSafeDivision()
+        public T DeterminantGaussianSafeDivision()
         {
+            InitIfNotInitted();
             #if ALLOW_EXCEPTIONS
             if (!IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
@@ -215,54 +167,48 @@ namespace GenericTensor.Core
 
             var n = Shape[0];
 
-            var elemMatrix = Tensor<SafeDivisionWrapper<TWrapper, TPrimitive>, TWrapper>
+            var elemMatrix = Tensor<SafeDivisionWrapper<T>>
                 .CreateMatrix(n, n,
-                k => new SafeDivisionWrapper<TWrapper, TPrimitive>(this[k.x, k.y])
+                k => new SafeDivisionWrapper<T>(this.GetValueNoCheck(k.x, k.y))
                 );
             for (int k = 1; k < n; k++)
             for (int j = k; j < n; j++)
             {
-                var m = ConstantsAndFunctions<SafeDivisionWrapper<TWrapper, TPrimitive>, TWrapper>.DivideSaveWrapper(
-                    elemMatrix.GetCell(j, k - 1),
-                    elemMatrix.GetCell(k - 1, k - 1)
+                var m = ConstantsAndFunctions<SafeDivisionWrapper<T>>.Divide(
+                    elemMatrix.GetValueNoCheck(j, k - 1),
+                    elemMatrix.GetValueNoCheck(k - 1, k - 1)
                     );
                 for (int i = 0; i < n; i++)
-                    elemMatrix.GetCell(j, i).Subtract(
-                        ConstantsAndFunctions<SafeDivisionWrapper<TWrapper, TPrimitive>, TWrapper>.MultiplySaveWrapper(
+                {
+                    var curr = elemMatrix.GetValueNoCheck(j, i);
+                    elemMatrix.SetValueNoCheck(ConstantsAndFunctions<SafeDivisionWrapper<T>>.Subtract(
+                        curr,
+                        ConstantsAndFunctions<SafeDivisionWrapper<T>>.Multiply(
                             m,
-                            elemMatrix.GetCell(k - 1, i)
+                            elemMatrix.GetValueNoCheck(k - 1, i)
                         )
-                    );
+                    ), j, i);
+                }
             }
 
             var det = 
-                ConstantsAndFunctions<SafeDivisionWrapper<TWrapper, TPrimitive>, TWrapper>.CreateOne();
+                ConstantsAndFunctions<SafeDivisionWrapper<T>>.CreateOne();
             for (int i = 0; i < n; i++)
             {
-                det.Multiply(elemMatrix.GetCell(i, i));
+                det = ConstantsAndFunctions<SafeDivisionWrapper<T>>.Multiply(det, elemMatrix.GetValueNoCheck(i, i));
             }
 
-            if (det.den.IsZero())
-                return ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero().GetValue();
-            return det.GetValue().GetValue();
+            if (ConstantsAndFunctions<T>.IsZero(det.den))
+                return ConstantsAndFunctions<T>.CreateZero();
+            return det.Count();
         }
 
-        /// <summary>
-        /// Performs simple Gaussian elimination method on a tensor
-        /// if you do not change TPrimitives in your TWrapper but
-        /// call its methods or change fields,
-        /// Rather use DeterminantGaussian(copy: true) so that its
-        /// temporarily tensor will not change tensor's values
-        /// </summary>
-        public TPrimitive DeterminantGaussianSimple()
-            => DeterminantGaussianSimple(copy: false);
-
+        
         // TODO: how to avoid code duplication?
         /// <summary>
-        /// Copy = true will slower the performance, but is necessary if your
-        /// TPrimitive's pointer does not change through operators
+        /// Performs simple Gaussian elimination method on a tensor
         /// </summary>
-        public TPrimitive DeterminantGaussianSimple(bool copy)
+        public T DeterminantGaussianSimple()
         {
             #if ALLOW_EXCEPTIONS
             if (!IsMatrix)
@@ -279,26 +225,30 @@ namespace GenericTensor.Core
             for (int k = 1; k < n; k++)
             for (int j = k; j < n; j++)
             {
-                var m = ConstantsAndFunctions<TWrapper, TPrimitive>.DivideSaveWrapper(
+                var m = ConstantsAndFunctions<T>.Divide(
                     elemMatrix.GetCell(j, k - 1),
                     elemMatrix.GetCell(k - 1, k - 1)
                 );
                 for (int i = 0; i < n; i++)
-                    elemMatrix.GetCell(j, i).Subtract(
-                        ConstantsAndFunctions<TWrapper, TPrimitive>.MultiplySaveWrapper(
+                {
+                    var curr = elemMatrix.GetValueNoCheck(j, i);
+                    elemMatrix.SetValueNoCheck(ConstantsAndFunctions<T>.Subtract(
+                        curr,
+                        ConstantsAndFunctions<T>.Multiply(
                             m,
-                            elemMatrix.GetCell(k - 1, i)
+                            elemMatrix.GetValueNoCheck(k - 1, i)
                         )
-                    );
+                    ), j, i);
+                }
             }
 
-            var det = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateOne();
+            var det = ConstantsAndFunctions<T>.CreateOne();
             for (int i = 0; i < n; i++)
             {
-                det.Multiply(elemMatrix.GetCell(i, i));
+                det = ConstantsAndFunctions<T>.Multiply(det, elemMatrix.GetValueNoCheck(i, i));
             }
 
-            return det.GetValue();
+            return det;
         }
 
         #endregion

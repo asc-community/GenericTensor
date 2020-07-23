@@ -36,14 +36,7 @@ namespace Sample
     { 
         static void Main(string[] args)
         {
-            var t1 = TensorInt.CreateMatrix(new[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } });
-            var t2 = TensorInt.CreateMatrix(new[,] { { 3, 2, 1 }, { 6, 5, 4 }, { 9, 8, 7 } });
-
-            for(int i = 0; true; i++)
-            {
-                var t3 = TensorInt.MatrixDotProduct(t1, t2);
-                (t1, t2) = (t2, t3);
-            }
+            BuiltinTypeInitter.InitForInt();
         }
     }
 }

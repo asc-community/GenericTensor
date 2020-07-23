@@ -26,6 +26,7 @@
 
 
 using System;
+using GenericTensor.Core;
 using GenericTensor.Functions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -34,7 +35,12 @@ namespace UnitTests
     [TestClass]
     public class GetSet
     {
-        private TensorInt GetT() => new TensorInt(2, 3, 4);
+        public GetSet()
+        {
+            BuiltinTypeInitter.InitForInt();
+        }
+
+        private Tensor<int> GetT() => new Tensor<int>(2, 3, 4);
 
         [TestMethod]
         public void SetGet1()

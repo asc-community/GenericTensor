@@ -27,99 +27,53 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    internal static class ConstantsAndFunctions<TWrapper, TPrimitive> where TWrapper : ITensorElement<TPrimitive>, new()
+    public static class ConstantsAndFunctions<T>
     {
-        public static TWrapper Create(TPrimitive value)
+        static Y AskForDefining<Y>(string methodName)
         {
-            var res = new TWrapper();
-            res.SetValue(value);
-            return res;
+            StackTrace stackTrace = new StackTrace();
+            throw new NotImplementedException(
+                $"This operation requires ConstantsAndFunctions<{typeof(T)}>." +
+                $"{methodName} to be defined.");
         }
 
-        public static TWrapper CreateOne()
-        {
-            var res = new TWrapper();
-            res.SetOne();
-            return res;
-        }
+        // 1
+        public static Func<T> CreateOne = () => AskForDefining<T>("CreateOne");
 
-        public static TWrapper CreateZero()
-        {
-            var res = new TWrapper();
-            res.SetZero();
-            return res;
-        }
+        // 0
+        public static Func<T> CreateZero = () => AskForDefining<T>("CreateZero");
 
-        public static TPrimitive Multiply(TPrimitive a, TPrimitive b)
-        {
-            var c = Create(a);
-            var d = Create(b);
-            c.Multiply(d);
-            return c.GetValue();
-        }
+        // +
+        public static Func<T, T, T> Add = (a, b) => AskForDefining<T>("Add");
 
-        public static TPrimitive Multiply(TWrapper a, TWrapper b)
-        {
-            var r = a.Forward();
-            r.Multiply(b);
-            return r.GetValue();
-        }
+        // -
+        public static Func<T, T, T> Subtract = (a, b) => AskForDefining<T>("Sutbract");
 
-        public static TWrapper MultiplySaveWrapper(TWrapper a, TWrapper b)
-        {
-            var r = a.Forward();
-            r.Multiply(b);
-            return (TWrapper)r;
-        }
+        // *
+        public static Func<T, T, T> Multiply = (a, b) => AskForDefining<T>("Multiply");
 
-        public static TPrimitive Subtract(TPrimitive a, TPrimitive b)
-        {
-            var c = Create(a);
-            var d = Create(b);
-            c.Subtract(d);
-            return c.GetValue();
-        }
+        // /
+        public static Func<T, T, T> Divide = (a, b) => AskForDefining<T>("Divide");
 
-        public static TWrapper SubtractSaveWrapper(TWrapper a, TWrapper b)
-        {
-            var c = a.Forward();
-            c.Subtract(b);
-            return (TWrapper)c;
-        }
+        // copying
+        public static Func<T, T> Copy = a => AskForDefining<T>("Copy");
 
-        public static TPrimitive Add(TPrimitive a, TPrimitive b)
-        {
-            var c = Create(a);
-            var d = Create(b);
-            c.Add(d);
-            return c.GetValue();
-        }
+        // new
+        public static Func<T> Default = () => AskForDefining<T>("Default");
 
-        public static TWrapper AddSaveWrapper(TWrapper a, TWrapper b)
-        {
-            var c = a.Forward();
-            c.Add(b);
-            return (TWrapper)c;
-        }
+        // ==
+        public static Func<T, T, bool> AreEqual = (a, b) => AskForDefining<bool>("Are equal");
 
-        public static TPrimitive Divide(TPrimitive a, TPrimitive b)
-        {
-            var c = Create(a);
-            var d = Create(b);
-            c.Divide(d);
-            return c.GetValue();
-        }
+        // -
+        public static Func<T, T> Negate = a => AskForDefining<T>("Negate");
 
-        public static TWrapper DivideSaveWrapper(TWrapper a, TWrapper b)
-        {
-            var c = a.Forward();
-            c.Divide(b);
-            return (TWrapper)c;
-        }
+        // == 0
+        public static Func<T, bool> IsZero = a => AskForDefining<bool>("IsZero");
     }
 }

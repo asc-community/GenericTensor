@@ -32,14 +32,14 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         /// <summary>
         /// Finds a perpendicular vector to two given
         /// TODO: So far only implemented for 3D vectors
         /// </summary>
-        public static Tensor<TWrapper, TPrimitive> VectorCrossProduct(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b)
+        public static Tensor<T> VectorCrossProduct(Tensor<T> a,
+            Tensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (!a.IsVector || !b.IsVector)
@@ -49,32 +49,32 @@ namespace GenericTensor.Core
             if (a.Shape[0] != 3)
                 throw new NotImplementedException("Other than vectors of the length of 3 aren't supported for VectorCrossProduct yet");
             #endif
-            return Tensor<TWrapper, TPrimitive>.CreateVector(
-                ConstantsAndFunctions<TWrapper, TPrimitive>.Subtract(
-                    ConstantsAndFunctions<TWrapper, TPrimitive>.Multiply(a[1], b[2]),
-                    ConstantsAndFunctions<TWrapper, TPrimitive>.Multiply(a[2], b[1])),
+            return Tensor<T>.CreateVector(
+                ConstantsAndFunctions<T>.Subtract(
+                    ConstantsAndFunctions<T>.Multiply(a[1], b[2]),
+                    ConstantsAndFunctions<T>.Multiply(a[2], b[1])),
 
-                ConstantsAndFunctions<TWrapper, TPrimitive>.Subtract(
-                    ConstantsAndFunctions<TWrapper, TPrimitive>.Multiply(a[2], b[0]),
-                    ConstantsAndFunctions<TWrapper, TPrimitive>.Multiply(a[0], b[2])),
+                ConstantsAndFunctions<T>.Subtract(
+                    ConstantsAndFunctions<T>.Multiply(a[2], b[0]),
+                    ConstantsAndFunctions<T>.Multiply(a[0], b[2])),
 
-                ConstantsAndFunctions<TWrapper, TPrimitive>.Subtract(
-                    ConstantsAndFunctions<TWrapper, TPrimitive>.Multiply(a[0], b[1]),
-                    ConstantsAndFunctions<TWrapper, TPrimitive>.Multiply(a[1], b[0]))
+                ConstantsAndFunctions<T>.Subtract(
+                    ConstantsAndFunctions<T>.Multiply(a[0], b[1]),
+                    ConstantsAndFunctions<T>.Multiply(a[1], b[0]))
             );
         }
 
         /// <summary>
         /// Calls VectorCrossProduct for every vector in the tensor
         /// </summary>
-        public static Tensor<TWrapper, TPrimitive> TensorVectorCrossProduct(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b)
+        public static Tensor<T> TensorVectorCrossProduct(Tensor<T> a,
+            Tensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException($"Pre-shapes of {nameof(a)} and {nameof(b)} should be equal");
             #endif
-            var res = new Tensor<TWrapper, TPrimitive>(a.Shape);
+            var res = new Tensor<T>(a.Shape);
             foreach (var index in a.IterateOverVectors())
                 res.SetSubtensor(
                     VectorCrossProduct(a.GetSubtensor(index), b.GetSubtensor(index)),

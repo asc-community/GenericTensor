@@ -33,7 +33,7 @@ using GenericTensor.Functions;
 namespace GenericTensor.Core
 {
 
-    public partial class Tensor<TWrapper, TPrimitive>
+    public partial class Tensor<T>
     {
         /// <summary>
         /// Applies scalar product to every vector in a tensor so that
@@ -43,14 +43,14 @@ namespace GenericTensor.Core
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Tensor<TWrapper, TPrimitive> TensorVectorDotProduct(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b)
+        public static Tensor<T> TensorVectorDotProduct(Tensor<T> a,
+            Tensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape.SubShape(0, 1) != b.Shape.SubShape(0, 1))
                 throw new InvalidShapeException("Other dimensions of tensors should be equal");
             #endif
-            var resTensor = new Tensor<TWrapper, TPrimitive>(a.Shape.SubShape(0, 1));
+            var resTensor = new Tensor<T>(a.Shape.SubShape(0, 1));
             foreach (var index in resTensor.IterateOverElements())
             {
                 var scal = VectorDotProduct(a.GetSubtensor(index), b.GetSubtensor(index));
@@ -62,8 +62,8 @@ namespace GenericTensor.Core
         /// <summary>
         /// Finds the scalar product of two vectors
         /// </summary>
-        public static TPrimitive VectorDotProduct(Tensor<TWrapper, TPrimitive> a,
-            Tensor<TWrapper, TPrimitive> b)
+        public static T VectorDotProduct(Tensor<T> a,
+            Tensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (!a.IsVector || !b.IsVector)
@@ -71,14 +71,13 @@ namespace GenericTensor.Core
             if (a.Shape[0] != b.Shape[0])
                 throw new InvalidShapeException($"{nameof(a)}'s length should be the same as {nameof(b)}'s");
             #endif
-            var res = ConstantsAndFunctions<TWrapper, TPrimitive>.CreateZero();
+            var res = ConstantsAndFunctions<T>.CreateZero();
             for (int i = 0; i < a.Shape[0]; i++)
             {
-                var term = a.GetCell(i).Forward();
-                term.Multiply(b.GetCell(i));
-                res.Add(term);
+                res = ConstantsAndFunctions<T>.Add(res,
+                    ConstantsAndFunctions<T>.Multiply(a.GetValueNoCheck(i), b.GetValueNoCheck(i)));
             }
-            return res.GetValue();
+            return res;
         }
     }
 }
