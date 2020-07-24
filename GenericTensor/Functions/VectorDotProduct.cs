@@ -39,10 +39,9 @@ namespace GenericTensor.Core
         /// Applies scalar product to every vector in a tensor so that
         /// you will get a one-reduced dimensional tensor
         /// (e. g. TensorVectorDotProduct([4 x 3 x 2], [4 x 3 x 2]) -> [4 x 3]
+        ///
+        /// O(V)
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
         public static GenTensor<T> TensorVectorDotProduct(GenTensor<T> a,
             GenTensor<T> b)
         {
@@ -61,6 +60,8 @@ namespace GenericTensor.Core
 
         /// <summary>
         /// Finds the scalar product of two vectors
+        ///
+        /// O(N)
         /// </summary>
         public static T VectorDotProduct(GenTensor<T> a,
             GenTensor<T> b)

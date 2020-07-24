@@ -30,26 +30,68 @@ using GenericTensor.Core;
 using GenericTensor.Functions;
 using System.Linq;
 
-namespace Sample
+public static class Samples
 {
-    class Program
-    { 
-        static void Main(string[] args)
-        {
-            BuiltinTypeInitter.InitForFloat();
-            var A = GenTensor<float>.CreateMatrix(
-            new float[,]{
-                {6, 1, 1},
+    public static void CreatingMatrix()
+    {
+        var myMatrix = GenTensor<float>.CreateMatrix(
+            new float[,]
+            {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+            }
+            );
+        Console.WriteLine(myMatrix);
+    }
+
+    public static void CreatingMatrixAndMultiply()
+    {
+        var myMatrix = GenTensor<float>.CreateMatrix(
+            new float[,]
+            {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+            }
+        );
+        Console.WriteLine(GenTensor<float>.MatrixDotProduct(myMatrix, myMatrix));
+    }
+}
+
+
+class Program
+{
+    public static GenTensor<T> Divide<T>(GenTensor<T> a, GenTensor<T> b)
+    {
+        b = b.Forward();
+        b.InvertMatrix();
+        return GenTensor<T>.MatrixDotProduct(a, b);
+    }
+
+    static void Main(string[] args)
+    {
+        BuiltinTypeInitter.InitForFloat();
+        //Samples.CreatingMatrixAndMultiply();
+        var myMatrix = GenTensor<float>.CreateMatrix(
+            new float[,]
+            {
+                {6,  1, 1},
                 {4, -2, 5},
-                {2, 8, 7}
-            });
-            var B = A.Copy(true);
-            Console.WriteLine(A);
-            A.InvertMatrix();
-            Console.WriteLine();
-            Console.WriteLine(A);
-            Console.WriteLine();
-            Console.WriteLine(GenTensor<float>.MatrixDotProduct(A, B));
-        }
+                {2,  8, 7}
+            }
+        );
+
+        var myMatrix1 = GenTensor<float>.CreateMatrix(
+            new float[,]
+            {
+                {6,  1, 1},
+                {4, -1, 5},
+                {2,  8, 7}
+            }
+        );
+        Console.WriteLine(
+            Divide(myMatrix, myMatrix1)
+            );
     }
 }

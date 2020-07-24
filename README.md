@@ -53,6 +53,7 @@ public static void InitForInt()
     ConstantsAndFunctions<int>.Negate = a => -a;
     ConstantsAndFunctions<int>.IsZero = a => a == 0;
     ConstantsAndFunctions<int>.Copy = a => a;
+    ConstantsAndFunctions<int>.Forward = a => a;
 }
 ```
 

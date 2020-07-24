@@ -46,6 +46,7 @@ namespace GenericTensor.Functions
             ConstantsAndFunctions<int>.Negate = a => -a;
             ConstantsAndFunctions<int>.IsZero = a => a == 0;
             ConstantsAndFunctions<int>.Copy = a => a;
+            ConstantsAndFunctions<int>.Forward = a => a;
         }
 
         public static void InitForFloat()
@@ -60,6 +61,7 @@ namespace GenericTensor.Functions
             ConstantsAndFunctions<float>.Negate = a => -a;
             ConstantsAndFunctions<float>.IsZero = a => Math.Abs(a) < 1e-5;
             ConstantsAndFunctions<float>.Copy = a => a;
+            ConstantsAndFunctions<float>.Forward = a => a;
         }
     }
 }

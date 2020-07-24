@@ -72,5 +72,29 @@ namespace UnitTests
                 GenTensor<float>.MatrixDotProduct(A, B)
             );
         }
+
+        [TestMethod]
+        public void Division()
+        {
+            var A = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+
+            var B = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -1, 5},
+                {2,  8, 7}
+            });
+
+            var res = GenTensor<float>.MatrixDivide(A, B);
+            Assert.AreEqual(
+                GenTensor<float>.MatrixDotProduct(res, B),
+                A
+                );
+        }
     }
 }

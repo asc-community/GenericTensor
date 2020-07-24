@@ -9,6 +9,8 @@ namespace GenericTensor.Core
     {
         /// <summary>
         /// Returns adjugate matrix
+        ///
+        /// O(N^5)
         /// </summary>
         public GenTensor<T> Adjoint()
         {
@@ -46,6 +48,8 @@ namespace GenericTensor.Core
         /// <summary>
         /// Inverts a matrix A to B so that A * B = I
         /// Borrowed from here: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
+        ///
+        /// O(N^5)
         /// </summary>
         public void InvertMatrix()
         {
@@ -72,6 +76,25 @@ namespace GenericTensor.Core
                     ),
                     x, y
                 );
+        }
+
+        /// <summary>
+        /// A / B
+        /// Finds such C = A / B that A = C * B
+        ///
+        /// O(N^5)
+        /// </summary>
+        public static GenTensor<T> MatrixDivide(GenTensor<T> a, GenTensor<T> b)
+        {
+            #if ALLOW_EXCEPTIONS
+            if (!a.IsSquareMatrix || !b.IsSquareMatrix)
+                throw new InvalidShapeException("Both should be square matrices");
+            if (a.Shape != b.Shape)
+                throw new InvalidShapeException("Given matrices should be of the same shape");
+            #endif
+            var fwd = b.Forward();
+            fwd.InvertMatrix();
+            return MatrixDotProduct(a, fwd);
         }
     }
 }

@@ -64,6 +64,9 @@ namespace GenericTensor.Functions
         // copying
         public static Func<T, T> Copy = a => AskForDefining<T>("Copy");
 
+        // forwarding (only copy the wrapper if have one)
+        public static Func<T, T> Forward = a => AskForDefining<T>("Forward");
+
         // ==
         public static Func<T, T, bool> AreEqual = (a, b) => AskForDefining<bool>("Are equal");
 

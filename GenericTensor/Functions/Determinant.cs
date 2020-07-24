@@ -63,7 +63,9 @@ namespace GenericTensor.Core
         /// Finds Determinant with the 100% precision for O(N!) where
         /// N is your matrix' width
         /// The matrix should be square
-        /// Borrowed from here: https://github.com/ZacharyPatten/Towel/blob/master/Sources/Towel/Mathematics/Matrix.cs#L528
+        /// Borrowed from here: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
+        ///
+        /// O(N!)
         /// </summary>
         public T DeterminantLaplace()
         {
@@ -150,7 +152,8 @@ namespace GenericTensor.Core
         /// <summary>
         /// Finds Determinant with possible overflow
         /// because it uses fractions for avoiding division
-        /// Works for O(N^3)
+        ///
+        /// O(N^3)
         /// </summary>
         public T DeterminantGaussianSafeDivision()
             => DeterminantGaussianSafeDivision(Shape[0]);
@@ -158,7 +161,8 @@ namespace GenericTensor.Core
         /// <summary>
         /// Finds Determinant with possible overflow
         /// because it uses fractions for avoiding division
-        /// Works for O(N^3)
+        ///
+        /// O(N^3)
         /// </summary>
         public T DeterminantGaussianSafeDivision(int diagLength)
         {
@@ -215,6 +219,8 @@ namespace GenericTensor.Core
         // TODO: how to avoid code duplication?
         /// <summary>
         /// Performs simple Gaussian elimination method on a tensor
+        ///
+        /// O(N^3)
         /// </summary>
         public T DeterminantGaussianSimple()
         {

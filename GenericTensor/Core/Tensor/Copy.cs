@@ -37,6 +37,8 @@ namespace GenericTensor.Core
     {
         /// <summary>
         /// Copies a tensor calling each cell with a .Copy()
+        ///
+        /// O(V)
         /// </summary>
         public GenTensor<T> Copy(bool copyElements)
         {
@@ -53,15 +55,16 @@ namespace GenericTensor.Core
         }
 
         /// <summary>
-        /// Forwards the tensor so TPrimitives are not copied,
-        /// but TWrappers are
+        /// You might need it to make sure you don't copy
+        /// your data but recreate a wrapper (if have one)
+        ///
+        /// O(V)
         /// </summary>
-        /// <returns></returns>
         public GenTensor<T> Forward()
         {
             var res = new GenTensor<T>(Shape);
             foreach (var index in res.IterateOverElements())
-                res.SetValueNoCheck(ConstantsAndFunctions<T>.Copy(GetValueNoCheck(index)), index);
+                res.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(GetValueNoCheck(index)), index);
             return res;
         }
 

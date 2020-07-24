@@ -39,10 +39,9 @@ namespace GenericTensor.Core
         /// a and b are matrices
         /// a.Shape[1] should be equal to b.Shape[0]
         /// the resulting matrix is [a.Shape[0] x b.Shape[1]] shape
+        ///
+        /// O(N^3)
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
         public static GenTensor<T> MatrixDotProduct(GenTensor<T> a,
             GenTensor<T> b)
         {
@@ -77,6 +76,8 @@ namespace GenericTensor.Core
         /// <summary>
         /// Applies matrix dot product operation for
         /// all matrices in tensors
+        ///
+        /// O(N^3)
         /// </summary>
         public static GenTensor<T> TensorMatrixDotProduct(GenTensor<T> a,
             GenTensor<T> b)

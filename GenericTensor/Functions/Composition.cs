@@ -38,6 +38,8 @@ namespace GenericTensor.Core
         /// say you have a bunch of tensors {t1, t2, t3} with shape of [2 x 4]
         /// Stack(t1, t2, t3) => T
         /// where T is a tensor of shape of [3 x 2 x 4]
+        ///
+        /// O(V)
         /// </summary>
         public static GenTensor<T> Stack(params GenTensor<T>[] elements)
         {
@@ -63,6 +65,8 @@ namespace GenericTensor.Core
 
         /// <summary>
         /// Borrowed from here: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
+        ///
+        /// O(N^2)
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void GetCofactor(GenTensor<T> a, GenTensor<T> temp, int rowId,

@@ -36,6 +36,14 @@ namespace GenericTensor.Core
     {
         private int LinOffset;
 
+        /// <summary>
+        /// Slice with data sharing like in python
+        /// A[3:5] in python
+        /// same as
+        /// A.Slice(3, 5) in GT
+        ///
+        /// O(1)
+        /// </summary>
         public GenTensor<T> Slice(int leftIncluding, int rightExcluding)
         {
             #if ALLOW_EXCEPTIONS
@@ -51,6 +59,11 @@ namespace GenericTensor.Core
             return Stack(toStack);
         }
 
+        /// <summary>
+        /// This Subtensor is sequential Subtensor(int)
+        ///
+        /// O(1)
+        /// </summary>
         public GenTensor<T> GetSubtensor(int[] indecies)
             => GetSubtensor(indecies, 0);
 
@@ -61,6 +74,8 @@ namespace GenericTensor.Core
         /// Get a subtensor of a tensor
         /// If you have a t = Tensor[2 x 3 x 4],
         /// t.GetSubtensor(0) will return the proper matrix [3 x 4]
+        ///
+        /// O(1)
         /// </summary>
         public GenTensor<T> GetSubtensor(int index)
         {
@@ -87,9 +102,9 @@ namespace GenericTensor.Core
         /// and m = matrix[3 x 4]
         /// You need to set this matrix to t's second matrix
         /// t.SetSubtensor(m, 1);
+        ///
+        /// O(V)
         /// </summary>
-        /// <param name="sub"></param>
-        /// <param name="indecies"></param>
         public void SetSubtensor(GenTensor<T> sub, params int[] indecies)
         {
             #if ALLOW_EXCEPTIONS
