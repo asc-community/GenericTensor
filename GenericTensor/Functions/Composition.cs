@@ -72,7 +72,7 @@ namespace GenericTensor.Core
                 {
                     if (row != rowId && col != colId)
                     {
-                        temp[i, j++] = a[row, col];
+                        temp.SetValueNoCheck(a.GetValueNoCheck(row, col), i, j++);
                         if (j == diagLength - 1)
                         {
                             j = 0;

@@ -22,7 +22,7 @@ namespace Benchmark
         
         [Params(3, 20, 50)] public int MatrixSize;
 
-        /*
+        
         [Benchmark] public void CreatingMatrix()
             => CreateMatrix(MatrixSize);
 
@@ -40,7 +40,6 @@ namespace Benchmark
 
         [Benchmark] public void MatrixAndMultiply()
             => TS.MatrixDotProduct(createdMatrix, createdMatrix);
-            */
         [Benchmark] public void MatrixAndAdd()
             => TS.PiecewiseAdd(createdMatrix, createdMatrix);
     }
