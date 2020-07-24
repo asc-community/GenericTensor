@@ -86,15 +86,15 @@ namespace UnitTests
         public void SubTensor()
         {
             var t = GetBig();
-            Assert.AreEqual(t.GetSubtensor(0, 0), GenTensor<int>.CreateVector(0, 1, 2, 3));
+            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int>.CreateVector(0, 1, 2, 3));
             t.Transpose(1, 2);
-            Assert.AreEqual(t.GetSubtensor(0, 0), GenTensor<int>.CreateVector(0, 4, 8));
+            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int>.CreateVector(0, 4, 8));
             t.Transpose(1, 2);
-            Assert.AreEqual(t.GetSubtensor(0, 0), GenTensor<int>.CreateVector(0, 1, 2, 3));
+            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int>.CreateVector(0, 1, 2, 3));
 
             t.Transpose(0, 1);
-            Assert.AreEqual(t.GetSubtensor(0, 0), GenTensor<int>.CreateVector(0, 1, 2, 3));
-            Assert.AreEqual(t.GetSubtensor(0, 1), GenTensor<int>.CreateVector(12 + 0, 12 + 1, 12 + 2, 12 + 3));
+            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int>.CreateVector(0, 1, 2, 3));
+            Assert.AreEqual(t.GetSubtensor(new []{0, 1}), GenTensor<int>.CreateVector(12 + 0, 12 + 1, 12 + 2, 12 + 3));
         }
 
         [TestMethod]

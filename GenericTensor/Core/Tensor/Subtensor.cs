@@ -36,17 +36,38 @@ namespace GenericTensor.Core
     {
         private int LinOffset;
 
+        public GenTensor<T> Slice(int leftIncluding, int rightExcluding)
+        {
+            #if ALLOW_EXCEPTIONS
+            ReactIfBadBound(leftIncluding, 0);
+            ReactIfBadBound(rightExcluding - 1, 0);
+            if (leftIncluding >= rightExcluding)
+                throw new InvalidShapeException("Slicing cannot be performed");
+            #endif
+            var newLength = rightExcluding - leftIncluding;
+            var toStack = new GenTensor<T>[newLength];
+            for (int i = 0; i < newLength; i++)
+                toStack[i] = GetSubtensor(i + leftIncluding);
+            return Stack(toStack);
+        }
+
+        public GenTensor<T> GetSubtensor(int[] indecies)
+            => GetSubtensor(indecies, 0);
+
+        internal GenTensor<T> GetSubtensor(int[] indecies, int id)
+            => id == indecies.Length ? this : this.GetSubtensor(indecies[id]).GetSubtensor(indecies, id + 1);
+
         /// <summary>
         /// Get a subtensor of a tensor
         /// If you have a t = Tensor[2 x 3 x 4],
         /// t.GetSubtensor(0) will return the proper matrix [3 x 4]
         /// </summary>
-        public GenTensor<T> GetSubtensor(params int[] indecies)
+        public GenTensor<T> GetSubtensor(int index)
         {
-            if (indecies.Length == 0)
-                return this;
-            var currIndex = indecies[0];
-            var newLinIndexDelta = GetFlattenedIndexSilent(currIndex);
+            #if ALLOW_EXCEPTIONS
+            ReactIfBadBound(index, 0);
+            #endif
+            var newLinIndexDelta = GetFlattenedIndexSilent(index);
             var newBlocks = Blocks.ToList();
             var rootAxis = AxesOrder[0];
             newBlocks.RemoveAt(rootAxis);
@@ -58,10 +79,7 @@ namespace GenericTensor.Core
             var newShape = Shape.CutOffset1();
             var result = new GenTensor<T>(newShape, newBlocks.ToArray(), newAxesOrder.ToArray(), Data);
             result.LinOffset = newLinIndexDelta;
-            if (indecies.Length == 1)
-                return result;
-            else
-                return result.GetSubtensor(new ArraySegment<int>(indecies, 1, indecies.Length - 1).ToArray());
+            return result;
         }
 
         /// <summary>
