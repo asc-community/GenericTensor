@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace GenericTensor.Core
@@ -38,5 +39,11 @@ namespace GenericTensor.Core
     {
         public InvalidShapeException(string msg) : base(msg) {}
         public InvalidShapeException() : base() {}
+    }
+
+    public class InvalidDeterminantException : DataException
+    {
+        public InvalidDeterminantException(string msg) : base(msg) {}
+        public InvalidDeterminantException() : base() {}
     }
 }

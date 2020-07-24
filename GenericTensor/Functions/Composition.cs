@@ -62,7 +62,7 @@ namespace GenericTensor.Core
         }
 
         /// <summary>
-        /// Borrowed from here: https://github.com/ZacharyPatten/Towel/blob/master/Sources/Towel/Mathematics/Matrix.cs#L365
+        /// Borrowed from here: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void GetCofactor(GenTensor<T> a, GenTensor<T> temp, int rowId,

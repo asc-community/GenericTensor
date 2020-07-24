@@ -121,6 +121,12 @@ namespace GenericTensor.Core
             return res;
         }
 
+        /// <summary>
+        /// Creates an empty square matrix
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> CreateSquareMatrix(int diagLength)
+            => CreateMatrix(diagLength, diagLength);
 
         /// <summary>
         /// Creates a matrix of width and height size

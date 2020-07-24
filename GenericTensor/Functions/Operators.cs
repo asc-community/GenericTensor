@@ -45,6 +45,11 @@ namespace GenericTensor.Core
         public bool IsVector => Shape.Count == 1;
 
         /// <summary>
+        /// Determines wether one is a matrix AND its width and height are equal
+        /// </summary>
+        public bool IsSquareMatrix => IsMatrix && Shape.shape[0] == Shape.shape[1];
+
+        /// <summary>
         /// Calls your TWrapper.Equals
         /// Be sure to override it when using this function or ==, != operators
         /// </summary>

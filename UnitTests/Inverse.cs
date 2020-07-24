@@ -24,32 +24,53 @@
  */
 #endregion
 
-using GenericTensor;
+
 using System;
 using GenericTensor.Core;
 using GenericTensor.Functions;
-using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Sample
+namespace UnitTests
 {
-    class Program
-    { 
-        static void Main(string[] args)
+    [TestClass]
+    public class Inverse
+    {
+        public Inverse()
         {
             BuiltinTypeInitter.InitForFloat();
-            var A = GenTensor<float>.CreateMatrix(
-            new float[,]{
-                {6, 1, 1},
+        }
+
+        [TestMethod]
+        public void Test1()
+        {
+            var A = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
                 {4, -2, 5},
-                {2, 8, 7}
+                {2,  8, 7}
             });
             var B = A.Copy(true);
-            Console.WriteLine(A);
-            A.InvertMatrix();
-            Console.WriteLine();
-            Console.WriteLine(A);
-            Console.WriteLine();
-            Console.WriteLine(GenTensor<float>.MatrixDotProduct(A, B));
+            B.InvertMatrix();
+            Assert.AreEqual(
+                GenTensor<float>.CreateIdentityMatrix(3),
+                GenTensor<float>.MatrixDotProduct(A, B)
+            );
+        }
+
+        [TestMethod]
+        public void Test2()
+        {
+            var A = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {1, 2},
+                {3, 4}
+            });
+            var B = A.Copy(true);
+            B.InvertMatrix();
+            Assert.AreEqual(
+                GenTensor<float>.CreateIdentityMatrix(2),
+                GenTensor<float>.MatrixDotProduct(A, B)
+            );
         }
     }
 }

@@ -56,9 +56,9 @@ namespace GenericTensor.Functions
             ConstantsAndFunctions<float>.Divide = (a, b) => a / b;
             ConstantsAndFunctions<float>.CreateZero = () => 0;
             ConstantsAndFunctions<float>.CreateOne = () => 1;
-            ConstantsAndFunctions<float>.AreEqual = (a, b) => a == b;
+            ConstantsAndFunctions<float>.AreEqual = (a, b) => Math.Abs(a - b) < 1e-5;
             ConstantsAndFunctions<float>.Negate = a => -a;
-            ConstantsAndFunctions<float>.IsZero = a => a == 0;
+            ConstantsAndFunctions<float>.IsZero = a => Math.Abs(a) < 1e-5;
             ConstantsAndFunctions<float>.Copy = a => a;
         }
     }

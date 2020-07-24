@@ -36,15 +36,13 @@ namespace GenericTensor.Core
     {
         #region Laplace
 
-        [ThreadStatic] internal static List<GenTensor<T>> TensorTempFactorySquareMatrices;
-
         internal T DeterminantLaplace(int diagLength)
         {
             if (diagLength == 1)
                 return this.GetValueNoCheck(0, 0);
             var det = ConstantsAndFunctions<T>.CreateZero();
             var sign = ConstantsAndFunctions<T>.CreateOne();
-            var temp = TensorTempFactorySquareMatrices[diagLength - 1];
+            var temp = SquareMatrixFactory<T>.GetMatrix(diagLength);
             for (int i = 0; i < diagLength; i++)
             {
                 GetCofactor(this, temp, 0, i, diagLength);
@@ -75,11 +73,6 @@ namespace GenericTensor.Core
             if (Shape[0] != Shape[1])
                 throw new InvalidShapeException("Matrix should be square");
             #endif
-            if (TensorTempFactorySquareMatrices is null)
-                TensorTempFactorySquareMatrices = new List<GenTensor<T>> {null};
-            var diagLength = Shape.shape[0];
-            for (int i = TensorTempFactorySquareMatrices.Count; i <= diagLength; i++)
-                TensorTempFactorySquareMatrices.Add(new GenTensor<T>(i, i));
             return DeterminantLaplace(Shape[0]);
         }
         #endregion
@@ -103,7 +96,7 @@ namespace GenericTensor.Core
                 this.num = num;
                 this.den = den;
             }
-
+            
             public W Count() => ConstantsAndFunctions<W>.Divide(num, den);
         }
 
@@ -160,6 +153,14 @@ namespace GenericTensor.Core
         /// Works for O(N^3)
         /// </summary>
         public T DeterminantGaussianSafeDivision()
+            => DeterminantGaussianSafeDivision(Shape[0]);
+
+        /// <summary>
+        /// Finds Determinant with possible overflow
+        /// because it uses fractions for avoiding division
+        /// Works for O(N^3)
+        /// </summary>
+        public T DeterminantGaussianSafeDivision(int diagLength)
         {
             InitIfNotInitted();
             #if ALLOW_EXCEPTIONS
@@ -172,7 +173,7 @@ namespace GenericTensor.Core
             if (Shape[0] == 1)
                 return this.GetValueNoCheck(0, 0);
 
-            var n = Shape[0];
+            var n = diagLength;
 
             var elemMatrix = GenTensor<SafeDivisionWrapper<T>>
                 .CreateMatrix(n, n,

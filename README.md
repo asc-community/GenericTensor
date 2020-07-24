@@ -16,7 +16,7 @@ For full correct work you will need some methods for your type to be defined. Bu
 create our first int tensor:
 
 ```cs
-var myTensor = new GenGensor<int>(3, 4, 5);
+var myTensor = new GenTensor<int>(3, 4, 5);
 ```
 
 Alright, your first tensor is created. You can now access its members:

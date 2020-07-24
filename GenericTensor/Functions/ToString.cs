@@ -37,6 +37,10 @@ namespace GenericTensor.Core
         {
             if (IsMatrix)
             {
+                var maxLength = -1;
+                for (int i = 0; i < Shape[0]; i++)
+                for (int j = 0; j < Shape[1]; j++)
+                    maxLength = Math.Max(maxLength, GetValueNoCheck(i, j).ToString().Length);
                 var rows = new List<string>();
                 rows.Add("Matrix[" + Shape + "]");
                 for (int i = 0; i < Shape[0]; i++)
@@ -44,7 +48,8 @@ namespace GenericTensor.Core
                     var s = "";
                     for (int j = 0; j < Shape[1]; j++)
                     {
-                        var count = 8 - this.GetValueNoCheck(i, j).ToString().Length;
+                        // TODO: it's actually bad to call ToString twice
+                        var count = maxLength + 3 - this.GetValueNoCheck(i, j).ToString().Length;
                         count = Math.Max(0, count);
                         s += this.GetValueNoCheck(i, j).ToString();
                         for (int k = 0; k < count; k++)
