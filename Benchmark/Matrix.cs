@@ -7,7 +7,7 @@ using GenericTensor.Core;
 
 namespace Benchmark
 {
-    using TS = Tensor<int>;
+    using TS = GenTensor<int>;
 
     public class MatrixBenchmark
     {
@@ -15,10 +15,6 @@ namespace Benchmark
         {
             BuiltinTypeInitter.InitForInt();
         }
-
-        static TS CreateMatrixPure(int size)
-            => TS.CreateMatrix(size, size);
-
         static TS CreateMatrix(int size)
             => TS.CreateMatrix(size, size, (x, y) => x + y);
 
@@ -26,11 +22,9 @@ namespace Benchmark
         
         [Params(3, 20, 50)] public int MatrixSize;
 
+        /*
         [Benchmark] public void CreatingMatrix()
             => CreateMatrix(MatrixSize);
-
-        [Benchmark] public void CreatingPureMatrix()
-            => CreateMatrixPure(MatrixSize);
 
         [Benchmark] public void CreatingMatrixAndTranspose()
             => CreateMatrix(MatrixSize).TransposeMatrix();
@@ -46,7 +40,7 @@ namespace Benchmark
 
         [Benchmark] public void MatrixAndMultiply()
             => TS.MatrixDotProduct(createdMatrix, createdMatrix);
-
+            */
         [Benchmark] public void MatrixAndAdd()
             => TS.PiecewiseAdd(createdMatrix, createdMatrix);
     }

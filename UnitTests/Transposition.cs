@@ -41,9 +41,9 @@ namespace UnitTests
             BuiltinTypeInitter.InitForInt();
         }
 
-        private Tensor<int> GetBig()
+        private GenTensor<int> GetBig()
         {
-            var res = new Tensor<int>(2, 3, 4);
+            var res = new GenTensor<int>(2, 3, 4);
             foreach (var (index, _) in res.Iterate())
             {
                 res[index] = index[0] * 12 + index[1] * 4 + index[2];
@@ -51,9 +51,9 @@ namespace UnitTests
             return res;
         }
 
-        private Tensor<int> GetSmall()
+        private GenTensor<int> GetSmall()
         {
-            var res = new Tensor<int>(2, 3);
+            var res = new GenTensor<int>(2, 3);
             foreach (var (index, _) in res.Iterate())
             {
                 res[index] = 3 * index[0] + index[1];

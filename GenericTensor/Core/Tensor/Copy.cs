@@ -33,14 +33,14 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         /// <summary>
         /// Copies a tensor calling each cell with a .Copy()
         /// </summary>
-        public Tensor<T> Copy(bool copyElements)
+        public GenTensor<T> Copy(bool copyElements)
         {
-            var res = new Tensor<T>(Shape);
+            var res = new GenTensor<T>(Shape);
             if (!copyElements)
             {
                 foreach (var index in res.IterateOverElements())
@@ -57,17 +57,17 @@ namespace GenericTensor.Core
         /// but TWrappers are
         /// </summary>
         /// <returns></returns>
-        public Tensor<T> Forward()
+        public GenTensor<T> Forward()
         {
-            var res = new Tensor<T>(Shape);
+            var res = new GenTensor<T>(Shape);
             foreach (var index in res.IterateOverElements())
                 res.SetValueNoCheck(ConstantsAndFunctions<T>.Copy(GetValueNoCheck(index)), index);
             return res;
         }
 
-        internal void Assign(Tensor<T> tensor)
+        internal void Assign(GenTensor<T> genTensor)
         {
-            foreach (var (index, value) in tensor.Iterate())
+            foreach (var (index, value) in genTensor.Iterate())
                 this.SetValueNoCheck(value, index);
         }
     }

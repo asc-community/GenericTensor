@@ -32,7 +32,7 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         /// <summary>
         /// A tensor is a matrix if has two dimensions, e. g. [3 x 4]
@@ -50,7 +50,7 @@ namespace GenericTensor.Core
         /// </summary>
         public override bool Equals(object obj)
         {
-            if (obj is null || !(obj is Tensor<T> ten))
+            if (obj is null || !(obj is GenTensor<T> ten))
                 return false;
             if (ten.Shape != Shape)
                 return false;
@@ -60,10 +60,10 @@ namespace GenericTensor.Core
             return true;
         }
 
-        public static bool operator ==(Tensor<T> a, Tensor<T> b)
+        public static bool operator ==(GenTensor<T> a, GenTensor<T> b)
             => a.Equals(b);
 
-        public static bool operator !=(Tensor<T> a, Tensor<T> b)
+        public static bool operator !=(GenTensor<T> a, GenTensor<T> b)
             => a.Equals(b);
 
         

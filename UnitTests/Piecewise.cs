@@ -32,7 +32,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = Tensor<int>;
+    using TS = GenTensor<int>;
 
     [TestClass]
     public class Piecewise
@@ -42,9 +42,9 @@ namespace UnitTests
             BuiltinTypeInitter.InitForInt();
         }
 
-        Tensor<int> GetA()
+        GenTensor<int> GetA()
         {
-            var res = Tensor<int>.CreateMatrix(
+            var res = GenTensor<int>.CreateMatrix(
                 new [,]
                 {
                     {1, 2},
@@ -54,9 +54,9 @@ namespace UnitTests
             return res;
         }
 
-        Tensor<int> GetB()
+        GenTensor<int> GetB()
         {
-            var res = Tensor<int>.CreateMatrix(
+            var res = GenTensor<int>.CreateMatrix(
                 new [,]
                 {
                     {6, 7},
@@ -70,8 +70,8 @@ namespace UnitTests
         public void AddMat()
         {
             Assert.AreEqual(
-                Tensor<int>.PiecewiseAdd(GetA(), GetB()),
-                Tensor<int>.CreateMatrix(
+                GenTensor<int>.PiecewiseAdd(GetA(), GetB()),
+                GenTensor<int>.CreateMatrix(
                     new [,]
                     {
                         {7,  9},
@@ -85,8 +85,8 @@ namespace UnitTests
         public void SubMat()
         {
             Assert.AreEqual(
-                Tensor<int>.PiecewiseSubtract(GetA(), GetB()),
-                Tensor<int>.CreateMatrix(
+                GenTensor<int>.PiecewiseSubtract(GetA(), GetB()),
+                GenTensor<int>.CreateMatrix(
                     new [,]
                     {
                         {-5,  -5},
@@ -100,8 +100,8 @@ namespace UnitTests
         public void MpMat()
         {
             Assert.AreEqual(
-                Tensor<int>.PiecewiseMultiply(GetA(), GetB()),
-                Tensor<int>.CreateMatrix(
+                GenTensor<int>.PiecewiseMultiply(GetA(), GetB()),
+                GenTensor<int>.CreateMatrix(
                     new [,]
                     {
                         {6,  14},
@@ -115,8 +115,8 @@ namespace UnitTests
         public void DivMat()
         {
             Assert.AreEqual(
-                Tensor<int>.PiecewiseDivide(GetA(), GetB()),
-                Tensor<int>.CreateMatrix(
+                GenTensor<int>.PiecewiseDivide(GetA(), GetB()),
+                GenTensor<int>.CreateMatrix(
                     new [,]
                     {
                         {0, 0},
@@ -130,8 +130,8 @@ namespace UnitTests
         public void AddEl()
         {
             Assert.AreEqual(
-                Tensor<int>.PiecewiseAdd(GetA(), 2),
-                Tensor<int>.CreateMatrix(
+                GenTensor<int>.PiecewiseAdd(GetA(), 2),
+                GenTensor<int>.CreateMatrix(
                     new [,]
                     {
                         {3, 4},
@@ -144,8 +144,8 @@ namespace UnitTests
         public void SubEl()
         {
             Assert.AreEqual(
-                Tensor<int>.PiecewiseSubtract(GetA(), 2),
-                Tensor<int>.CreateMatrix(
+                GenTensor<int>.PiecewiseSubtract(GetA(), 2),
+                GenTensor<int>.CreateMatrix(
                     new [,]
                     {
                         {-1, 0},
@@ -158,8 +158,8 @@ namespace UnitTests
         public void MulEl()
         {
             Assert.AreEqual(
-                Tensor<int>.PiecewiseMultiply(GetA(), 2),
-                Tensor<int>.CreateMatrix(
+                GenTensor<int>.PiecewiseMultiply(GetA(), 2),
+                GenTensor<int>.CreateMatrix(
                     new [,]
                     {
                         {2, 4},
@@ -172,8 +172,8 @@ namespace UnitTests
         public void DivEl()
         {
             Assert.AreEqual(
-                Tensor<int>.PiecewiseDivide(GetA(), 2),
-                Tensor<int>.CreateMatrix(
+                GenTensor<int>.PiecewiseDivide(GetA(), 2),
+                GenTensor<int>.CreateMatrix(
                     new [,]
                     {
                         {0, 1},

@@ -34,7 +34,7 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         private T[] Data { get; set; }
         
@@ -68,7 +68,7 @@ namespace GenericTensor.Core
             Blocks.Reverse();
         }
 
-        protected Tensor(TensorShape dimensions, int[] blocks, int[] axesOrder, T[] data)
+        protected GenTensor(TensorShape dimensions, int[] blocks, int[] axesOrder, T[] data)
         {
             Shape = dimensions;
             AxesOrder = axesOrder;
@@ -87,7 +87,6 @@ namespace GenericTensor.Core
                 AxesOrder[i] = i;
             }
             var data = new T[len];
-
             Data = data;
             LinOffset = 0;
             Blocks = new int[dimensions.Count];
@@ -97,13 +96,13 @@ namespace GenericTensor.Core
         /// <summary>
         /// Creates an empty tensor where each element is just created wrapper
         /// </summary>
-        public Tensor(TensorShape dimensions)
+        public GenTensor(TensorShape dimensions)
             => Init(dimensions);
 
         /// <summary>
         /// Creates an empty tensor where each element is just created wrapper
         /// </summary>
-        public Tensor(params int[] dimensions)
+        public GenTensor(params int[] dimensions)
             => Init(new TensorShape(dimensions));
     }
 }

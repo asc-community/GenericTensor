@@ -32,7 +32,7 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         /// <summary>
         /// Shape represents axes' lengths of the tensor

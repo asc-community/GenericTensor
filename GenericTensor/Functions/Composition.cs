@@ -27,7 +27,7 @@
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         /// <summary>
         /// Creates a new axis that is put backward
@@ -37,7 +37,7 @@ namespace GenericTensor.Core
         /// Stack(t1, t2, t3) => T
         /// where T is a tensor of shape of [3 x 2 x 4]
         /// </summary>
-        public static Tensor<T> Stack(params Tensor<T>[] elements)
+        public static GenTensor<T> Stack(params GenTensor<T>[] elements)
         {
             #if ALLOW_EXCEPTIONS
             if (elements.Length < 1)
@@ -53,7 +53,7 @@ namespace GenericTensor.Core
             newShape[0] = elements.Length;
             for (int i = 1; i < newShape.Length; i++)
                 newShape[i] = desiredShape[i - 1];
-            var res = new Tensor<T>(newShape);
+            var res = new GenTensor<T>(newShape);
             for (int i = 0; i < elements.Length; i++)
                 res.SetSubtensor(elements[i], i);
             return res;
@@ -62,7 +62,7 @@ namespace GenericTensor.Core
         /// <summary>
         /// Borrowed from here: https://github.com/ZacharyPatten/Towel/blob/master/Sources/Towel/Mathematics/Matrix.cs#L365
         /// </summary>
-        private static void GetCofactor(Tensor<T> a, Tensor<T> temp, int rowId,
+        private static void GetCofactor(GenTensor<T> a, GenTensor<T> temp, int rowId,
             int colId, int diagLength)
         {
             int i = 0, j = 0;

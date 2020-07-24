@@ -5,7 +5,7 @@ using GenericTensor.Functions;
 
 namespace Benchmark
 {
-    using TS = Tensor<int>;
+    using TS = GenTensor<int>;
     class Program
     {
         static TS CreateMatrix(int size)

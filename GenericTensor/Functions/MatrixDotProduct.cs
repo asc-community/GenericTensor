@@ -32,7 +32,7 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         /// <summary>
         /// Finds matrix multiplication result
@@ -43,8 +43,8 @@ namespace GenericTensor.Core
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Tensor<T> MatrixDotProduct(Tensor<T> a,
-            Tensor<T> b)
+        public static GenTensor<T> MatrixDotProduct(GenTensor<T> a,
+            GenTensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (!a.IsMatrix || !b.IsMatrix)
@@ -79,8 +79,8 @@ namespace GenericTensor.Core
         /// Applies matrix dot product operation for
         /// all matrices in tensors
         /// </summary>
-        public static Tensor<T> TensorMatrixDotProduct(Tensor<T> a,
-            Tensor<T> b)
+        public static GenTensor<T> TensorMatrixDotProduct(GenTensor<T> a,
+            GenTensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape.Count < 2 || b.Shape.Count < 2)
@@ -94,7 +94,7 @@ namespace GenericTensor.Core
                 newShape[i] = oldShape[i];
             newShape[newShape.Length - 2] = a.Shape[a.Shape.Length - 2];
             newShape[newShape.Length - 1] = b.Shape[b.Shape.Length - 1];
-            var resTensor = new Tensor<T>(newShape);
+            var resTensor = new GenTensor<T>(newShape);
             foreach (var subDimensions in a.IterateOverMatrices())
             {
                 var product = MatrixDotProduct(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions));

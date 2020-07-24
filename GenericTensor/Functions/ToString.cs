@@ -31,7 +31,7 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         public override string ToString()
         {

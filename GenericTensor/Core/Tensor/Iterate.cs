@@ -32,7 +32,7 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         private void NextIndex(int[] indecies, int id)
         {

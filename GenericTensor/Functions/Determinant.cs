@@ -32,7 +32,7 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         #region Laplace
         
@@ -42,7 +42,7 @@ namespace GenericTensor.Core
                 return this.GetValueNoCheck(0, 0);
             var det = ConstantsAndFunctions<T>.CreateZero();
             var sign = ConstantsAndFunctions<T>.CreateOne();
-            var temp = new Tensor<T>(diagLength, diagLength);
+            var temp = new GenTensor<T>(diagLength, diagLength);
             for (int i = 0; i < diagLength; i++)
             {
                 GetCofactor(this, temp, 0, i, diagLength);
@@ -167,7 +167,7 @@ namespace GenericTensor.Core
 
             var n = Shape[0];
 
-            var elemMatrix = Tensor<SafeDivisionWrapper<T>>
+            var elemMatrix = GenTensor<SafeDivisionWrapper<T>>
                 .CreateMatrix(n, n,
                 (x, y) => new SafeDivisionWrapper<T>(this.GetValueNoCheck(x, y))
                 );

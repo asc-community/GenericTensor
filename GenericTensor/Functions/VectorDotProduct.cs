@@ -33,7 +33,7 @@ using GenericTensor.Functions;
 namespace GenericTensor.Core
 {
 
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         /// <summary>
         /// Applies scalar product to every vector in a tensor so that
@@ -43,14 +43,14 @@ namespace GenericTensor.Core
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Tensor<T> TensorVectorDotProduct(Tensor<T> a,
-            Tensor<T> b)
+        public static GenTensor<T> TensorVectorDotProduct(GenTensor<T> a,
+            GenTensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape.SubShape(0, 1) != b.Shape.SubShape(0, 1))
                 throw new InvalidShapeException("Other dimensions of tensors should be equal");
             #endif
-            var resTensor = new Tensor<T>(a.Shape.SubShape(0, 1));
+            var resTensor = new GenTensor<T>(a.Shape.SubShape(0, 1));
             foreach (var index in resTensor.IterateOverElements())
             {
                 var scal = VectorDotProduct(a.GetSubtensor(index), b.GetSubtensor(index));
@@ -62,8 +62,8 @@ namespace GenericTensor.Core
         /// <summary>
         /// Finds the scalar product of two vectors
         /// </summary>
-        public static T VectorDotProduct(Tensor<T> a,
-            Tensor<T> b)
+        public static T VectorDotProduct(GenTensor<T> a,
+            GenTensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (!a.IsVector || !b.IsVector)

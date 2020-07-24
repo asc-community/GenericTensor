@@ -43,25 +43,25 @@ namespace UnitTests
         [TestMethod]
         public void TestVectorDotProduct1()
         {
-            var v1 = Tensor<int>.CreateVector(1, 2, 3);
-            var v2 = Tensor<int>.CreateVector(-3, 5, 3);
-            Assert.AreEqual(16, Tensor<int>.VectorDotProduct(v1, v2));
+            var v1 = GenTensor<int>.CreateVector(1, 2, 3);
+            var v2 = GenTensor<int>.CreateVector(-3, 5, 3);
+            Assert.AreEqual(16, GenTensor<int>.VectorDotProduct(v1, v2));
         }
 
         [TestMethod]
         public void TestVectorDotProduct2()
         {
-            var v1 = Tensor<int>.CreateVector(1, 2, 3);
-            var v2 = Tensor<int>.CreateVector(-3, 5);
-            Assert.ThrowsException<InvalidShapeException>(() => Tensor<int>.VectorDotProduct(v1, v2));
+            var v1 = GenTensor<int>.CreateVector(1, 2, 3);
+            var v2 = GenTensor<int>.CreateVector(-3, 5);
+            Assert.ThrowsException<InvalidShapeException>(() => GenTensor<int>.VectorDotProduct(v1, v2));
         }
 
         [TestMethod]
         public void TestVectorCrossProduct1()
         {
-            var v1 = Tensor<int>.CreateVector(1, 2, 3);
-            var v2 = Tensor<int>.CreateVector(-3, 5, 3);
-            Assert.AreEqual(Tensor<int>.CreateVector(-9, -12, 11), Tensor<int>.VectorCrossProduct(v1, v2));
+            var v1 = GenTensor<int>.CreateVector(1, 2, 3);
+            var v2 = GenTensor<int>.CreateVector(-3, 5, 3);
+            Assert.AreEqual(GenTensor<int>.CreateVector(-9, -12, 11), GenTensor<int>.VectorCrossProduct(v1, v2));
         }
     }
 }

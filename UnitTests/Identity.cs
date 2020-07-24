@@ -32,7 +32,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = Tensor<int>;
+    using TS = GenTensor<int>;
     [TestClass]
     public class Identity
     {

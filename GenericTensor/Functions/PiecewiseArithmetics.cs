@@ -30,90 +30,82 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class Tensor<T>
+    public partial class GenTensor<T>
     {
         /// <summary>
         /// [i, j, k...]th element of the resulting tensor is
         /// operation(a[i, j, k...], b[i, j, k...])
         /// </summary>
-        public static Tensor<T> Zip(Tensor<T> a,
-            Tensor<T> b, Func<T, T, T> operation)
+        public static GenTensor<T> Zip(GenTensor<T> a,
+            GenTensor<T> b, Func<T, T, T> operation)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException("Arguments should be of the same shape");
             #endif
-            var res = new Tensor<T>(a.Shape);
-            if (res.Shape.Length == 1)
-                res.IterateOver1(x =>
-                    res.SetValueNoCheck(
-                        operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)),
-                        x
-                    )
-                );
-            else if (res.Shape.Length == 2)
-                res.IterateOver2((x, y) =>
-                    res.SetValueNoCheck(
-                        operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)),
-                        x, y
-                    )
-                );
-            else if (res.Shape.Length == 3)
-                res.IterateOver3((x, y, z) =>
-                    res.SetValueNoCheck(
-                        operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z)),
-                        x, y, z
-                    )
-                );
+            var res = new GenTensor<T>(a.Shape);
+            if (res.Shape.shape.Length == 1)
+                for (int x = 0; x < res.Shape.shape[0]; x++)
+                    res.Data[x] = operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x));
+            else if (res.Shape.shape.Length == 2)
+                for (int x = 0; x < res.Shape.shape[0]; x++)
+                    for(int y = 0; y < res.Shape.shape[1]; y++)
+                        res.Data[x * res.Blocks[0] + y] = operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y));
+            else if (res.Shape.shape.Length == 3)
+                for (int x = 0; x < res.Shape.shape[0]; x++)
+                    for (int y = 0; y < res.Shape.shape[1]; y++)
+                    for (int z = 0; z < res.Shape.shape[2]; z++)
+                        res.Data[x * res.Blocks[0] + y * res.Blocks[1] + z] =
+                            operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z));
             else
                 foreach (var index in res.IterateOverElements())
                     res.SetValueNoCheck(operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index)), index);
             return res;
         }
 
-        public static Tensor<T> PiecewiseAdd(Tensor<T> a,
-            Tensor<T> b)
+        public static GenTensor<T> PiecewiseAdd(GenTensor<T> a,
+            GenTensor<T> b)
             => Zip(a, b, ConstantsAndFunctions<T>.Add);
 
-        public static Tensor<T> PiecewiseSubtract(Tensor<T> a,
-            Tensor<T> b)
+        public static GenTensor<T> PiecewiseSubtract(GenTensor<T> a,
+            GenTensor<T> b)
             => Zip(a, b, ConstantsAndFunctions<T>.Subtract);
 
-        public static Tensor<T> PiecewiseMultiply(Tensor<T> a,
-            Tensor<T> b)
+        public static GenTensor<T> PiecewiseMultiply(GenTensor<T> a,
+            GenTensor<T> b)
             => Zip(a, b, ConstantsAndFunctions<T>.Multiply);
 
-        public static Tensor<T> PiecewiseDivide(Tensor<T> a,
-            Tensor<T> b)
+        public static GenTensor<T> PiecewiseDivide(GenTensor<T> a,
+            GenTensor<T> b)
             => Zip(a, b, ConstantsAndFunctions<T>.Divide);
 
-        public static Tensor<T> PiecewiseAdd(Tensor<T> a,
+        public static GenTensor<T> PiecewiseAdd(GenTensor<T> a,
             T b)
             => CreateTensor(a.Shape, ind => 
                 ConstantsAndFunctions<T>.Add(a[ind], b));
 
-        public static Tensor<T> PiecewiseSubtract(Tensor<T> a,
+        public static GenTensor<T> PiecewiseSubtract(GenTensor<T> a,
             T b)
             => CreateTensor(a.Shape, ind => 
                 ConstantsAndFunctions<T>.Subtract(a[ind], b));
 
-        public static Tensor<T> PiecewiseSubtract(
-            T a, Tensor<T> b)
+        public static GenTensor<T> PiecewiseSubtract(
+            T a, GenTensor<T> b)
             => CreateTensor(b.Shape, ind => 
                 ConstantsAndFunctions<T>.Subtract(a, b[ind]));
 
-        public static Tensor<T> PiecewiseMultiply(Tensor<T> a,
+        public static GenTensor<T> PiecewiseMultiply(GenTensor<T> a,
             T b)
             => CreateTensor(a.Shape, ind => 
                 ConstantsAndFunctions<T>.Multiply(a[ind], b));
 
-        public static Tensor<T> PiecewiseDivide(Tensor<T> a,
+        public static GenTensor<T> PiecewiseDivide(GenTensor<T> a,
             T b)
             => CreateTensor(a.Shape, ind => 
                 ConstantsAndFunctions<T>.Divide(a[ind], b));
 
-        public static Tensor<T> PiecewiseDivide(
-            T a, Tensor<T> b)
+        public static GenTensor<T> PiecewiseDivide(
+            T a, GenTensor<T> b)
             => CreateTensor(b.Shape, ind => 
                 ConstantsAndFunctions<T>.Divide(a, b[ind]));
     }
