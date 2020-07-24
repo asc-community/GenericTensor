@@ -12,84 +12,51 @@ you could use not only built-in types like int, float, etc., but also your own t
 
 #### Hello world
 
-Class's definition:
+For full correct work you will need some methods for your type to be defined. But first, we could
+create our first int tensor:
+
 ```cs
-public class Tensor<T> where TWrapper : ITensorElement<TPrimitive>, new()
+var myTensor = new GenGensor<int>(3, 4, 5);
 ```
 
-We need to use a primitive type and a wrapper for it. For example, you can use built-in types:
-```cs
-var myTensor = new Tensor<TensorIntWrapper, int>(3, 4, 5); // you created a tensor with the shape of 3 x 4 x 5
-```
-
-You can now access its members:
+Alright, your first tensor is created. You can now access its members:
 ```cs
 myTensor[2, 0, 3] = 5;
 Console.WriteLine(myTensor[1, 1, 1]);
 ```
 
-More methods' documentation is coming soon
-
-#### Custom type
-
-Use this template:
+However, if you try to do anything with it,
+for example, add it to itself:
 
 ```cs
-public class TensorYourTypeWrapper : ITensorElement<YourType>
+var b = GenTensor<int>.PiecewiseAdd(myTensor, myTensor);
+```
+
+it will require you to first define static method Add:
+
+```cs
+ConstantsAndFunctions<int>.Add = (a, b) => a + b;
+```
+
+There is how BuiltinTypeInitter.InitForInt() is implemented (call it to make Tensor<int> work):
+
+```cs
+public static void InitForInt()
 {
-    private YourType val;
-    public YourType GetValue() => val;
-    public void SetValue(YourType newValue) => this.val = newValue;
-
-    public override string ToString()
-        => val.ToString();
-
-    public ITensorElement<YourType> Copy()
-    {
-        var res = new TensorIntWrapper();
-        res.SetValue(val);
-        return res;
-    }
-
-    public ITensorElement<YourType> Forward()
-    {
-        var res = new TensorIntWrapper();
-        res.SetValue(val);
-        return res;
-    }
-
-    public void SetZero()
-        => throw new NotImplementedException("This operation needs SetZero to be defined");
-
-    public void SetOne()
-        => throw new NotImplementedException("This operation needs SetOne to be defined");
-
-    void ITensorElement<YourType>.Add(ITensorElement<YourType> other)
-    {
-        => throw new NotImplementedException("This operation needs Add to be defined");
-    }
-
-    void ITensorElement<YourType>.Multiply(ITensorElement<YourType> other)
-    {
-        => throw new NotImplementedException("This operation needs Multiply to be defined");
-    }
-
-    void ITensorElement<YourType>.Subtract(ITensorElement<YourType> other)
-    {
-        => throw new NotImplementedException("This operation needs Subtract to be defined");
-    }
-
-    void ITensorElement<YourType>.Divide(ITensorElement<YourType> other)
-    {
-        => throw new NotImplementedException("This operation needs Divide to be defined");
-    }
-
-    void ITensorElement<YourType>.Negate()
-    {
-        => throw new NotImplementedException("This operation needs Negate to be defined");
-    }
-
+    ConstantsAndFunctions<int>.Add = (a, b) => a + b;
+    ConstantsAndFunctions<int>.Subtract = (a, b) => a - b;
+    ConstantsAndFunctions<int>.Multiply = (a, b) => a * b;
+    ConstantsAndFunctions<int>.Divide = (a, b) => a / b;
+    ConstantsAndFunctions<int>.CreateZero = () => 0;
+    ConstantsAndFunctions<int>.CreateOne = () => 1;
+    ConstantsAndFunctions<int>.AreEqual = (a, b) => a == b;
+    ConstantsAndFunctions<int>.Negate = a => -a;
+    ConstantsAndFunctions<int>.IsZero = a => a == 0;
+    ConstantsAndFunctions<int>.Copy = a => a;
 }
 ```
 
-You do not have to implement all these methods, only those that are required by functions you use.
+Just call it in the beginning of your program. You can define these methods for any type
+including your own.
+
+More methods' documentation is coming soon

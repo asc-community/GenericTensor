@@ -64,9 +64,6 @@ namespace GenericTensor.Functions
         // copying
         public static Func<T, T> Copy = a => AskForDefining<T>("Copy");
 
-        // new
-        public static Func<T> Default = () => AskForDefining<T>("Default");
-
         // ==
         public static Func<T, T, bool> AreEqual = (a, b) => AskForDefining<bool>("Are equal");
 

@@ -62,26 +62,80 @@ namespace GenericTensor.Core
             Transpose(Shape.Count - 2, Shape.Count - 1);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void ReactIfBadBound(int index, int axisId)
+        {
+            if (index < 0 || index >= Shape.shape[axisId])
+                throw new IndexOutOfRangeException($"Bound vialoting: axis {axisId} is {Shape[axisId]} long, your input is {index}");
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void ReactIfBadIndexCount(int count)
+        {
+            if (count != Shape.Count)
+                throw new ArgumentException($"There should be {Shape.Count} indecies, not {count}");
+        }
+
         private int GetFlattenedIndexWithCheck(int[] indecies)
         {
             #if ALLOW_EXCEPTIONS
-            if (indecies.Length != Shape.Count)
-                throw new ArgumentException($"There should be {Shape.Count} indecies, not {indecies.Length}");
+            ReactIfBadIndexCount(indecies.Length);
             #endif
             var res = 0;
             for (int i = 0; i < indecies.Length; i++)
             {
                 #if ALLOW_EXCEPTIONS
-                if (indecies[i] < 0 || indecies[i] >= Shape[i])
-                    throw new IndexOutOfRangeException($"Bound vialoting: axis {i} is {Shape[i]} long, your input is {indecies[i]}");
+                ReactIfBadBound(indecies[i], i);
                 #endif
                 res += Blocks[AxesOrder[i]] * indecies[i];
             }
-            #if ALLOW_EXCEPTIONS
-            if (res >= Data.Length)
-                throw new IndexOutOfRangeException();
-            #endif
             return res + LinOffset;
+        }
+
+        private int GetFlattenedIndexWithCheck(int x, int y, int z, int[] indecies)
+        {
+            #if ALLOW_EXCEPTIONS
+            ReactIfBadIndexCount(indecies.Length + 3);
+            #endif
+            var res = GetFlattenedIndexWithCheck(x, y, z);
+            for (int i = 0; i < indecies.Length; i++)
+            {
+                #if ALLOW_EXCEPTIONS
+                ReactIfBadBound(indecies[i], i + 3);
+                #endif
+                res += Blocks[AxesOrder[i + 3]] * indecies[i];
+            }
+            return res;
+        }
+
+        private int GetFlattenedIndexWithCheck(int x)
+        {
+            #if ALLOW_EXCEPTIONS
+            ReactIfBadIndexCount(1);
+            ReactIfBadBound(x, 0);
+            #endif
+            return LinOffset + Blocks[AxesOrder[0]] * x; // TODO: remove AxesOrder?
+        }
+
+        private int GetFlattenedIndexWithCheck(int x, int y)
+        {
+            #if ALLOW_EXCEPTIONS
+            ReactIfBadIndexCount(2);
+            ReactIfBadBound(x, 0);
+            ReactIfBadBound(y, 1);
+            #endif
+            return LinOffset + Blocks[AxesOrder[0]] * x + Blocks[AxesOrder[1]] * y;
+        }
+
+        private int GetFlattenedIndexWithCheck(int x, int y, int z)
+        {
+            #if ALLOW_EXCEPTIONS
+            ReactIfBadIndexCount(3);
+            ReactIfBadBound(x, 0);
+            ReactIfBadBound(y, 1);
+            ReactIfBadBound(z, 2);
+            #endif
+            return LinOffset + Blocks[AxesOrder[0]] * x + Blocks[AxesOrder[1]] * y + Blocks[AxesOrder[2]] * z;
         }
 
 

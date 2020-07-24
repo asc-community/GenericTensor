@@ -54,7 +54,7 @@ namespace GenericTensor.Core
             foreach (var index in resTensor.IterateOverElements())
             {
                 var scal = VectorDotProduct(a.GetSubtensor(index), b.GetSubtensor(index));
-                resTensor[index] = scal;
+                resTensor.SetValueNoCheck(scal, index);
             }
             return resTensor;
         }

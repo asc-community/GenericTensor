@@ -61,7 +61,6 @@ namespace GenericTensor.Core
             {
                 for (int y = 0; y < height; y++)
                 {
-                    
                     var s = ConstantsAndFunctions<T>.CreateZero();
                     for (int i = 0; i < row; i++)
                     {

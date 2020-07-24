@@ -42,7 +42,6 @@ namespace GenericTensor.Functions
             ConstantsAndFunctions<int>.Divide = (a, b) => a / b;
             ConstantsAndFunctions<int>.CreateZero = () => 0;
             ConstantsAndFunctions<int>.CreateOne = () => 1;
-            ConstantsAndFunctions<int>.Default = () => 0;
             ConstantsAndFunctions<int>.AreEqual = (a, b) => a == b;
             ConstantsAndFunctions<int>.Negate = a => -a;
             ConstantsAndFunctions<int>.IsZero = a => a == 0;
@@ -57,7 +56,6 @@ namespace GenericTensor.Functions
             ConstantsAndFunctions<float>.Divide = (a, b) => a / b;
             ConstantsAndFunctions<float>.CreateZero = () => 0;
             ConstantsAndFunctions<float>.CreateOne = () => 1;
-            ConstantsAndFunctions<float>.Default = () => 0;
             ConstantsAndFunctions<float>.AreEqual = (a, b) => a == b;
             ConstantsAndFunctions<float>.Negate = a => -a;
             ConstantsAndFunctions<float>.IsZero = a => a == 0;

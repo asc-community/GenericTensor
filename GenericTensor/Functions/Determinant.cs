@@ -35,14 +35,16 @@ namespace GenericTensor.Core
     public partial class GenTensor<T>
     {
         #region Laplace
-        
+
+        [ThreadStatic] internal static List<GenTensor<T>> TensorTempFactorySquareMatrices;
+
         internal T DeterminantLaplace(int diagLength)
         {
             if (diagLength == 1)
                 return this.GetValueNoCheck(0, 0);
             var det = ConstantsAndFunctions<T>.CreateZero();
             var sign = ConstantsAndFunctions<T>.CreateOne();
-            var temp = new GenTensor<T>(diagLength, diagLength);
+            var temp = TensorTempFactorySquareMatrices[diagLength - 1];
             for (int i = 0; i < diagLength; i++)
             {
                 GetCofactor(this, temp, 0, i, diagLength);
@@ -73,6 +75,11 @@ namespace GenericTensor.Core
             if (Shape[0] != Shape[1])
                 throw new InvalidShapeException("Matrix should be square");
             #endif
+            if (TensorTempFactorySquareMatrices is null)
+                TensorTempFactorySquareMatrices = new List<GenTensor<T>> {null};
+            var diagLength = Shape.shape[0];
+            for (int i = TensorTempFactorySquareMatrices.Count; i <= diagLength; i++)
+                TensorTempFactorySquareMatrices.Add(new GenTensor<T>(i, i));
             return DeterminantLaplace(Shape[0]);
         }
         #endregion

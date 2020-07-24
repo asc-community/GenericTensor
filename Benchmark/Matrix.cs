@@ -15,32 +15,70 @@ namespace Benchmark
         {
             BuiltinTypeInitter.InitForInt();
         }
+
+
         static TS CreateMatrix(int size)
             => TS.CreateMatrix(size, size, (x, y) => x + y);
 
-        private static TS createdMatrix = CreateMatrix(6);
-        
-        [Params(3, 20, 50)] public int MatrixSize;
+        private static TS createdMatrix3 = CreateMatrix(3);
+        private static TS createdMatrix6 = CreateMatrix(6);
+        private static TS createdMatrix9 = CreateMatrix(9);
+        private static TS createdMatrix20 = CreateMatrix(20);
+        private static TS createdMatrix50 = CreateMatrix(50);
 
-        
-        [Benchmark] public void CreatingMatrix()
-            => CreateMatrix(MatrixSize);
+        [Benchmark] public void MatrixAndLaplace3()
+            => createdMatrix3.DeterminantLaplace();
+        [Benchmark] public void MatrixAndLaplace6()
+            => createdMatrix6.DeterminantLaplace();
+        [Benchmark] public void MatrixAndLaplace9()
+            => createdMatrix9.DeterminantLaplace();
 
-        [Benchmark] public void CreatingMatrixAndTranspose()
-            => CreateMatrix(MatrixSize).TransposeMatrix();
+        [Benchmark] public void MatrixAndGaussian3()
+            => createdMatrix3.DeterminantGaussianSafeDivision();
 
-        [Benchmark] public void Transpose()
-            => createdMatrix.TransposeMatrix();
+        [Benchmark] public void MatrixAndGaussian6()
+            => createdMatrix6.DeterminantGaussianSafeDivision();
 
-        [Benchmark] public void MatrixAndLaplace()
-            => createdMatrix.DeterminantLaplace();
+        [Benchmark] public void MatrixAndGaussian9()
+            => createdMatrix9.DeterminantGaussianSafeDivision();
 
-        [Benchmark] public void MatrixAndGaussian()
-            => createdMatrix.DeterminantGaussianSafeDivision();
+        [Benchmark] public void CreatingMatrix20()
+            => CreateMatrix(20);
 
-        [Benchmark] public void MatrixAndMultiply()
-            => TS.MatrixDotProduct(createdMatrix, createdMatrix);
-        [Benchmark] public void MatrixAndAdd()
-            => TS.PiecewiseAdd(createdMatrix, createdMatrix);
+        [Benchmark] public void CreatingMatrix50()
+            => CreateMatrix(50);
+
+        [Benchmark] public void Transpose20()
+            => createdMatrix20.TransposeMatrix();
+
+        [Benchmark] public void MatrixAndMultiply6()
+            => TS.MatrixDotProduct(createdMatrix6, createdMatrix6);
+
+        [Benchmark] public void MatrixAndMultiply20()
+            => TS.MatrixDotProduct(createdMatrix20, createdMatrix20);
+
+        [Benchmark] public void MatrixAndAdd6()
+            => TS.PiecewiseAdd(createdMatrix6, createdMatrix6);
+
+        [Benchmark] public void MatrixAndAdd20()
+            => TS.PiecewiseAdd(createdMatrix20, createdMatrix20);
+
+        [Benchmark] public void SafeIndexing()
+        {
+            for (int i = 0; i < createdMatrix9.Shape[0]; i++)
+            for (int j = 0; j < createdMatrix9.Shape[1]; j++)
+            {
+                var c = createdMatrix9[i, j];
+            }
+        }
+
+        [Benchmark] public void FastIndexing()
+        {
+            for (int i = 0; i < createdMatrix9.Shape[0]; i++)
+            for (int j = 0; j < createdMatrix9.Shape[1]; j++)
+            {
+                var c = createdMatrix9.GetValueNoCheck(i, j);
+            }
+        }
     }
 }

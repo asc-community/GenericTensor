@@ -62,10 +62,55 @@ namespace GenericTensor.Core
         /// t[0, 0, 1] or t[1, 2, 3],
         /// but neither of t[0, 1] (Use GetSubtensor for this) and t[4, 5, 6] (IndexOutOfRange)
         /// </summary>
-        public T this[params int[] indecies]
+        public T this[int x, int y, int z, params int[] indecies]
         {
-            get => Data[GetFlattenedIndexWithCheck(indecies)];
-            set => Data[GetFlattenedIndexWithCheck(indecies)] = value;
+            get => Data[GetFlattenedIndexWithCheck(x, y, z, indecies)];
+            set => Data[GetFlattenedIndexWithCheck(x, y, z, indecies)] = value;
+        }
+
+        /// <summary>
+        /// Element-wise indexing,
+        /// for example suppose you have a t = Tensor[2 x 3 x 4] of int-s
+        /// A correct way to index it would be
+        /// t[0, 0, 1] or t[1, 2, 3],
+        /// but neither of t[0, 1] (Use GetSubtensor for this) and t[4, 5, 6] (IndexOutOfRange)
+        /// </summary>
+        public T this[int x, int y, int z]
+        {
+            get => Data[GetFlattenedIndexWithCheck(x, y, z)];
+            set => Data[GetFlattenedIndexWithCheck(x, y, z)] = value;
+        }
+
+        /// <summary>
+        /// Element-wise indexing,
+        /// for example suppose you have a t = Tensor[2 x 3 x 4] of int-s
+        /// A correct way to index it would be
+        /// t[0, 0, 1] or t[1, 2, 3],
+        /// but neither of t[0, 1] (Use GetSubtensor for this) and t[4, 5, 6] (IndexOutOfRange)
+        /// </summary>
+        public T this[int x, int y]
+        {
+            get => Data[GetFlattenedIndexWithCheck(x, y)];
+            set => Data[GetFlattenedIndexWithCheck(x, y)] = value;
+        }
+
+        /// <summary>
+        /// Element-wise indexing,
+        /// for example suppose you have a t = Tensor[2 x 3 x 4] of int-s
+        /// A correct way to index it would be
+        /// t[0, 0, 1] or t[1, 2, 3],
+        /// but neither of t[0, 1] (Use GetSubtensor for this) and t[4, 5, 6] (IndexOutOfRange)
+        /// </summary>
+        public T this[int x]
+        {
+            get => Data[GetFlattenedIndexWithCheck(x)];
+            set => Data[GetFlattenedIndexWithCheck(x)] = value;
+        }
+
+        public T this[int[] inds]
+        {
+            get => Data[GetFlattenedIndexWithCheck(inds)];
+            set => Data[GetFlattenedIndexWithCheck(inds)] = value;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
