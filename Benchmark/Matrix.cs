@@ -1,7 +1,4 @@
 ﻿using BenchmarkDotNet.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using GenericTensor.Functions;
 using GenericTensor.Core;
 
@@ -24,7 +21,6 @@ namespace Benchmark
         private static TS createdMatrix6 = CreateMatrix(6);
         private static TS createdMatrix9 = CreateMatrix(9);
         private static TS createdMatrix20 = CreateMatrix(20);
-        private static TS createdMatrix50 = CreateMatrix(50);
 
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();

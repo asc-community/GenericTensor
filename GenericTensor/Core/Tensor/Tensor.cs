@@ -25,16 +25,12 @@
 #endregion
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 
 
 namespace GenericTensor.Core
 {
-    public partial class GenTensor<T>
+    public partial class GenTensor<T> : IEquatable<GenTensor<T>>, ICloneable
     {
         private T[] Data { get; set; }
         
@@ -92,6 +88,9 @@ namespace GenericTensor.Core
             Blocks = new int[dimensions.Count];
             BlockRecompute();
         }
+
+        public object Clone()
+            => Copy(copyElements: true);
 
         /// <summary>
         /// Creates an empty tensor where each element is just created wrapper

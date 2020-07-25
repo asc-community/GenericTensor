@@ -25,9 +25,6 @@
 #endregion
 
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using GenericTensor.Functions;
 
 namespace GenericTensor.Core
@@ -57,10 +54,15 @@ namespace GenericTensor.Core
         {
             if (obj is null || !(obj is GenTensor<T> ten))
                 return false;
-            if (ten.Shape != Shape)
+            return Equals(ten);
+        }
+
+        public bool Equals(GenTensor<T> obj)
+        {
+            if (obj.Shape != Shape)
                 return false;
-            foreach (var (index, _) in ten.Iterate())
-                if (!ConstantsAndFunctions<T>.AreEqual(this.GetValueNoCheck(index), ten.GetValueNoCheck(index)))
+            foreach (var (index, _) in obj.Iterate())
+                if (!ConstantsAndFunctions<T>.AreEqual(this.GetValueNoCheck(index), obj.GetValueNoCheck(index)))
                     return false;
             return true;
         }

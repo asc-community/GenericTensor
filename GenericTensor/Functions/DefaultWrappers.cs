@@ -26,9 +26,6 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {

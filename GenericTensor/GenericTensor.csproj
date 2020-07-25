@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.1-alpha</Version>
+    <Version>0.0.2-alpha</Version>
     <Authors>WhiteBlackGoose</Authors>
     <Company>AngouriSoft</Company>
     <Description>The only .NET tensor &amp; matrix library for generic types</Description>

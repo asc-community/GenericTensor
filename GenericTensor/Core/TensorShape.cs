@@ -25,10 +25,7 @@
 #endregion
 
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace GenericTensor.Core
 {
@@ -37,7 +34,7 @@ namespace GenericTensor.Core
     /// </summary>
     public struct TensorShape
     {
-        internal int[] shape;
+        internal readonly int[] shape;
         /// <summary>
         /// Length of a shape is basically number of dimensions
         /// </summary>
@@ -112,6 +109,9 @@ namespace GenericTensor.Core
                     return false;
             return true;
         }
+
+        public override int GetHashCode()
+            => shape.GetHashCode();
 
         public static bool operator ==(TensorShape a, TensorShape b)
             => a.Equals(b);

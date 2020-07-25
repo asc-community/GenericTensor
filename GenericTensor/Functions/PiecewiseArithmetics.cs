@@ -44,6 +44,7 @@ namespace GenericTensor.Core
                 throw new InvalidShapeException("Arguments should be of the same shape");
             #endif
             var res = new GenTensor<T>(a.Shape);
+            
             if (res.Shape.shape.Length == 1)
                 for (int x = 0; x < res.Shape.shape[0]; x++)
                     res.Data[x] = ConstantsAndFunctions<T>.Forward(

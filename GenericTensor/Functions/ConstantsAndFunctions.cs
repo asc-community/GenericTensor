@@ -26,10 +26,6 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
@@ -37,7 +33,6 @@ namespace GenericTensor.Functions
     {
         static Y AskForDefining<Y>(string methodName)
         {
-            StackTrace stackTrace = new StackTrace();
             throw new NotImplementedException(
                 $"This operation requires ConstantsAndFunctions<{typeof(T)}>." +
                 $"{methodName} to be defined.");

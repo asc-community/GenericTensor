@@ -25,9 +25,6 @@
 #endregion
 
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using GenericTensor.Functions;
 
 namespace GenericTensor.Core
@@ -178,10 +175,27 @@ namespace GenericTensor.Core
                 return ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(0, 0));
 
             var n = diagLength;
+            var elemMatrix = InnerGaussianEliminationSafeDivision(n);
+
+            var det = 
+                ConstantsAndFunctions<SafeDivisionWrapper<T>>.CreateOne();
+            for (int i = 0; i < n; i++)
+            {
+                det = ConstantsAndFunctions<SafeDivisionWrapper<T>>.Multiply(det, elemMatrix.GetValueNoCheck(i, i));
+            }
+
+            if (ConstantsAndFunctions<T>.IsZero(det.den))
+                return ConstantsAndFunctions<T>.CreateZero();
+            return det.Count();
+        }
+
+        private GenTensor<SafeDivisionWrapper<T>> InnerGaussianEliminationSafeDivision(int n)
+        {
+            InitIfNotInitted();
 
             var elemMatrix = GenTensor<SafeDivisionWrapper<T>>
                 .CreateMatrix(n, n,
-                (x, y) => new SafeDivisionWrapper<T>(ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(x, y)))
+                    (x, y) => new SafeDivisionWrapper<T>(ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(x, y)))
                 );
             for (int k = 1; k < n; k++)
             for (int j = k; j < n; j++)
@@ -189,7 +203,7 @@ namespace GenericTensor.Core
                 var m = ConstantsAndFunctions<SafeDivisionWrapper<T>>.Divide(
                     elemMatrix.GetValueNoCheck(j, k - 1),
                     elemMatrix.GetValueNoCheck(k - 1, k - 1)
-                    );
+                );
                 for (int i = 0; i < n; i++)
                 {
                     var curr = elemMatrix.GetValueNoCheck(j, i);
@@ -203,16 +217,19 @@ namespace GenericTensor.Core
                 }
             }
 
-            var det = 
-                ConstantsAndFunctions<SafeDivisionWrapper<T>>.CreateOne();
-            for (int i = 0; i < n; i++)
-            {
-                det = ConstantsAndFunctions<SafeDivisionWrapper<T>>.Multiply(det, elemMatrix.GetValueNoCheck(i, i));
-            }
+            return elemMatrix;
+        }
 
-            if (ConstantsAndFunctions<T>.IsZero(det.den))
-                return ConstantsAndFunctions<T>.CreateZero();
-            return det.Count();
+        public GenTensor<T> GaussianEliminationSafeDivision()
+        {
+            #if ALLOW_EXCEPTIONS
+            if (!IsMatrix)
+                throw new InvalidShapeException("this should be matrix");
+            if (Shape[0] != Shape[1])
+                throw new InvalidShapeException("this should be square matrix");
+            #endif
+            var wrp = InnerGaussianEliminationSafeDivision(Shape[0]);
+            return GenTensor<T>.CreateMatrix(Shape[0], Shape[1], (x, y) => wrp.GetValueNoCheck(x, y).Count());
         }
 
         

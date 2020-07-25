@@ -73,5 +73,18 @@ namespace GenericTensor.Core
             sb.Append("}");
             return sb.ToString();
         }
+
+        // TODO: make it faster
+        public override int GetHashCode()
+        {
+            var res = 0;
+            unchecked
+            {
+                res += Shape.GetHashCode();
+                foreach (var (_, value) in this.Iterate())
+                    res += value.GetHashCode();
+            }
+            return res;
+        }
     }
 }

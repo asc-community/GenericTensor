@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using BenchmarkDotNet.Running;
-using GenericTensor.Core;
+﻿using BenchmarkDotNet.Running;
 using GenericTensor.Functions;
 
 namespace Benchmark

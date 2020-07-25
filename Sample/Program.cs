@@ -24,11 +24,9 @@
  */
 #endregion
 
-using GenericTensor;
 using System;
 using GenericTensor.Core;
 using GenericTensor.Functions;
-using System.Linq;
 
 public static class Samples
 {
@@ -81,17 +79,6 @@ class Program
                 {2,  8, 7}
             }
         );
-
-        var myMatrix1 = GenTensor<float>.CreateMatrix(
-            new float[,]
-            {
-                {6,  1, 1},
-                {4, -1, 5},
-                {2,  8, 7}
-            }
-        );
-        Console.WriteLine(
-            Divide(myMatrix, myMatrix1)
-            );
+        Console.WriteLine(myMatrix.GaussianEliminationSafeDivision());
     }
 }
