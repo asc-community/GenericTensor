@@ -96,5 +96,25 @@ namespace GenericTensor.Core
             fwd.InvertMatrix();
             return MatrixDotProduct(a, fwd);
         }
+
+        public static GenTensor<T> TensorMatrixDivide(GenTensor<T> a, GenTensor<T> b)
+        {
+            #if ALLOW_EXCEPTIONS
+            InvalidShapeException.NeedTensorSquareMatrix(a);
+            InvalidShapeException.NeedTensorSquareMatrix(b);
+            if (a.Shape != b.Shape)
+                throw new InvalidShapeException("Should be of the same shape");
+            #endif
+
+            var res = new GenTensor<T>(a.Shape);
+            foreach (var ind in res.IterateOverMatrices())
+                res.SetSubtensor(
+                    MatrixDivide(
+                        a.GetSubtensor(ind),
+                        b.GetSubtensor(ind)
+                        ), ind);
+
+            return res;
+        }
     }
 }

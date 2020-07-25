@@ -42,5 +42,21 @@
             else
                 return MatrixDotProduct(dotted, m);
         }
+
+        public static GenTensor<T> TensorMatrixPower(GenTensor<T> m, int power)
+        {
+            #if ALLOW_EXCEPTIONS
+            InvalidShapeException.NeedTensorSquareMatrix(m);
+            #endif
+
+            var res = new GenTensor<T>(m.Shape);
+            foreach (var ind in res.IterateOverMatrices())
+                res.SetSubtensor(
+                    MatrixPower(m.GetSubtensor(ind), power),
+                    ind
+                );
+
+            return res;
+        }
     }
 }

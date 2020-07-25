@@ -96,5 +96,34 @@ namespace UnitTests
                 A
                 );
         }
+
+        [TestMethod]
+        public void TensorDivision()
+        {
+            var A = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+
+            var B = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -1, 5},
+                {2,  8, 7}
+            });
+
+            var T1 = GenTensor<float>.Stack(A, B);
+            var T2 = GenTensor<float>.Stack(B, A);
+
+            var res = GenTensor<float>.TensorMatrixDivide(T1, T2);
+            Assert.AreEqual(
+                res.GetSubtensor(0), GenTensor<float>.MatrixDivide(A, B)
+                );
+            Assert.AreEqual(
+                    res.GetSubtensor(1), GenTensor<float>.MatrixDivide(B, A)
+                );
+        }
     }
 }

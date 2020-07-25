@@ -69,6 +69,23 @@ namespace UnitTests
                 {4, -2, 5},
                 {2,  8, 7}
             });
+            var powered = GenTensor<float>.MatrixPower(M, 3);
+            var I = GenTensor<float>.CreateIdentityMatrix(3);
+            for (int i = 0; i < 3; i++)
+                I = GenTensor<float>.MatrixDotProduct(I, M);
+
+            Assert.AreEqual(I, powered);
+        }
+
+        [TestMethod]
+        public void Test3()
+        {
+            var M = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
             var powered = GenTensor<float>.MatrixPower(M, -4);
             M = M.Forward();
             M.InvertMatrix();
@@ -77,6 +94,35 @@ namespace UnitTests
                 I = GenTensor<float>.MatrixDotProduct(I, M);
 
             Assert.AreEqual(I, powered);
+        }
+
+        [TestMethod]
+        public void Test4Tensor()
+        {
+            var power = 3;
+
+            var M1 = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+            var M2 = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {1,  2, 9},
+                {2, 3, 5},
+                {3,  8, 5}
+            });
+
+            Assert.AreEqual(
+                GenTensor<float>.Stack(
+                    GenTensor<float>.MatrixPower(M1, power),
+                    GenTensor<float>.MatrixPower(M2, power)),
+                GenTensor<float>.TensorMatrixPower(
+                    GenTensor<float>.Stack(M1, M2),
+                    power
+                    )
+            );
         }
     }
 }

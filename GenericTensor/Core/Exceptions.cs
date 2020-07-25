@@ -39,6 +39,14 @@ namespace GenericTensor.Core
     {
         public InvalidShapeException(string msg) : base(msg) {}
         public InvalidShapeException() : base() {}
+
+        internal static void NeedTensorSquareMatrix<T>(GenTensor<T> m)
+        {
+            if (m.Shape.Length <= 2)
+                throw new InvalidShapeException("Should be 3+ dimensional");
+            if (m.Shape.shape[m.Shape.Length - 1] != m.Shape.shape[m.Shape.Length - 2])
+                throw new InvalidShapeException("The last two dimensions should be equal");
+        }
     }
 
     public class InvalidDeterminantException : DataException
