@@ -6,7 +6,7 @@
 It is the only fully-implemented generic-tensor library for C#. Allows to work with tensors of custom types.
 Is still under development, as well as documentation.
 
-Tensor - is an extentension of matrices, a N-D dimensional array. Soon you will find all common functions that are
+Tensor - is an extentension of matrices, a N-dimensional array. Soon you will find all common functions that are
 defined for matrices and vectors here. In order to make it custom, Tensor class is generic, which means that
 you could use not only built-in types like int, float, etc., but also your own types.
 
@@ -86,6 +86,7 @@ asymptotics of an algorithm, where N is a side of a tensor, V is its volume.
 That is how you work with a tensor's structure:
 
 <details><summary><strong>GetSubtensor</strong></summary><p>
+
 ```cs
 public GenTensor<T> GetSubtensor(params int[] indecies)
 ```
@@ -99,6 +100,7 @@ Works for O(1)
 </p></details>
 
 <details><summary><strong>SetSubtensor</strong></summary><p>
+
 ```cs
 public void SetSubtensor(GenTensor<T> sub, params int[] indecies);
 ```
@@ -110,6 +112,7 @@ Works for O(V)
 </p></details>
 
 <details><summary><strong>Transposition</strong></summary><p>
+
 ```cs
 public void Transpose(int axis1, int axis2);
 public void TransposeMatrix();
