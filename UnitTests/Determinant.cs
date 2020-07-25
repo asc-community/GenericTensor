@@ -143,5 +143,29 @@ namespace UnitTests
                 T.TensorDeterminantLaplace()
                 );
         }
+
+        [TestMethod]
+        public void TensorGaussian()
+        {
+            var T = GenTensor<float>.CreateTensor(new float[,,]
+            {
+                {
+                    {1, 2}, // -2
+                    {3, 4}
+                },
+                {
+                    {5, 7}, // -4
+                    {7, 9}
+                },
+                {
+                    {3, 1}, // 15
+                    {6, 7}
+                }
+            });
+            Assert.AreEqual(
+                GenTensor<float>.CreateVector(-2, -4, 15),
+                T.TensorDeterminantGaussianSafeDivision()
+            );
+        }
     }
 }

@@ -283,6 +283,34 @@ namespace GenericTensor.Core
             return res;
         }
 
+        public GenTensor<T> TensorDeterminantGaussianSafeDivision()
+        {
+            #if ALLOW_EXCEPTIONS
+            if (Shape.Length <= 2)
+                throw new InvalidShapeException("Should be 3+ dimensional");
+            if (Shape.shape[Shape.Length - 1] != Shape.shape[Shape.Length - 2])
+                throw new InvalidShapeException("The last two dimensions should be equal");
+            #endif
+
+            var res = GenTensor<T>.CreateTensor(Shape.SubShape(0, 2),
+                ind => GetSubtensor(ind).DeterminantGaussianSafeDivision());
+            return res;
+        }
+
+        public GenTensor<T> TensorDeterminantGaussianSimple()
+        {
+            #if ALLOW_EXCEPTIONS
+            if (Shape.Length <= 2)
+                throw new InvalidShapeException("Should be 3+ dimensional");
+            if (Shape.shape[Shape.Length - 1] != Shape.shape[Shape.Length - 2])
+                throw new InvalidShapeException("The last two dimensions should be equal");
+            #endif
+
+            var res = GenTensor<T>.CreateTensor(Shape.SubShape(0, 2),
+                ind => GetSubtensor(ind).DeterminantGaussianSimple());
+            return res;
+        }
+
         #endregion
     }
 }
