@@ -10,7 +10,7 @@ Tensor - is an extentension of matrices, a N-D dimensional array. Soon you will 
 defined for matrices and vectors here. In order to make it custom, Tensor class is generic, which means that
 you could use not only built-in types like int, float, etc., but also your own types.
 
-#### Hello world
+### Hello world
 
 For full correct work you will need some methods for your type to be defined. But first, we could
 create our first int tensor:
@@ -57,7 +57,109 @@ public static void InitForInt()
 }
 ```
 
-Just call it in the beginning of your program. You can define these methods for any type
-including your own.
+Forward is an essential function. It allows you to only copy a wrapper while
+keeping pointer to the same inner data. For example, you have a class
+```cs
+class Wrapper
+{
+    private MyData innerData;
 
-More methods' documentation is coming soon
+    public Wrapper(MyData data) { innerData = data; }
+}
+```
+
+Then it might look like
+
+```cs
+ConstantsAndFunctions<Wrapper>.Copy = a => new Wrapper(innerData.Copy());
+ConstantsAndFunctions<Wrapper>.Forward = a => new Wrapper(innerData());
+```
+
+
+### Functionality
+
+Here we list and explain all methods from GT. We use O() syntax to show
+asymptotics of an algorithm, where N is a side of a tensor, V is its volume.
+
+#### Composition (structure)
+
+<details><summary><strong>GetSubtensor</strong></summary>
+```cs
+public GenTensor<T> GetSubtensor(params int[] indecies)
+```
+
+Allows to get a subtensor with SHARED data (so that any changes to
+intial tensor or the subtensor will be reflected in both).
+
+For example, Subtensor of a matrix is a vector (row).
+
+Works for O(1)
+</details>
+
+<details><summary><strong>SetSubtensor</strong></summary>
+```cs
+public void SetSubtensor(GenTensor<T> sub, params int[] indecies);
+```
+
+Allows to set a subtensor by forwarding all elements from sub to this. Override
+ConstantsAndFunctions<T>.Forward to enable it.
+
+Works for O(V)
+</details>
+
+<details><summary><strong>Transposition</strong></summary>
+```cs
+public void Transpose(int axis1, int axis2);
+public void TransposeMatrix();
+```
+
+Swaps axis1 and axis2 in this.
+TransposeMatrix swaps the last two axes.
+
+Works for O(1)
+</details>
+
+<details><summary><strong>Concatenation</strong></summary>
+```cs
+public static GenTensor<T> Concat(GenTensor<T> a, GenTensor<T> b);
+```
+
+Conatenates two tensors by their first axis. For example, concatenation of
+two tensors of shape [4 x 5 x 6] and [7 x 5 x 6] is a tensor of shape
+[11 x 5 x 6]. 
+
+Works for O(N)
+</details>
+
+<details><summary><strong>Stacking</strong></summary>
+```cs
+public static GenTensor<T> Stack(params GenTensor<T>[] elements);
+```
+
+Unites all same-shape elements into one tensor with 1 dimension more.
+For example, if t1, t2, and t3 are of shape [2 x 5], Stack(t1, t2, t3) will
+return a tensor of shape [3 x 2 x 5]
+
+Works for O(V)
+</details>
+
+<details><summary><strong>Slicing</strong></summary>
+```cs
+public GenTensor<T> Slice(int leftIncluding, int rightExcluding);
+```
+
+Slices this into another tensor with data-sharing. Syntax and use is similar to
+python's numpy:
+
+```py
+v = myTensor[2:3]
+```
+
+is the same as
+
+```cs
+var v = myTensor.Slice(2, 3);
+```
+
+Works for O(N)
+</details>

@@ -46,7 +46,7 @@ namespace GenericTensor.Core
             if (!copyElements)
             {
                 foreach (var index in res.IterateOverElements())
-                    res.SetValueNoCheck(GetValueNoCheck(index), index);
+                    res.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(GetValueNoCheck(index)), index);
             }
             else
                 foreach (var index in res.IterateOverElements())
@@ -71,7 +71,7 @@ namespace GenericTensor.Core
         internal void Assign(GenTensor<T> genTensor)
         {
             foreach (var (index, value) in genTensor.Iterate())
-                this.SetValueNoCheck(value, index);
+                this.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(value), index);
         }
     }
 }

@@ -42,8 +42,9 @@ namespace GenericTensor.Core
         /// same as
         /// A.Slice(3, 5) in GT
         ///
-        /// O(1)
+        /// O(N)
         /// </summary>
+        // TODO: Make it O(1)
         public GenTensor<T> Slice(int leftIncluding, int rightExcluding)
         {
             #if ALLOW_EXCEPTIONS

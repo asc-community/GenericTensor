@@ -26,6 +26,7 @@
 
 
 using System.Runtime.CompilerServices;
+using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
@@ -74,10 +75,10 @@ namespace GenericTensor.Core
             {
                 var resultingVector = GenTensor<T>.CreateVector(a.Shape.shape[0] + b.Shape.shape[0]);
                 for (int i = 0; i < a.Shape.shape[0]; i++)
-                    resultingVector.SetValueNoCheck(a.GetValueNoCheck(i), i);
+                    resultingVector.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(a.GetValueNoCheck(i)), i);
 
                 for (int i = 0; i < b.Shape.shape[0]; i++)
-                    resultingVector.SetValueNoCheck(b.GetValueNoCheck(i), i + a.Shape.shape[0]);
+                    resultingVector.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(b.GetValueNoCheck(i)), i + a.Shape.shape[0]);
 
                 return resultingVector;
             }

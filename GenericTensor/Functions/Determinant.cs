@@ -39,7 +39,7 @@ namespace GenericTensor.Core
         internal T DeterminantLaplace(int diagLength)
         {
             if (diagLength == 1)
-                return this.GetValueNoCheck(0, 0);
+                return ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(0, 0));
             var det = ConstantsAndFunctions<T>.CreateZero();
             var sign = ConstantsAndFunctions<T>.CreateOne();
             var temp = SquareMatrixFactory<T>.GetMatrix(diagLength);
@@ -175,13 +175,13 @@ namespace GenericTensor.Core
             #endif
 
             if (Shape[0] == 1)
-                return this.GetValueNoCheck(0, 0);
+                return ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(0, 0));
 
             var n = diagLength;
 
             var elemMatrix = GenTensor<SafeDivisionWrapper<T>>
                 .CreateMatrix(n, n,
-                (x, y) => new SafeDivisionWrapper<T>(this.GetValueNoCheck(x, y))
+                (x, y) => new SafeDivisionWrapper<T>(ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(x, y)))
                 );
             for (int k = 1; k < n; k++)
             for (int j = k; j < n; j++)
@@ -231,7 +231,7 @@ namespace GenericTensor.Core
                 throw new InvalidShapeException("this should be square matrix");
             #endif
             if (Shape[0] == 1)
-                return this.GetValueNoCheck(0, 0);
+                return ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(0, 0));
 
             var n = Shape[0];
 
@@ -240,12 +240,12 @@ namespace GenericTensor.Core
             for (int j = k; j < n; j++)
             {
                 var m = ConstantsAndFunctions<T>.Divide(
-                    elemMatrix.GetValueNoCheck(j, k - 1),
-                    elemMatrix.GetValueNoCheck(k - 1, k - 1)
+                    ConstantsAndFunctions<T>.Forward(elemMatrix.GetValueNoCheck(j, k - 1)),
+                    ConstantsAndFunctions<T>.Forward(elemMatrix.GetValueNoCheck(k - 1, k - 1))
                 );
                 for (int i = 0; i < n; i++)
                 {
-                    var curr = elemMatrix.GetValueNoCheck(j, i);
+                    var curr = ConstantsAndFunctions<T>.Forward(elemMatrix.GetValueNoCheck(j, i));
                     elemMatrix.SetValueNoCheck(ConstantsAndFunctions<T>.Subtract(
                         curr,
                         ConstantsAndFunctions<T>.Multiply(
