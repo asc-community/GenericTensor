@@ -116,5 +116,15 @@ namespace GenericTensor.Core
 
             return res;
         }
+        
+        public void TensorMatrixInvert()
+        {
+            #if ALLOW_EXCEPTIONS
+            InvalidShapeException.NeedTensorSquareMatrix(this);
+            #endif
+
+            foreach (var ind in IterateOverMatrices())
+                GetSubtensor(ind).InvertMatrix();
+        }
     }
 }

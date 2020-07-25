@@ -125,5 +125,32 @@ namespace UnitTests
                     res.GetSubtensor(1), GenTensor<float>.MatrixDivide(B, A)
                 );
         }
+
+        [TestMethod]
+        public void TensorMatrixInverse()
+        {
+            var A = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+
+            var B = GenTensor<float>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -1, 5},
+                {2,  8, 7}
+            });
+
+            var T = GenTensor<float>.Stack(A, B);
+            var K = T.Copy(true);
+            T.TensorMatrixInvert();
+
+            Assert.AreEqual(
+                GenTensor<float>.CreateIdentityTensor(T.Shape.SubShape(0, 2).ToArray(), 3),
+                GenTensor<float>.TensorMatrixDotProduct(T, K)
+                );
+        }
     }
 }

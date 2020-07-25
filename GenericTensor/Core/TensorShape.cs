@@ -71,7 +71,7 @@ namespace GenericTensor.Core
             return new TensorShape(newShape);
         }
 
-        internal TensorShape SubShape(int offsetFromLeft, int offsetFromRight)
+        public TensorShape SubShape(int offsetFromLeft, int offsetFromRight)
         {
             var newShape = new int[Length - offsetFromLeft - offsetFromRight];
             for (int i = offsetFromLeft; i < Length - offsetFromRight; i++)
@@ -90,7 +90,7 @@ namespace GenericTensor.Core
         /// <returns></returns>
         public int this[int axisId] => shape[axisId];
 
-        internal int[] ToArray() => shape;
+        public int[] ToArray() => shape;
 
         public override string ToString()
             => string.Join(" x ", shape.Select(c => c.ToString()));
