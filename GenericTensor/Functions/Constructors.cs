@@ -80,7 +80,7 @@ namespace GenericTensor.Core
         {
             var res = new GenTensor<T>(elements.Length);
             for (int i = 0; i < elements.Length; i++)
-                res[i] = elements[i];
+                res.SetValueNoCheck(elements[i], i);
             return res;
         }
 
@@ -152,15 +152,52 @@ namespace GenericTensor.Core
         /// Creates a tensor of given size with iterator over its indecies
         /// (its only argument is an array of integers which are indecies of the tensor)
         /// </summary>
-        /// <param name="shape"></param>
-        /// <param name="operation"></param>
-        /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateTensor(TensorShape shape, Func<int[], T> operation)
         {
             var res = new GenTensor<T>(shape);
             foreach (var ind in res.IterateOverElements())
-                res[ind] = operation(ind);
+                res.SetValueNoCheck(operation(ind), ind);
+            return res;
+        }
+
+        /// <summary>
+        /// Creates a tensor from an array
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> CreateTensor(T[] data)
+        {
+            var res = new GenTensor<T>(data.GetLength(0));
+            for (int x = 0; x < data.GetLength(0); x++)
+                res.SetValueNoCheck(data[x], x);
+            return res;
+        }
+
+        /// <summary>
+        /// Creates a tensor from a two-dimensional array
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> CreateTensor(T[,] data)
+        {
+            var res = new GenTensor<T>(data.GetLength(0), data.GetLength(1));
+            for (int x = 0; x < data.GetLength(0); x++)
+            for (int y = 0; y < data.GetLength(1); y++)
+                res.SetValueNoCheck(data[x, y], x, y);
+            return res;
+        }
+
+        /// <summary>
+        /// Creates a tensor from a two-dimensional array
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> CreateTensor(T[,,] data)
+        {
+            var res = new GenTensor<T>(data.GetLength(0), 
+                data.GetLength(1), data.GetLength(2));
+            for (int x = 0; x < data.GetLength(0); x++)
+            for (int y = 0; y < data.GetLength(1); y++)
+            for (int z = 0; z < data.GetLength(1); z++)
+                res.SetValueNoCheck(data[x, y, z], x, y, z);
             return res;
         }
     }

@@ -34,8 +34,8 @@ namespace GenericTensor.Core
 {
     public partial class GenTensor<T>
     {
+        #region Matrix Determinant
         #region Laplace
-
         internal T DeterminantLaplace(int diagLength)
         {
             if (diagLength == 1)
@@ -263,6 +263,24 @@ namespace GenericTensor.Core
             }
 
             return det;
+        }
+        #endregion
+        #endregion
+
+        #region Tensor Determinant
+
+        public GenTensor<T> TensorDeterminantLaplace()
+        {
+            #if ALLOW_EXCEPTIONS
+            if (Shape.Length <= 2)
+                throw new InvalidShapeException("Should be 3+ dimensional");
+            if (Shape.shape[Shape.Length - 1] != Shape.shape[Shape.Length - 2])
+                throw new InvalidShapeException("The last two dimensions should be equal");
+            #endif
+
+            var res = GenTensor<T>.CreateTensor(Shape.SubShape(0, 2),
+                ind => GetSubtensor(ind).DeterminantLaplace());
+            return res;
         }
 
         #endregion
