@@ -55,7 +55,7 @@ public static class Samples
                 {7, 8, 9}
             }
         );
-        Console.WriteLine(GenTensor<float>.MatrixDotProduct(myMatrix, myMatrix));
+        Console.WriteLine(GenTensor<float>.MatrixMultiply(myMatrix, myMatrix));
     }
 }
 
@@ -66,7 +66,7 @@ class Program
     {
         b = b.Forward();
         b.InvertMatrix();
-        return GenTensor<T>.MatrixDotProduct(a, b);
+        return GenTensor<T>.MatrixMultiply(a, b);
     }
 
     static void Main(string[] args)

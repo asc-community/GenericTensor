@@ -42,7 +42,7 @@ namespace GenericTensor.Core
         ///
         /// O(N^3)
         /// </summary>
-        public static GenTensor<T> MatrixDotProduct(GenTensor<T> a,
+        public static GenTensor<T> MatrixMultiply(GenTensor<T> a,
             GenTensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
@@ -79,7 +79,7 @@ namespace GenericTensor.Core
         ///
         /// O(N^3)
         /// </summary>
-        public static GenTensor<T> TensorMatrixDotProduct(GenTensor<T> a,
+        public static GenTensor<T> TensorMatrixMultiply(GenTensor<T> a,
             GenTensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
@@ -97,7 +97,7 @@ namespace GenericTensor.Core
             var resTensor = new GenTensor<T>(newShape);
             foreach (var subDimensions in a.IterateOverMatrices())
             {
-                var product = MatrixDotProduct(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions));
+                var product = MatrixMultiply(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions));
                 resTensor.SetSubtensor(product, subDimensions);
             }
             return resTensor;

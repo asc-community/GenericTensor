@@ -33,14 +33,14 @@
             if (power == 1)
                 return m;
             if (power == 2)
-                return MatrixDotProduct(m, m);
+                return MatrixMultiply(m, m);
             var half = power / 2;
             var m1 = MatrixPower(m, half);
-            var dotted = MatrixDotProduct(m1, m1);
+            var dotted = MatrixMultiply(m1, m1);
             if (power % 2 == 0)
                 return dotted;
             else
-                return MatrixDotProduct(dotted, m);
+                return MatrixMultiply(dotted, m);
         }
 
         public static GenTensor<T> TensorMatrixPower(GenTensor<T> m, int power)

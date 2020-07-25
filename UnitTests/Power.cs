@@ -55,7 +55,7 @@ namespace UnitTests
             var powered = GenTensor<float>.MatrixPower(M, 4);
             var I = GenTensor<float>.CreateIdentityMatrix(3);
             for (int i = 0; i < 4; i++)
-                I = GenTensor<float>.MatrixDotProduct(I, M);
+                I = GenTensor<float>.MatrixMultiply(I, M);
 
             Assert.AreEqual(I, powered);
         }
@@ -72,7 +72,7 @@ namespace UnitTests
             var powered = GenTensor<float>.MatrixPower(M, 3);
             var I = GenTensor<float>.CreateIdentityMatrix(3);
             for (int i = 0; i < 3; i++)
-                I = GenTensor<float>.MatrixDotProduct(I, M);
+                I = GenTensor<float>.MatrixMultiply(I, M);
 
             Assert.AreEqual(I, powered);
         }
@@ -91,7 +91,7 @@ namespace UnitTests
             M.InvertMatrix();
             var I = GenTensor<float>.CreateIdentityMatrix(3);
             for (int i = 0; i < 4; i++)
-                I = GenTensor<float>.MatrixDotProduct(I, M);
+                I = GenTensor<float>.MatrixMultiply(I, M);
 
             Assert.AreEqual(I, powered);
         }

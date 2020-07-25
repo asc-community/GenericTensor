@@ -46,20 +46,23 @@ namespace GenericTensor.Core
             var res = new GenTensor<T>(a.Shape);
             if (res.Shape.shape.Length == 1)
                 for (int x = 0; x < res.Shape.shape[0]; x++)
-                    res.Data[x] = operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x));
+                    res.Data[x] = ConstantsAndFunctions<T>.Forward(
+                        operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
             else if (res.Shape.shape.Length == 2)
                 for (int x = 0; x < res.Shape.shape[0]; x++)
                     for(int y = 0; y < res.Shape.shape[1]; y++)
-                        res.Data[x * res.Blocks[0] + y] = operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y));
+                        res.Data[x * res.Blocks[0] + y] = ConstantsAndFunctions<T>.Forward(
+                            operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
             else if (res.Shape.shape.Length == 3)
                 for (int x = 0; x < res.Shape.shape[0]; x++)
                     for (int y = 0; y < res.Shape.shape[1]; y++)
                     for (int z = 0; z < res.Shape.shape[2]; z++)
-                        res.Data[x * res.Blocks[0] + y * res.Blocks[1] + z] =
-                            operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z));
+                        res.Data[x * res.Blocks[0] + y * res.Blocks[1] + z] = ConstantsAndFunctions<T>.Forward(
+                            operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z)));
             else
                 foreach (var index in res.IterateOverElements())
-                    res.SetValueNoCheck(operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index)), index);
+                    res.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(
+                        operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))), index);
             return res;
         }
 

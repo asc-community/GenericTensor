@@ -164,7 +164,7 @@ namespace GenericTensor.Core
         ///
         /// O(N^3)
         /// </summary>
-        public T DeterminantGaussianSafeDivision(int diagLength)
+        internal T DeterminantGaussianSafeDivision(int diagLength)
         {
             InitIfNotInitted();
             #if ALLOW_EXCEPTIONS

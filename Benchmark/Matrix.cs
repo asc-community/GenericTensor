@@ -52,10 +52,10 @@ namespace Benchmark
             => createdMatrix20.TransposeMatrix();
 
         [Benchmark] public void MatrixAndMultiply6()
-            => TS.MatrixDotProduct(createdMatrix6, createdMatrix6);
+            => TS.MatrixMultiply(createdMatrix6, createdMatrix6);
 
         [Benchmark] public void MatrixAndMultiply20()
-            => TS.MatrixDotProduct(createdMatrix20, createdMatrix20);
+            => TS.MatrixMultiply(createdMatrix20, createdMatrix20);
 
         [Benchmark] public void MatrixAndAdd6()
             => TS.PiecewiseAdd(createdMatrix6, createdMatrix6);

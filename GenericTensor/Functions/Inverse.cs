@@ -122,7 +122,7 @@ namespace GenericTensor.Core
             #endif
             var fwd = b.Forward();
             fwd.InvertMatrix();
-            return MatrixDotProduct(a, fwd);
+            return MatrixMultiply(a, fwd);
         }
 
         public static GenTensor<T> TensorMatrixDivide(GenTensor<T> a, GenTensor<T> b)

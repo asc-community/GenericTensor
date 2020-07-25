@@ -53,7 +53,7 @@ namespace UnitTests
             B.InvertMatrix();
             Assert.AreEqual(
                 GenTensor<float>.CreateIdentityMatrix(3),
-                GenTensor<float>.MatrixDotProduct(A, B)
+                GenTensor<float>.MatrixMultiply(A, B)
             );
         }
 
@@ -69,7 +69,7 @@ namespace UnitTests
             B.InvertMatrix();
             Assert.AreEqual(
                 GenTensor<float>.CreateIdentityMatrix(2),
-                GenTensor<float>.MatrixDotProduct(A, B)
+                GenTensor<float>.MatrixMultiply(A, B)
             );
         }
 
@@ -92,7 +92,7 @@ namespace UnitTests
 
             var res = GenTensor<float>.MatrixDivide(A, B);
             Assert.AreEqual(
-                GenTensor<float>.MatrixDotProduct(res, B),
+                GenTensor<float>.MatrixMultiply(res, B),
                 A
                 );
         }
@@ -149,7 +149,7 @@ namespace UnitTests
 
             Assert.AreEqual(
                 GenTensor<float>.CreateIdentityTensor(T.Shape.SubShape(0, 2).ToArray(), 3),
-                GenTensor<float>.TensorMatrixDotProduct(T, K)
+                GenTensor<float>.TensorMatrixMultiply(T, K)
                 );
         }
     }
