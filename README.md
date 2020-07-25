@@ -83,7 +83,7 @@ asymptotics of an algorithm, where N is a side of a tensor, V is its volume.
 
 #### Composition (structure)
 
-<details><summary><strong>GetSubtensor</strong></summary>
+<details><summary><strong>GetSubtensor</strong></summary><p>
 ```cs
 public GenTensor<T> GetSubtensor(params int[] indecies)
 ```
@@ -94,9 +94,9 @@ intial tensor or the subtensor will be reflected in both).
 For example, Subtensor of a matrix is a vector (row).
 
 Works for O(1)
-</details>
+</p></details>
 
-<details><summary><strong>SetSubtensor</strong></summary>
+<details><summary><strong>SetSubtensor</strong></summary><p>
 ```cs
 public void SetSubtensor(GenTensor<T> sub, params int[] indecies);
 ```
@@ -105,9 +105,9 @@ Allows to set a subtensor by forwarding all elements from sub to this. Override
 ConstantsAndFunctions<T>.Forward to enable it.
 
 Works for O(V)
-</details>
+</p></details>
 
-<details><summary><strong>Transposition</strong></summary>
+<details><summary><strong>Transposition</strong></summary><p>
 ```cs
 public void Transpose(int axis1, int axis2);
 public void TransposeMatrix();
@@ -117,9 +117,9 @@ Swaps axis1 and axis2 in this.
 TransposeMatrix swaps the last two axes.
 
 Works for O(1)
-</details>
+</p></details>
 
-<details><summary><strong>Concatenation</strong></summary>
+<details><summary><strong>Concatenation</strong></summary><p>
 ```cs
 public static GenTensor<T> Concat(GenTensor<T> a, GenTensor<T> b);
 ```
@@ -129,9 +129,9 @@ two tensors of shape [4 x 5 x 6] and [7 x 5 x 6] is a tensor of shape
 [11 x 5 x 6]. 
 
 Works for O(N)
-</details>
+</p></details>
 
-<details><summary><strong>Stacking</strong></summary>
+<details><summary><strong>Stacking</strong></summary><p>
 ```cs
 public static GenTensor<T> Stack(params GenTensor<T>[] elements);
 ```
@@ -141,9 +141,9 @@ For example, if t1, t2, and t3 are of shape [2 x 5], Stack(t1, t2, t3) will
 return a tensor of shape [3 x 2 x 5]
 
 Works for O(V)
-</details>
+</p></details>
 
-<details><summary><strong>Slicing</strong></summary>
+<details><summary><strong>Slicing</strong></summary><p>
 ```cs
 public GenTensor<T> Slice(int leftIncluding, int rightExcluding);
 ```
@@ -162,4 +162,4 @@ var v = myTensor.Slice(2, 3);
 ```
 
 Works for O(N)
-</details>
+</p></details>
