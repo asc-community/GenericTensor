@@ -84,6 +84,16 @@ namespace GenericTensor.Core
             return res;
         }
 
+        /// <summary>
+        /// Creates a vector from an array of primitives
+        /// Its length will be equal to elements.Length
+        /// </summary>
+        public static GenTensor<T> CreateVector(int length)
+        {
+            var res = new GenTensor<T>(length);
+            return res;
+        }
+
         private static (int height, int width) ExtractAndCheck<T>(T[,] data)
         {
             var width = data.GetLength(0);

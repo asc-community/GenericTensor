@@ -21,3 +21,4 @@
 /Sample/bin/Release/netcoreapp3.1
 /UnitTests/bin/Release/netcoreapp3.0
 /GenericTensor/bin/Release
+/GenericTensor/bin/Debug

@@ -109,7 +109,7 @@ namespace GenericTensor.Core
         {
             #if ALLOW_EXCEPTIONS
             if (indecies.Length >= Shape.Count)
-                throw new InvalidShapeException($"{nameof(indecies.Length)} should be less than {nameof(Shape.Length)}");
+                throw new InvalidShapeException($"Number of {nameof(indecies)} should be less than number of {nameof(Shape)}");
             for (int i = 0; i < indecies.Length; i++)
                 if (indecies[i] < 0 || indecies[i] >= Shape[i])
                     throw new IndexOutOfRangeException();

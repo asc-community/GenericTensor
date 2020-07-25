@@ -79,6 +79,12 @@ namespace GenericTensor.Core
             return new TensorShape(newShape);
         }
 
+        public TensorShape Copy()
+        {
+            var resI = shape.ToArray();
+            return new TensorShape(resI);
+        }
+
         internal void Swap(int id1, int id2)
             => (shape[id1], shape[id2]) = (shape[id2], shape[id1]);
 

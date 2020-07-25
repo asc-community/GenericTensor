@@ -63,30 +63,37 @@ namespace GenericTensor.Core
             return res;
         }
 
-        /// <summary>
-        /// Borrowed from here: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
-        ///
-        /// O(N^2)
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void GetCofactor(GenTensor<T> a, GenTensor<T> temp, int rowId,
-            int colId, int diagLength)
+        public static GenTensor<T> Concat(GenTensor<T> a, GenTensor<T> b)
         {
-            int i = 0, j = 0;
-            for (int row = 0; row < diagLength; row++)
+            #if ALLOW_EXCEPTIONS
+            if (a.Shape.SubShape(1, 0) != b.Shape.SubShape(1, 0))
+                throw new InvalidShapeException("Excluding the first dimension, all others should match");
+            #endif
+
+            if (a.IsVector)
             {
-                for (int col = 0; col < diagLength; col++)
-                {
-                    if (row != rowId && col != colId)
-                    {
-                        temp.SetValueNoCheck(a.GetValueNoCheck(row, col), i, j++);
-                        if (j == diagLength - 1)
-                        {
-                            j = 0;
-                            i++;
-                        }
-                    }
-                }
+                var resultingVector = GenTensor<T>.CreateVector(a.Shape.shape[0] + b.Shape.shape[0]);
+                for (int i = 0; i < a.Shape.shape[0]; i++)
+                    resultingVector.SetValueNoCheck(a.GetValueNoCheck(i), i);
+
+                for (int i = 0; i < b.Shape.shape[0]; i++)
+                    resultingVector.SetValueNoCheck(b.GetValueNoCheck(i), i + a.Shape.shape[0]);
+
+                return resultingVector;
+            }
+            else
+            {
+                var newShape = a.Shape.Copy();
+                newShape.shape[0] = a.Shape.shape[0] + b.Shape.shape[0];
+
+                var res = new GenTensor<T>(newShape);
+                for (int i = 0; i < a.Shape.shape[0]; i++)
+                    res.SetSubtensor(a.GetSubtensor(i), i);
+
+                for (int i = 0; i < b.Shape.shape[0]; i++)
+                    res.SetSubtensor(b.GetSubtensor(i), i + a.Shape.shape[0]);
+
+                return res;
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using GenericTensor.Functions;
 
@@ -7,6 +8,33 @@ namespace GenericTensor.Core
 {
     public partial class GenTensor<T>
     {
+        /// <summary>
+        /// Borrowed from here: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
+        ///
+        /// O(N^2)
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void GetCofactor(GenTensor<T> a, GenTensor<T> temp, int rowId,
+            int colId, int diagLength)
+        {
+            int i = 0, j = 0;
+            for (int row = 0; row < diagLength; row++)
+            {
+                for (int col = 0; col < diagLength; col++)
+                {
+                    if (row != rowId && col != colId)
+                    {
+                        temp.SetValueNoCheck(a.GetValueNoCheck(row, col), i, j++);
+                        if (j == diagLength - 1)
+                        {
+                            j = 0;
+                            i++;
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Returns adjugate matrix
         ///

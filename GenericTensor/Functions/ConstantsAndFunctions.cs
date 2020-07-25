@@ -68,7 +68,7 @@ namespace GenericTensor.Functions
         public static Func<T, T> Forward = a => AskForDefining<T>("Forward");
 
         // ==
-        public static Func<T, T, bool> AreEqual = (a, b) => AskForDefining<bool>("Are equal");
+        public static Func<T, T, bool> AreEqual = (a, b) => AskForDefining<bool>("AreEqual");
 
         // -
         public static Func<T, T> Negate = a => AskForDefining<T>("Negate");
