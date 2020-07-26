@@ -42,7 +42,7 @@ namespace UnitTests
         private GenTensor<int> GetSmall()
         {
             var res = new GenTensor<int>(2, 3);
-            foreach (var (index, _) in res.Iterate())
+            foreach (var (index, _) in res)
             {
                 res[index] = 3 * index[0] + index[1];
             }
@@ -52,7 +52,7 @@ namespace UnitTests
         private GenTensor<int> GetBig()
         {
             var res = new GenTensor<int>(2, 3, 4);
-            foreach (var (index, _) in res.Iterate())
+            foreach (var (index, _) in res)
             {
                 res[index] = index[0] * 12 + index[1] * 4 + index[2];
             }

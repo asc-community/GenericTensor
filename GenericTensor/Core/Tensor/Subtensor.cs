@@ -82,7 +82,7 @@ namespace GenericTensor.Core
             ReactIfBadBound(index, 0);
             #endif
             var newLinIndexDelta = GetFlattenedIndexSilent(index);
-            var newBlocks = Blocks.ToList();
+            var newBlocks = _blocks.ToList();
             var rootAxis = AxesOrder[0];
             newBlocks.RemoveAt(rootAxis);
             var newAxesOrder = AxesOrder.ToList();
@@ -91,7 +91,7 @@ namespace GenericTensor.Core
                     newAxesOrder[i] -= 1;
             newAxesOrder.RemoveAt(0);
             var newShape = Shape.CutOffset1();
-            var result = new GenTensor<T>(newShape, newBlocks.ToArray(), newAxesOrder.ToArray(), Data);
+            var result = new GenTensor<T>(newShape, newBlocks.ToArray(), newAxesOrder.ToArray(), _data);
             result.LinOffset = newLinIndexDelta;
             return result;
         }

@@ -25,31 +25,23 @@
 #endregion
 
 
-using System;
-using System.Data;
+using GenericTensor.Core;
+using GenericTensor.Functions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static System.Reflection.BindingFlags;
 
-namespace GenericTensor.Core
+namespace UnitTests
 {
-    /// <summary>
-    /// Occurs when an axis mismatch happens
-    /// </summary>
-    public class InvalidShapeException : ArgumentException
+    [TestClass]
+    public class ConstantsAndFunctions
     {
-        public InvalidShapeException(string msg) : base(msg) {}
-        public InvalidShapeException() : base() {}
-
-        internal static void NeedTensorSquareMatrix<T>(GenTensor<T> m) where T : notnull
+        [TestMethod]
+        public void AllFunctionsThrowWithCorrectMessage()
         {
-            if (m.Shape.Length <= 2)
-                throw new InvalidShapeException("Should be 3+ dimensional");
-            if (m.Shape.shape[m.Shape.Length - 1] != m.Shape.shape[m.Shape.Length - 2])
-                throw new InvalidShapeException("The last two dimensions should be equal");
+            foreach (var m in typeof(ConstantsAndFunctions<object>).GetMethods(Public | Static))
+                Assert.ThrowsException<System.NotImplementedException>(() =>
+                    m.Invoke(null, new object[m.GetParameters().Length]),
+                    $"This operation requires ConstantsAndFunctions<System.Object>.{m.Name} to be defined.");
         }
-    }
-
-    public class InvalidDeterminantException : DataException
-    {
-        public InvalidDeterminantException(string msg) : base(msg) {}
-        public InvalidDeterminantException() : base() {}
     }
 }

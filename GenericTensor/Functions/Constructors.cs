@@ -61,8 +61,8 @@ namespace GenericTensor.Core
         public static GenTensor<T> CreateIdentityMatrix(int diag)
         {
             var res = new GenTensor<T>(diag, diag);
-            for (int i = 0; i < res.Data.Length; i++)
-                res.Data[i] = ConstantsAndFunctions<T>.CreateZero();
+            for (int i = 0; i < res._data.Length; i++)
+                res._data[i] = ConstantsAndFunctions<T>.CreateZero();
 
             for (int i = 0; i < diag; i++)
                 res.SetValueNoCheck(ConstantsAndFunctions<T>.CreateOne, i, i);
@@ -91,7 +91,7 @@ namespace GenericTensor.Core
             return res;
         }
 
-        private static (int height, int width) ExtractAndCheck<T>(T[,] data)
+        private static (int height, int width) ExtractAndCheck(T[,] data)
         {
             var width = data.GetLength(0);
             #if ALLOW_EXCEPTIONS

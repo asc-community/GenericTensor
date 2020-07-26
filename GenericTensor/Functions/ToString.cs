@@ -31,7 +31,7 @@ using System.Text;
 
 namespace GenericTensor.Core
 {
-    public partial class GenTensor<T>
+    public partial class GenTensor<T> where T : notnull
     {
         public override string ToString()
         {
@@ -81,7 +81,7 @@ namespace GenericTensor.Core
             unchecked
             {
                 res += Shape.GetHashCode();
-                foreach (var (_, value) in this.Iterate())
+                foreach (var (_, value) in this)
                     res += value.GetHashCode();
             }
             return res;

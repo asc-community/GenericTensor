@@ -29,7 +29,7 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class GenTensor<T>
+    public partial class GenTensor<T> : System.IEquatable<GenTensor<T>>
     {
         /// <summary>
         /// A tensor is a matrix if has two dimensions, e. g. [3 x 4]
@@ -61,7 +61,7 @@ namespace GenericTensor.Core
         {
             if (obj.Shape != Shape)
                 return false;
-            foreach (var (index, _) in obj.Iterate())
+            foreach (var (index, _) in obj)
                 if (!ConstantsAndFunctions<T>.AreEqual(this.GetValueNoCheck(index), obj.GetValueNoCheck(index)))
                     return false;
             return true;
