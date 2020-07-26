@@ -203,7 +203,7 @@ namespace GenericTensor.Core
                 data.GetLength(1), data.GetLength(2));
             for (int x = 0; x < data.GetLength(0); x++)
             for (int y = 0; y < data.GetLength(1); y++)
-            for (int z = 0; z < data.GetLength(1); z++)
+            for (int z = 0; z < data.GetLength(2); z++)
                 res.SetValueNoCheck(data[x, y, z], x, y, z);
             return res;
         }
