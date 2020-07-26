@@ -70,5 +70,8 @@ namespace GenericTensor.Functions
 
         // == 0
         public static Func<T, bool> IsZero = a => AskForDefining<bool>("IsZero");
+
+        // .ToSting()
+        public new static Func<T, string> ToString = a => AskForDefining<string>("ToString");
     }
 }

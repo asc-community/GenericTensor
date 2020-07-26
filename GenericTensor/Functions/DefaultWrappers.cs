@@ -44,6 +44,7 @@ namespace GenericTensor.Functions
             ConstantsAndFunctions<int>.IsZero = a => a == 0;
             ConstantsAndFunctions<int>.Copy = a => a;
             ConstantsAndFunctions<int>.Forward = a => a;
+            ConstantsAndFunctions<int>.ToString = a => a.ToString();
         }
 
         public static void InitForFloat()
@@ -59,6 +60,7 @@ namespace GenericTensor.Functions
             ConstantsAndFunctions<float>.IsZero = a => Math.Abs(a) < 1e-5;
             ConstantsAndFunctions<float>.Copy = a => a;
             ConstantsAndFunctions<float>.Forward = a => a;
+            ConstantsAndFunctions<float>.ToString = a => a.ToString();
         }
     }
 }
