@@ -35,8 +35,8 @@ namespace GenericTensor.Core
         /// <summary>
         /// Shape represents axes' lengths of the tensor
         /// </summary>
-        public TensorShape Shape { get; private set; }
-        private int[] AxesOrder;
+        public TensorShape Shape { get; }
+        private readonly int[] AxesOrder;
 
         /// <summary>
         /// Swaps axes in tensor.
@@ -71,37 +71,37 @@ namespace GenericTensor.Core
         private void ReactIfBadIndexCount(int count)
         {
             if (count != Shape.Count)
-                throw new ArgumentException($"There should be {Shape.Count} indecies, not {count}");
+                throw new ArgumentException($"There should be {Shape.Count} indices, not {count}");
         }
 
-        private int GetFlattenedIndexWithCheck(int[] indecies)
+        private int GetFlattenedIndexWithCheck(int[] indices)
         {
             #if ALLOW_EXCEPTIONS
-            ReactIfBadIndexCount(indecies.Length);
+            ReactIfBadIndexCount(indices.Length);
             #endif
             var res = 0;
-            for (int i = 0; i < indecies.Length; i++)
+            for (int i = 0; i < indices.Length; i++)
             {
                 #if ALLOW_EXCEPTIONS
-                ReactIfBadBound(indecies[i], i);
+                ReactIfBadBound(indices[i], i);
                 #endif
-                res += Blocks[AxesOrder[i]] * indecies[i];
+                res += blocks[AxesOrder[i]] * indices[i];
             }
             return res + LinOffset;
         }
 
-        private int GetFlattenedIndexWithCheck(int x, int y, int z, int[] indecies)
+        private int GetFlattenedIndexWithCheck(int x, int y, int z, int[] indices)
         {
             #if ALLOW_EXCEPTIONS
-            ReactIfBadIndexCount(indecies.Length + 3);
+            ReactIfBadIndexCount(indices.Length + 3);
             #endif
             var res = GetFlattenedIndexWithCheck(x, y, z);
-            for (int i = 0; i < indecies.Length; i++)
+            for (int i = 0; i < indices.Length; i++)
             {
                 #if ALLOW_EXCEPTIONS
-                ReactIfBadBound(indecies[i], i + 3);
+                ReactIfBadBound(indices[i], i + 3);
                 #endif
-                res += Blocks[AxesOrder[i + 3]] * indecies[i];
+                res += blocks[AxesOrder[i + 3]] * indices[i];
             }
             return res;
         }
@@ -112,7 +112,7 @@ namespace GenericTensor.Core
             ReactIfBadIndexCount(1);
             ReactIfBadBound(x, 0);
             #endif
-            return LinOffset + Blocks[AxesOrder[0]] * x; // TODO: remove AxesOrder?
+            return LinOffset + blocks[AxesOrder[0]] * x; // TODO: remove AxesOrder?
         }
 
         private int GetFlattenedIndexWithCheck(int x, int y)
@@ -122,7 +122,7 @@ namespace GenericTensor.Core
             ReactIfBadBound(x, 0);
             ReactIfBadBound(y, 1);
             #endif
-            return LinOffset + Blocks[AxesOrder[0]] * x + Blocks[AxesOrder[1]] * y;
+            return LinOffset + blocks[AxesOrder[0]] * x + blocks[AxesOrder[1]] * y;
         }
 
         private int GetFlattenedIndexWithCheck(int x, int y, int z)
@@ -133,26 +133,26 @@ namespace GenericTensor.Core
             ReactIfBadBound(y, 1);
             ReactIfBadBound(z, 2);
             #endif
-            return LinOffset + Blocks[AxesOrder[0]] * x + Blocks[AxesOrder[1]] * y + Blocks[AxesOrder[2]] * z;
+            return LinOffset + blocks[AxesOrder[0]] * x + blocks[AxesOrder[1]] * y + blocks[AxesOrder[2]] * z;
         }
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int GetFlattenedIndexSilent(int x) 
-            => Blocks[AxesOrder[0]] * x + 
+            => blocks[AxesOrder[0]] * x + 
                LinOffset;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int GetFlattenedIndexSilent(int x, int y) 
-            => Blocks[AxesOrder[0]] * x +
-               Blocks[AxesOrder[1]] * y +
+            => blocks[AxesOrder[0]] * x +
+               blocks[AxesOrder[1]] * y +
                LinOffset;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int GetFlattenedIndexSilent(int x, int y, int z) 
-            => Blocks[AxesOrder[0]] * x +
-               Blocks[AxesOrder[1]] * y +
-               Blocks[AxesOrder[2]] * z +
+            => blocks[AxesOrder[0]] * x +
+               blocks[AxesOrder[1]] * y +
+               blocks[AxesOrder[2]] * z +
                LinOffset;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -160,7 +160,7 @@ namespace GenericTensor.Core
         {
             var res = GetFlattenedIndexSilent(x, y, z);
             for (int i = 0; i < other.Length; i++)
-                res += other[i] * Blocks[AxesOrder[i + 3]];
+                res += other[i] * blocks[AxesOrder[i + 3]];
             return res;
         }
 
@@ -169,7 +169,7 @@ namespace GenericTensor.Core
         {
             var res = 0;
             for (int i = 0; i < other.Length; i++)
-                res += other[i] * Blocks[AxesOrder[i]];
+                res += other[i] * blocks[AxesOrder[i]];
             return res + LinOffset;
         }
     }

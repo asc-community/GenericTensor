@@ -63,11 +63,11 @@ namespace GenericTensor.Core
         ///
         /// O(1)
         /// </summary>
-        public GenTensor<T> GetSubtensor(int[] indecies)
-            => GetSubtensor(indecies, 0);
+        public GenTensor<T> GetSubtensor(int[] indices)
+            => GetSubtensor(indices, 0);
 
-        internal GenTensor<T> GetSubtensor(int[] indecies, int id)
-            => id == indecies.Length ? this : this.GetSubtensor(indecies[id]).GetSubtensor(indecies, id + 1);
+        internal GenTensor<T> GetSubtensor(int[] indices, int id)
+            => id == indices.Length ? this : this.GetSubtensor(indices[id]).GetSubtensor(indices, id + 1);
 
         /// <summary>
         /// Get a subtensor of a tensor
@@ -82,7 +82,7 @@ namespace GenericTensor.Core
             ReactIfBadBound(index, 0);
             #endif
             var newLinIndexDelta = GetFlattenedIndexSilent(index);
-            var newBlocks = Blocks.ToList();
+            var newBlocks = blocks.ToList();
             var rootAxis = AxesOrder[0];
             newBlocks.RemoveAt(rootAxis);
             var newAxesOrder = AxesOrder.ToList();
@@ -91,7 +91,7 @@ namespace GenericTensor.Core
                     newAxesOrder[i] -= 1;
             newAxesOrder.RemoveAt(0);
             var newShape = Shape.CutOffset1();
-            var result = new GenTensor<T>(newShape, newBlocks.ToArray(), newAxesOrder.ToArray(), Data);
+            var result = new GenTensor<T>(newShape, newBlocks.ToArray(), newAxesOrder.ToArray(), data);
             result.LinOffset = newLinIndexDelta;
             return result;
         }
@@ -104,18 +104,18 @@ namespace GenericTensor.Core
         ///
         /// O(V)
         /// </summary>
-        public void SetSubtensor(GenTensor<T> sub, params int[] indecies)
+        public void SetSubtensor(GenTensor<T> sub, params int[] indices)
         {
             #if ALLOW_EXCEPTIONS
-            if (indecies.Length >= Shape.Count)
-                throw new InvalidShapeException($"Number of {nameof(indecies)} should be less than number of {nameof(Shape)}");
-            for (int i = 0; i < indecies.Length; i++)
-                if (indecies[i] < 0 || indecies[i] >= Shape[i])
+            if (indices.Length >= Shape.Count)
+                throw new InvalidShapeException($"Number of {nameof(indices)} should be less than number of {nameof(Shape)}");
+            for (int i = 0; i < indices.Length; i++)
+                if (indices[i] < 0 || indices[i] >= Shape[i])
                     throw new IndexOutOfRangeException();
-            if (Shape.Count - indecies.Length != sub.Shape.Count)
-                throw new InvalidShapeException($"Number of {nameof(sub.Shape.Length)} + {nameof(indecies.Length)} should be equal to {Shape.Count}");
+            if (Shape.Count - indices.Length != sub.Shape.Count)
+                throw new InvalidShapeException($"Number of {nameof(sub.Shape.Length)} + {nameof(indices.Length)} should be equal to {Shape.Count}");
             #endif
-            var thisSub = GetSubtensor(indecies);
+            var thisSub = GetSubtensor(indices);
             #if ALLOW_EXCEPTIONS
             if (thisSub.Shape != sub.Shape)
                 throw new InvalidShapeException($"{nameof(sub.Shape)} must be equal to {nameof(Shape)}");

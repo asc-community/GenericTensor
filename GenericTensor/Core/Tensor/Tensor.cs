@@ -27,15 +27,13 @@
 using System;
 using System.Linq;
 
-
 namespace GenericTensor.Core
 {
-    public partial class GenTensor<T> : IEquatable<GenTensor<T>>, ICloneable
+    public partial class GenTensor<T> : ICloneable
     {
-        private T[] Data { get; set; }
-        
-        private int[] Blocks; // 3 x 4 x 5
-        private int _volume = -1;
+        private readonly T[] data;
+        private readonly int[] blocks; // 3 x 4 x 5
+        private int volume = -1;
         /// <summary>
         /// Number of elements in tensor overall
         /// </summary>
@@ -43,13 +41,13 @@ namespace GenericTensor.Core
         {
             get
             {
-                if (_volume == -1)
+                if (volume == -1)
                 {
-                    _volume = 1;
+                    volume = 1;
                     for (var i = 0; i < Shape.Length; i++)
-                        _volume *= Shape[i];
+                        volume *= Shape[i];
                 }
-                return _volume;
+                return volume;
             }
         }
 
@@ -58,21 +56,27 @@ namespace GenericTensor.Core
             int len = 1;
             for (int i = Shape.Count - 1; i >= 0; i--)
             {
-                Blocks[i] = len;
+                blocks[i] = len;
                 len *= Shape[i];
             }
-            Blocks.Reverse();
+            blocks.Reverse();
         }
 
         protected GenTensor(TensorShape dimensions, int[] blocks, int[] axesOrder, T[] data)
         {
             Shape = dimensions;
             AxesOrder = axesOrder;
-            Blocks = blocks;
-            Data = data;
+            this.blocks = blocks;
+            this.data = data;
         }
 
-        private void Init(TensorShape dimensions)
+        public object Clone()
+            => Copy(copyElements: true);
+
+        /// <summary>
+        /// Creates an uninitialized tensor where each element is just created wrapper
+        /// </summary>
+        public GenTensor(TensorShape dimensions)
         {
             Shape = dimensions;
             int len = 1;
@@ -83,25 +87,15 @@ namespace GenericTensor.Core
                 AxesOrder[i] = i;
             }
             var data = new T[len];
-            Data = data;
+            this.data = data;
             LinOffset = 0;
-            Blocks = new int[dimensions.Count];
+            blocks = new int[dimensions.Count];
             BlockRecompute();
         }
 
-        public object Clone()
-            => Copy(copyElements: true);
-
         /// <summary>
-        /// Creates an empty tensor where each element is just created wrapper
+        /// Creates an uninitialized tensor where each element is just created wrapper
         /// </summary>
-        public GenTensor(TensorShape dimensions)
-            => Init(dimensions);
-
-        /// <summary>
-        /// Creates an empty tensor where each element is just created wrapper
-        /// </summary>
-        public GenTensor(params int[] dimensions)
-            => Init(new TensorShape(dimensions));
+        public GenTensor(params int[] dimensions) : this(new TensorShape(dimensions)) { }
     }
 }

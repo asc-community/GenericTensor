@@ -31,47 +31,45 @@ namespace GenericTensor.Functions
 {
     public static class ConstantsAndFunctions<T>
     {
-        static Y AskForDefining<Y>(string methodName)
-        {
+        static Y AskForDefining<Y>([System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
             throw new NotImplementedException(
                 $"This operation requires ConstantsAndFunctions<{typeof(T)}>." +
                 $"{methodName} to be defined.");
-        }
 
         // 1
-        public static Func<T> CreateOne = () => AskForDefining<T>("CreateOne");
+        public static Func<T> CreateOne = () => AskForDefining<T>();
 
         // 0
-        public static Func<T> CreateZero = () => AskForDefining<T>("CreateZero");
+        public static Func<T> CreateZero = () => AskForDefining<T>();
 
         // +
-        public static Func<T, T, T> Add = (a, b) => AskForDefining<T>("Add");
+        public static Func<T, T, T> Add = (a, b) => AskForDefining<T>();
 
         // -
-        public static Func<T, T, T> Subtract = (a, b) => AskForDefining<T>("Sutbract");
+        public static Func<T, T, T> Subtract = (a, b) => AskForDefining<T>();
 
         // *
-        public static Func<T, T, T> Multiply = (a, b) => AskForDefining<T>("Multiply");
+        public static Func<T, T, T> Multiply = (a, b) => AskForDefining<T>();
 
         // /
-        public static Func<T, T, T> Divide = (a, b) => AskForDefining<T>("Divide");
+        public static Func<T, T, T> Divide = (a, b) => AskForDefining<T>();
 
-        // copying
-        public static Func<T, T> Copy = a => AskForDefining<T>("Copy");
+        // copying (deep copying)
+        public static Func<T, T> Copy = a => AskForDefining<T>();
 
-        // forwarding (only copy the wrapper if have one)
-        public static Func<T, T> Forward = a => AskForDefining<T>("Forward");
+        // forwarding (only copy the wrapper if have one => shallow copying)
+        public static Func<T, T> Forward = a => AskForDefining<T>();
 
         // ==
-        public static Func<T, T, bool> AreEqual = (a, b) => AskForDefining<bool>("AreEqual");
+        public static Func<T, T, bool> AreEqual = (a, b) => AskForDefining<bool>();
 
         // -
-        public static Func<T, T> Negate = a => AskForDefining<T>("Negate");
+        public static Func<T, T> Negate = a => AskForDefining<T>();
 
         // == 0
-        public static Func<T, bool> IsZero = a => AskForDefining<bool>("IsZero");
+        public static Func<T, bool> IsZero = a => AskForDefining<bool>();
 
-        // .ToSting()
-        public new static Func<T, string> ToString = a => AskForDefining<string>("ToString");
+        // .ToString()
+        public new static Func<T, string> ToString = a => AskForDefining<string>();
     }
 }
