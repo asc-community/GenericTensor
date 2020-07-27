@@ -27,7 +27,6 @@
 using System;
 using System.Linq;
 
-
 namespace GenericTensor.Core
 {
     public partial class GenTensor<T> : ICloneable
@@ -75,7 +74,7 @@ namespace GenericTensor.Core
             => Copy(copyElements: true);
 
         /// <summary>
-        /// Creates an empty tensor where each element is just created wrapper
+        /// Creates an uninitialized tensor where each element is just created wrapper
         /// </summary>
         public GenTensor(TensorShape dimensions)
         {
@@ -95,7 +94,7 @@ namespace GenericTensor.Core
         }
 
         /// <summary>
-        /// Creates an empty tensor where each element is just created wrapper
+        /// Creates an uninitialized tensor where each element is just created wrapper
         /// </summary>
         public GenTensor(params int[] dimensions) : this(new TensorShape(dimensions)) { }
     }

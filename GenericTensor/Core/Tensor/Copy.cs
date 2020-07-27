@@ -66,7 +66,7 @@ namespace GenericTensor.Core
 
         internal void Assign(GenTensor<T> genTensor)
         {
-            foreach (var (index, value) in genTensor)
+            foreach (var (index, value) in genTensor.Iterate())
                 this.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(value), index);
         }
     }

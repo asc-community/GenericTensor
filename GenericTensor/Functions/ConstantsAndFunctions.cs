@@ -54,10 +54,10 @@ namespace GenericTensor.Functions
         // /
         public static Func<T, T, T> Divide = (a, b) => AskForDefining<T>();
 
-        // copying
+        // copying (deep copying)
         public static Func<T, T> Copy = a => AskForDefining<T>();
 
-        // forwarding (only copy the wrapper if have one)
+        // forwarding (only copy the wrapper if have one => shallow copying)
         public static Func<T, T> Forward = a => AskForDefining<T>();
 
         // ==
@@ -69,7 +69,7 @@ namespace GenericTensor.Functions
         // == 0
         public static Func<T, bool> IsZero = a => AskForDefining<bool>();
 
-        // .ToSting()
+        // .ToString()
         public new static Func<T, string> ToString = a => AskForDefining<string>();
     }
 }

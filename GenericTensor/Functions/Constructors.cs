@@ -35,8 +35,8 @@ namespace GenericTensor.Core
     {
         /// <summary>
         /// Creates a tensor whose all matrices are identity matrices
-        /// 1 is achieved with TWrapper.SetOne()
-        /// 0 is achieved with TWrapper.SetZero()
+        /// <para>1 is achieved with <see cref="ConstantsAndFunctions{T}.CreateOne"/></para>
+        /// <para>0 is achieved with <see cref="ConstantsAndFunctions{T}.CreateZero"/></para>
         /// </summary>
         public static GenTensor<T> CreateIdentityTensor(int[] dimensions, int finalMatrixDiag)
         {
@@ -55,8 +55,8 @@ namespace GenericTensor.Core
 
         /// <summary>
         /// Creates an indentity matrix whose width and height are equal to diag
-        /// 1 is achieved with TWrapper.SetOne()
-        /// 0 is achieved with TWrapper.SetZero()
+        /// <para>1 is achieved with <see cref="ConstantsAndFunctions{T}.CreateOne"/></para>
+        /// <para>0 is achieved with <see cref="ConstantsAndFunctions{T}.CreateZero"/></para>
         /// </summary>
         public static GenTensor<T> CreateIdentityMatrix(int diag)
         {
@@ -94,27 +94,29 @@ namespace GenericTensor.Core
         private static (int height, int width) ExtractAndCheck(T[,] data)
         {
             var width = data.GetLength(0);
-            #if ALLOW_EXCEPTIONS
+#if ALLOW_EXCEPTIONS
             if (width <= 0)
                 throw new InvalidShapeException();
-            #endif
+#endif
             var height = data.GetLength(1);
-            #if ALLOW_EXCEPTIONS
+#if ALLOW_EXCEPTIONS
             if (height <= 0)
                 throw new InvalidShapeException();
-            #endif
+#endif
             return (width, height);
         }
 
         /// <summary>
         /// Creates a matrix from a two-dimensional array of primitives
         /// for example
+        /// <code>
         /// var M = Tensor.CreateMatrix(new[,]
         /// {
         ///     {1, 2},
         ///     {3, 4}
         /// });
-        /// where yourData.GetLength(0) is Shape[0]
+        /// </code>
+        /// where yourData.GetLength(0) is Shape[0] and
         /// yourData.GetLength(1) is Shape[1]
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -123,13 +125,13 @@ namespace GenericTensor.Core
             var (width, height) = GenTensor<T>.ExtractAndCheck(data);
             var res = new GenTensor<T>(width, height);
             for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                res.SetValueNoCheck(data[x, y], x, y);
+                for (int y = 0; y < height; y++)
+                    res.SetValueNoCheck(data[x, y], x, y);
             return res;
         }
 
         /// <summary>
-        /// Creates an empty square matrix
+        /// Creates an uninitialized square matrix
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateSquareMatrix(int diagLength)
@@ -144,8 +146,8 @@ namespace GenericTensor.Core
         {
             var res = GenTensor<T>.CreateMatrix(width, height);
             for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                res.SetValueNoCheck(stepper(x, y), x, y);
+                for (int y = 0; y < height; y++)
+                    res.SetValueNoCheck(stepper(x, y), x, y);
             return res;
         }
 
@@ -156,8 +158,8 @@ namespace GenericTensor.Core
             => new GenTensor<T>(width, height);
 
         /// <summary>
-        /// Creates a tensor of given size with iterator over its indecies
-        /// (its only argument is an array of integers which are indecies of the tensor)
+        /// Creates a tensor of given size with iterator over its indices
+        /// (its only argument is an array of integers which are indices of the tensor)
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateTensor(TensorShape shape, Func<int[], T> operation)
@@ -188,24 +190,62 @@ namespace GenericTensor.Core
         {
             var res = new GenTensor<T>(data.GetLength(0), data.GetLength(1));
             for (int x = 0; x < data.GetLength(0); x++)
-            for (int y = 0; y < data.GetLength(1); y++)
-                res.SetValueNoCheck(data[x, y], x, y);
+                for (int y = 0; y < data.GetLength(1); y++)
+                    res.SetValueNoCheck(data[x, y], x, y);
             return res;
         }
 
         /// <summary>
-        /// Creates a tensor from a two-dimensional array
+        /// Creates a tensor from a three-dimensional array
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateTensor(T[,,] data)
         {
-            var res = new GenTensor<T>(data.GetLength(0), 
+            var res = new GenTensor<T>(data.GetLength(0),
                 data.GetLength(1), data.GetLength(2));
             for (int x = 0; x < data.GetLength(0); x++)
-            for (int y = 0; y < data.GetLength(1); y++)
-            for (int z = 0; z < data.GetLength(2); z++)
-                res.SetValueNoCheck(data[x, y, z], x, y, z);
+                for (int y = 0; y < data.GetLength(1); y++)
+                    for (int z = 0; z < data.GetLength(2); z++)
+                        res.SetValueNoCheck(data[x, y, z], x, y, z);
             return res;
+        }
+
+        /// <summary>
+        /// Creates a tensor from an n-dimensional array
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> CreateTensor(Array data)
+        {
+            var dimensions = new int[data.Rank];
+            for (int i = 0; i < data.Rank; i++)
+                dimensions[i] = data.GetLength(i);
+            var res = new GenTensor<T>(dimensions);
+
+            dimensions = new int[data.Rank]; // Don't modify res
+            var normalizedIndices = new int[data.Rank];
+            var indices = new int[data.Rank];
+            for (int i = 0; i < data.Rank; i++)
+            {
+                dimensions[i] = data.GetUpperBound(i);
+                indices[i] = data.GetLowerBound(i);
+            }
+            var increment = indices.Length - 1;
+            while (true)
+            {
+                for (int i = increment; indices[i] > dimensions[i]; i--)
+                    if (i == 0)
+                        return res;
+                    else
+                    {
+                        indices[i - 1]++;
+                        indices[i] = data.GetLowerBound(i);
+                        normalizedIndices[i - 1]++;
+                        normalizedIndices[i] = 0;
+                    }
+                res.SetValueNoCheck((T)data.GetValue(indices), normalizedIndices);
+                indices[increment]++;
+                normalizedIndices[increment]++;
+            }
         }
     }
 }

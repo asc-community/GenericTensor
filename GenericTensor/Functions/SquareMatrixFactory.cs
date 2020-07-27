@@ -4,7 +4,7 @@ using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    internal static class SquareMatrixFactory<T> where T : notnull
+    internal static class SquareMatrixFactory<T>
     {
         // [0] is 2x2 matrix, [1] is 3x3 matrix, etc.
         static readonly List<GenTensor<T>> tensorTempFactorySquareMatrices = new List<GenTensor<T>>();

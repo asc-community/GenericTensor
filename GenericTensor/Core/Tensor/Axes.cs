@@ -35,8 +35,8 @@ namespace GenericTensor.Core
         /// <summary>
         /// Shape represents axes' lengths of the tensor
         /// </summary>
-        public TensorShape Shape { get; private set; }
-        private int[] AxesOrder;
+        public TensorShape Shape { get; }
+        private readonly int[] AxesOrder;
 
         /// <summary>
         /// Swaps axes in tensor.
@@ -71,37 +71,37 @@ namespace GenericTensor.Core
         private void ReactIfBadIndexCount(int count)
         {
             if (count != Shape.Count)
-                throw new ArgumentException($"There should be {Shape.Count} indecies, not {count}");
+                throw new ArgumentException($"There should be {Shape.Count} indices, not {count}");
         }
 
-        private int GetFlattenedIndexWithCheck(int[] indecies)
+        private int GetFlattenedIndexWithCheck(int[] indices)
         {
             #if ALLOW_EXCEPTIONS
-            ReactIfBadIndexCount(indecies.Length);
+            ReactIfBadIndexCount(indices.Length);
             #endif
             var res = 0;
-            for (int i = 0; i < indecies.Length; i++)
+            for (int i = 0; i < indices.Length; i++)
             {
                 #if ALLOW_EXCEPTIONS
-                ReactIfBadBound(indecies[i], i);
+                ReactIfBadBound(indices[i], i);
                 #endif
-                res += _blocks[AxesOrder[i]] * indecies[i];
+                res += _blocks[AxesOrder[i]] * indices[i];
             }
             return res + LinOffset;
         }
 
-        private int GetFlattenedIndexWithCheck(int x, int y, int z, int[] indecies)
+        private int GetFlattenedIndexWithCheck(int x, int y, int z, int[] indices)
         {
             #if ALLOW_EXCEPTIONS
-            ReactIfBadIndexCount(indecies.Length + 3);
+            ReactIfBadIndexCount(indices.Length + 3);
             #endif
             var res = GetFlattenedIndexWithCheck(x, y, z);
-            for (int i = 0; i < indecies.Length; i++)
+            for (int i = 0; i < indices.Length; i++)
             {
                 #if ALLOW_EXCEPTIONS
-                ReactIfBadBound(indecies[i], i + 3);
+                ReactIfBadBound(indices[i], i + 3);
                 #endif
-                res += _blocks[AxesOrder[i + 3]] * indecies[i];
+                res += _blocks[AxesOrder[i + 3]] * indices[i];
             }
             return res;
         }

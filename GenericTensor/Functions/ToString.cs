@@ -32,7 +32,7 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class GenTensor<T> where T : notnull
+    public partial class GenTensor<T>
     {
         public override string ToString()
         {
@@ -67,7 +67,7 @@ namespace GenericTensor.Core
             {
                 var els = new List<string>();
                 for (int i = 0; i < Shape[0]; i++)
-                    els.Add(this.GetValueNoCheck(i).ToString());
+                    els.Add(ConstantsAndFunctions<T>.ToString(this.GetValueNoCheck(i)));
                 return string.Join(" ", els);
             }
             var sb = new StringBuilder();
@@ -89,8 +89,8 @@ namespace GenericTensor.Core
             unchecked
             {
                 res += Shape.GetHashCode();
-                foreach (var (_, value) in this)
-                    res += value.GetHashCode();
+                foreach (var (_, value) in this.Iterate())
+                    res += value?.GetHashCode() ?? 0;
             }
             return res;
         }

@@ -61,7 +61,7 @@ namespace GenericTensor.Core
         {
             if (obj.Shape != Shape)
                 return false;
-            foreach (var (index, _) in obj)
+            foreach (var (index, _) in obj.Iterate())
                 if (!ConstantsAndFunctions<T>.AreEqual(this.GetValueNoCheck(index), obj.GetValueNoCheck(index)))
                     return false;
             return true;
