@@ -63,8 +63,8 @@ namespace GenericTensor.Core
         /// </summary>
         public T this[int x, int y, int z, params int[] indices]
         {
-            get => _data[GetFlattenedIndexWithCheck(x, y, z, indices)];
-            set => _data[GetFlattenedIndexWithCheck(x, y, z, indices)] = value;
+            get => data[GetFlattenedIndexWithCheck(x, y, z, indices)];
+            set => data[GetFlattenedIndexWithCheck(x, y, z, indices)] = value;
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace GenericTensor.Core
         /// </summary>
         public T this[int x, int y, int z]
         {
-            get => _data[GetFlattenedIndexWithCheck(x, y, z)];
-            set => _data[GetFlattenedIndexWithCheck(x, y, z)] = value;
+            get => data[GetFlattenedIndexWithCheck(x, y, z)];
+            set => data[GetFlattenedIndexWithCheck(x, y, z)] = value;
         }
 
         /// <summary>
@@ -89,8 +89,8 @@ namespace GenericTensor.Core
         /// </summary>
         public T this[int x, int y]
         {
-            get => _data[GetFlattenedIndexWithCheck(x, y)];
-            set => _data[GetFlattenedIndexWithCheck(x, y)] = value;
+            get => data[GetFlattenedIndexWithCheck(x, y)];
+            set => data[GetFlattenedIndexWithCheck(x, y)] = value;
         }
 
         /// <summary>
@@ -102,75 +102,75 @@ namespace GenericTensor.Core
         /// </summary>
         public T this[int x]
         {
-            get => _data[GetFlattenedIndexWithCheck(x)];
-            set => _data[GetFlattenedIndexWithCheck(x)] = value;
+            get => data[GetFlattenedIndexWithCheck(x)];
+            set => data[GetFlattenedIndexWithCheck(x)] = value;
         }
 
         public T this[int[] inds]
         {
-            get => _data[GetFlattenedIndexWithCheck(inds)];
-            set => _data[GetFlattenedIndexWithCheck(inds)] = value;
+            get => data[GetFlattenedIndexWithCheck(inds)];
+            set => data[GetFlattenedIndexWithCheck(inds)] = value;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x)
-         => _data[GetFlattenedIndexSilent(x)];
+         => data[GetFlattenedIndexSilent(x)];
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x, int y)
-            => _data[GetFlattenedIndexSilent(x, y)];
+            => data[GetFlattenedIndexSilent(x, y)];
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x, int y, int z)
-            => _data[GetFlattenedIndexSilent(x, y, z)];
+            => data[GetFlattenedIndexSilent(x, y, z)];
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x, int y, int z, int[] indices)
-            => _data[GetFlattenedIndexSilent(x, y, z, indices)];
+            => data[GetFlattenedIndexSilent(x, y, z, indices)];
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int[] indices)
-            => _data[GetFlattenedIndexSilent(indices)];
+            => data[GetFlattenedIndexSilent(indices)];
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(T value, int x)
-            => _data[GetFlattenedIndexSilent(x)] = value;
+            => data[GetFlattenedIndexSilent(x)] = value;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(T value, int x, int y)
-            => _data[GetFlattenedIndexSilent(x, y)] = value;
+            => data[GetFlattenedIndexSilent(x, y)] = value;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(T value, int x, int y, int z)
-            => _data[GetFlattenedIndexSilent(x, y, z)] = value;
+            => data[GetFlattenedIndexSilent(x, y, z)] = value;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(T value, int x, int y, int z, int[] other)
-            => _data[GetFlattenedIndexSilent(x, y, z, other)] = value;
+            => data[GetFlattenedIndexSilent(x, y, z, other)] = value;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(T value, int[] indices)
-            => _data[GetFlattenedIndexSilent(indices)] = value;
+            => data[GetFlattenedIndexSilent(indices)] = value;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(Func<T> valueCreator, int x)
-            => _data[GetFlattenedIndexSilent(x)] = valueCreator();
+            => data[GetFlattenedIndexSilent(x)] = valueCreator();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(Func<T> valueCreator, int x, int y)
-            => _data[GetFlattenedIndexSilent(x, y)] = valueCreator();
+            => data[GetFlattenedIndexSilent(x, y)] = valueCreator();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(Func<T> valueCreator, int x, int y, int z)
-            => _data[GetFlattenedIndexSilent(x, y, z)] = valueCreator();
+            => data[GetFlattenedIndexSilent(x, y, z)] = valueCreator();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(Func<T> valueCreator, int x, int y, int z, int[] indices)
-            => _data[GetFlattenedIndexSilent(x, y, z, indices)] = valueCreator();
+            => data[GetFlattenedIndexSilent(x, y, z, indices)] = valueCreator();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(Func<T> valueCreator, int[] indices)
-            => _data[GetFlattenedIndexSilent(indices)] = valueCreator();
+            => data[GetFlattenedIndexSilent(indices)] = valueCreator();
 
         /// <summary>
         /// If you need to set your wrapper to the tensor directly, use this function
@@ -178,7 +178,7 @@ namespace GenericTensor.Core
         public void SetCell(T newWrapper, params int[] indices)
         {
             var actualIndex = GetFlattenedIndexWithCheck(indices);
-            _data[actualIndex] = newWrapper;
+            data[actualIndex] = newWrapper;
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace GenericTensor.Core
         public T GetCell(params int[] indices)
         {
             var actualIndex = GetFlattenedIndexWithCheck(indices);
-            return _data[actualIndex];
+            return data[actualIndex];
         }
 
         /// <summary>

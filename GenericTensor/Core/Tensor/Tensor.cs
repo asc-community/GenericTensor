@@ -31,9 +31,9 @@ namespace GenericTensor.Core
 {
     public partial class GenTensor<T> : ICloneable
     {
-        private readonly T[] _data;
-        private readonly int[] _blocks; // 3 x 4 x 5
-        private int _volume = -1;
+        private readonly T[] data;
+        private readonly int[] blocks; // 3 x 4 x 5
+        private int volume = -1;
         /// <summary>
         /// Number of elements in tensor overall
         /// </summary>
@@ -41,13 +41,13 @@ namespace GenericTensor.Core
         {
             get
             {
-                if (_volume == -1)
+                if (volume == -1)
                 {
-                    _volume = 1;
+                    volume = 1;
                     for (var i = 0; i < Shape.Length; i++)
-                        _volume *= Shape[i];
+                        volume *= Shape[i];
                 }
-                return _volume;
+                return volume;
             }
         }
 
@@ -56,18 +56,18 @@ namespace GenericTensor.Core
             int len = 1;
             for (int i = Shape.Count - 1; i >= 0; i--)
             {
-                _blocks[i] = len;
+                blocks[i] = len;
                 len *= Shape[i];
             }
-            _blocks.Reverse();
+            blocks.Reverse();
         }
 
         protected GenTensor(TensorShape dimensions, int[] blocks, int[] axesOrder, T[] data)
         {
             Shape = dimensions;
             AxesOrder = axesOrder;
-            _blocks = blocks;
-            _data = data;
+            this.blocks = blocks;
+            this.data = data;
         }
 
         public object Clone()
@@ -87,9 +87,9 @@ namespace GenericTensor.Core
                 AxesOrder[i] = i;
             }
             var data = new T[len];
-            _data = data;
+            this.data = data;
             LinOffset = 0;
-            _blocks = new int[dimensions.Count];
+            blocks = new int[dimensions.Count];
             BlockRecompute();
         }
 
