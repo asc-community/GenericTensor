@@ -10,6 +10,10 @@ Tensor - is an extentension of matrices, a N-dimensional array. Soon you will fi
 defined for matrices and vectors here. In order to make it custom, Tensor class is generic, which means that
 you could use not only built-in types like int, float, etc., but also your own types.
 
+### Installation
+
+GT is available on [Nuget](https://www.nuget.org/packages/GenericTensor/).
+
 ### Hello world
 
 For full correct work you will need some methods for your type to be defined. But first, we could
@@ -54,6 +58,7 @@ public static void InitForInt()
     ConstantsAndFunctions<int>.IsZero = a => a == 0;
     ConstantsAndFunctions<int>.Copy = a => a;
     ConstantsAndFunctions<int>.Forward = a => a;
+    ConstantsAndFunctions<int>.ToString = a => a.ToString();
 }
 ```
 

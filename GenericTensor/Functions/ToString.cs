@@ -28,6 +28,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
@@ -38,9 +39,13 @@ namespace GenericTensor.Core
             if (IsMatrix)
             {
                 var maxLength = -1;
+                var stringArray = new string[Shape[0], Shape[1]];
                 for (int i = 0; i < Shape[0]; i++)
                 for (int j = 0; j < Shape[1]; j++)
-                    maxLength = Math.Max(maxLength, GetValueNoCheck(i, j).ToString().Length);
+                {
+                    stringArray[i, j] = ConstantsAndFunctions<T>.ToString(GetValueNoCheck(i, j));
+                    maxLength = Math.Max(maxLength, stringArray[i, j].Length);
+                }
                 var rows = new List<string>();
                 rows.Add("Matrix[" + Shape + "]");
                 for (int i = 0; i < Shape[0]; i++)
@@ -48,10 +53,9 @@ namespace GenericTensor.Core
                     var s = "";
                     for (int j = 0; j < Shape[1]; j++)
                     {
-                        // TODO: it's actually bad to call ToString twice
-                        var count = maxLength + 3 - this.GetValueNoCheck(i, j).ToString().Length;
+                        var count = maxLength + 3 - stringArray[i, j].Length;
                         count = Math.Max(0, count);
-                        s += this.GetValueNoCheck(i, j).ToString();
+                        s += stringArray[i, j];
                         for (int k = 0; k < count; k++)
                             s += " ";
                     }
@@ -69,7 +73,11 @@ namespace GenericTensor.Core
             var sb = new StringBuilder();
             sb.Append("Tensor[" + Shape + "] {\n");
             foreach (var index in IterateOverMatrices())
-                sb.Append(GetSubtensor(index).ToString().Replace("\n", "\n  "));
+            {
+                sb.Append("    ");
+                sb.Append(GetSubtensor(index).ToString().Replace("\n", "\n    "));
+                sb.Append("\n\n");
+            }
             sb.Append("}");
             return sb.ToString();
         }
