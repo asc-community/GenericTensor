@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.2-alpha</Version>
+    <Version>0.0.2-beta</Version>
     <Authors>WhiteBlackGoose</Authors>
     <Company>AngouriSoft</Company>
     <Description>The only .NET tensor &amp; matrix library for generic types</Description>
@@ -13,7 +13,8 @@
     <PackageProjectUrl>https://github.com/WhiteBlackGoose/GenericTensor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/WhiteBlackGoose/GenericTensor</RepositoryUrl>
     <RepositoryType>public</RepositoryType>
-    <PackageReleaseNotes>It's a test version of the GenericTensor library, might not be compatible</PackageReleaseNotes>
+    <PackageReleaseNotes>All available functions can be found on the official repo: https://github.com/WhiteBlackGoose/GenericTensor</PackageReleaseNotes>
+    <PackageIcon>ico1.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -25,6 +26,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\ico1.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

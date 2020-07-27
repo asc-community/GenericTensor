@@ -60,25 +60,8 @@ public static class Samples
 
 class Program
 {
-    public static GenTensor<T> Divide<T>(GenTensor<T> a, GenTensor<T> b)
-    {
-        b = b.Forward();
-        b.InvertMatrix();
-        return GenTensor<T>.MatrixMultiply(a, b);
-    }
-
     static void Main(string[] args)
     {
         BuiltinTypeInitter.InitForFloat();
-        //Samples.CreatingMatrixAndMultiply();
-        var myMatrix = GenTensor<float>.CreateMatrix(
-            new float[,]
-            {
-                {6,  1, 1},
-                {4, -2, 5},
-                {2,  8, 7}
-            }
-        );
-        Console.WriteLine(myMatrix.GaussianEliminationSafeDivision());
     }
 }

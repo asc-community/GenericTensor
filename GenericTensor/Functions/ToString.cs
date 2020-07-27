@@ -73,7 +73,11 @@ namespace GenericTensor.Core
             var sb = new StringBuilder();
             sb.Append("Tensor[" + Shape + "] {\n");
             foreach (var index in IterateOverMatrices())
-                sb.Append(GetSubtensor(index).ToString().Replace("\n", "\n  "));
+            {
+                sb.Append("    ");
+                sb.Append(GetSubtensor(index).ToString().Replace("\n", "\n    "));
+                sb.Append("\n\n");
+            }
             sb.Append("}");
             return sb.ToString();
         }
