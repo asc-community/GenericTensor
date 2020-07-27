@@ -258,6 +258,7 @@ namespace UnitTests
             ConstantsAndFunctions<BigInteger>.ToString = x => x.ToString();
             ConstantsAndFunctions<Complex>.ToString = x => x.ToString();
         }
+
         static IEnumerable<object[]> CreateUninitializedMatrixData =>
             new[]
             {
@@ -266,7 +267,6 @@ namespace UnitTests
                 GenTensor<BigInteger>.CreateMatrix(new BigInteger[4, 4]),
                 GenTensor<BigInteger>.CreateTensor(new BigInteger[4, 4])
             }.Select(tensor => new[] { tensor }).ToArray();
-
         [DataTestMethod]
         [DynamicData(nameof(CreateUninitializedMatrixData))]
         public void CreateUninitializedMatrix(GenTensor<BigInteger> x)
@@ -278,6 +278,7 @@ namespace UnitTests
             Assert.AreEqual(16, x.Volume);
             AssertTensor(Enumerable.Repeat(BigInteger.Zero, 16), x);
         }
+
         static IEnumerable<object[]> CreateUninitializedVectorData =>
             new[]
             {
