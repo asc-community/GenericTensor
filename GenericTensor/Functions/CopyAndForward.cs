@@ -25,49 +25,32 @@
 #endregion
 
 
-using GenericTensor.Functions;
+using GenericTensor.Core;
 
-namespace GenericTensor.Core
+namespace GenericTensor.Functions
 {
-    public partial class GenTensor<T>
+    internal static class CopyAndForward<T>
     {
-        /// <summary>
-        /// Copies a tensor calling each cell with a .Copy()
-        ///
-        /// O(V)
-        /// </summary>
-        public GenTensor<T> Copy(bool copyElements)
+        public static GenTensor<T> Copy(GenTensor<T> t, bool copyElements)
         {
-            var res = new GenTensor<T>(Shape);
+            var res = new GenTensor<T>(t.Shape);
             if (!copyElements)
             {
                 foreach (var index in res.IterateOverElements())
-                    res.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(GetValueNoCheck(index)), index);
+                    res.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(t.GetValueNoCheck(index)), index);
             }
             else
                 foreach (var index in res.IterateOverElements())
-                    res.SetValueNoCheck(ConstantsAndFunctions<T>.Copy(GetValueNoCheck(index)), index);
+                    res.SetValueNoCheck(ConstantsAndFunctions<T>.Copy(t.GetValueNoCheck(index)), index);
             return res;
         }
 
-        /// <summary>
-        /// You might need it to make sure you don't copy
-        /// your data but recreate a wrapper (if have one)
-        ///
-        /// O(V)
-        /// </summary>
-        public GenTensor<T> Forward()
+        public static GenTensor<T> Forward(GenTensor<T> t)
         {
-            var res = new GenTensor<T>(Shape);
+            var res = new GenTensor<T>(t.Shape);
             foreach (var index in res.IterateOverElements())
-                res.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(GetValueNoCheck(index)), index);
+                res.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(t.GetValueNoCheck(index)), index);
             return res;
-        }
-
-        internal void Assign(GenTensor<T> genTensor)
-        {
-            foreach (var (index, value) in genTensor.Iterate())
-                this.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(value), index);
         }
     }
 }

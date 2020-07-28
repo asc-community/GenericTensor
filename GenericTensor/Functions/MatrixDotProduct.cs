@@ -25,21 +25,13 @@
 #endregion
 
 
-using GenericTensor.Functions;
+using GenericTensor.Core;
 
-namespace GenericTensor.Core
+namespace GenericTensor.Functions
 {
-    public partial class GenTensor<T>
+    internal static class MatrixMultiplication<T>
     {
-        /// <summary>
-        /// Finds matrix multiplication result
-        /// a and b are matrices
-        /// a.Shape[1] should be equal to b.Shape[0]
-        /// the resulting matrix is [a.Shape[0] x b.Shape[1]] shape
-        ///
-        /// O(N^3)
-        /// </summary>
-        public static GenTensor<T> MatrixMultiply(GenTensor<T> a,
+        public static GenTensor<T> Multiply(GenTensor<T> a,
             GenTensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
@@ -52,7 +44,7 @@ namespace GenericTensor.Core
             var width = a.Shape[0];
             var height = b.Shape[1];
             var row = a.Shape[1];
-            var res = CreateMatrix(width, height);
+            var res = Constructors<T>.CreateMatrix(width, height);
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -76,7 +68,7 @@ namespace GenericTensor.Core
         ///
         /// O(N^3)
         /// </summary>
-        public static GenTensor<T> TensorMatrixMultiply(GenTensor<T> a,
+        public static GenTensor<T> TensorMultiply(GenTensor<T> a,
             GenTensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
@@ -94,7 +86,7 @@ namespace GenericTensor.Core
             var resTensor = new GenTensor<T>(newShape);
             foreach (var subDimensions in a.IterateOverMatrices())
             {
-                var product = MatrixMultiply(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions));
+                var product = Multiply(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions));
                 resTensor.SetSubtensor(product, subDimensions);
             }
             return resTensor;

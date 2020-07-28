@@ -26,16 +26,12 @@
 
 
 using System;
-using GenericTensor.Functions;
+using GenericTensor.Core;
 
-namespace GenericTensor.Core
+namespace GenericTensor.Functions
 {
-    public partial class GenTensor<T>
+    internal static class PiecewiseArithmetics<T>
     {
-        /// <summary>
-        /// [i, j, k...]th element of the resulting tensor is
-        /// operation(a[i, j, k...], b[i, j, k...])
-        /// </summary>
         public static GenTensor<T> Zip(GenTensor<T> a,
             GenTensor<T> b, Func<T, T, T> operation)
         {
@@ -85,32 +81,32 @@ namespace GenericTensor.Core
 
         public static GenTensor<T> PiecewiseAdd(GenTensor<T> a,
             T b)
-            => CreateTensor(a.Shape, ind => 
+            => Constructors<T>.CreateTensor(a.Shape, ind => 
                 ConstantsAndFunctions<T>.Add(a[ind], b));
 
         public static GenTensor<T> PiecewiseSubtract(GenTensor<T> a,
             T b)
-            => CreateTensor(a.Shape, ind => 
+            => Constructors<T>.CreateTensor(a.Shape, ind => 
                 ConstantsAndFunctions<T>.Subtract(a[ind], b));
 
         public static GenTensor<T> PiecewiseSubtract(
             T a, GenTensor<T> b)
-            => CreateTensor(b.Shape, ind => 
+            => Constructors<T>.CreateTensor(b.Shape, ind => 
                 ConstantsAndFunctions<T>.Subtract(a, b[ind]));
 
         public static GenTensor<T> PiecewiseMultiply(GenTensor<T> a,
             T b)
-            => CreateTensor(a.Shape, ind => 
+            => Constructors<T>.CreateTensor(a.Shape, ind => 
                 ConstantsAndFunctions<T>.Multiply(a[ind], b));
 
         public static GenTensor<T> PiecewiseDivide(GenTensor<T> a,
             T b)
-            => CreateTensor(a.Shape, ind => 
+            => Constructors<T>.CreateTensor(a.Shape, ind => 
                 ConstantsAndFunctions<T>.Divide(a[ind], b));
 
         public static GenTensor<T> PiecewiseDivide(
             T a, GenTensor<T> b)
-            => CreateTensor(b.Shape, ind => 
+            => Constructors<T>.CreateTensor(b.Shape, ind => 
                 ConstantsAndFunctions<T>.Divide(a, b[ind]));
     }
 }

@@ -25,22 +25,12 @@
 #endregion
 
 
-using GenericTensor.Functions;
+using GenericTensor.Core;
 
-namespace GenericTensor.Core
+namespace GenericTensor.Functions
 {
-    public partial class GenTensor<T>
+    internal static class Composition<T>
     {
-        /// <summary>
-        /// Creates a new axis that is put backward
-        /// and then sets all elements as children
-        /// e. g.
-        /// say you have a bunch of tensors {t1, t2, t3} with shape of [2 x 4]
-        /// Stack(t1, t2, t3) => T
-        /// where T is a tensor of shape of [3 x 2 x 4]
-        ///
-        /// O(V)
-        /// </summary>
         public static GenTensor<T> Stack(params GenTensor<T>[] elements)
         {
             #if ALLOW_EXCEPTIONS

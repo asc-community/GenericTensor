@@ -25,7 +25,6 @@
 #endregion
 
 
-using GenericTensor.Core;
 using GenericTensor.Functions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static System.Reflection.BindingFlags;

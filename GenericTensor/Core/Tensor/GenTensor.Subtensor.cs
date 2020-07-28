@@ -27,6 +27,7 @@
 
 using System;
 using System.Linq;
+using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
@@ -121,6 +122,12 @@ namespace GenericTensor.Core
                 throw new InvalidShapeException($"{nameof(sub.Shape)} must be equal to {nameof(Shape)}");
             #endif
             thisSub.Assign(sub);
+        }
+
+        internal void Assign(GenTensor<T> genTensor)
+        {
+            foreach (var (index, value) in genTensor.Iterate())
+                this.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(value), index);
         }
     }
 

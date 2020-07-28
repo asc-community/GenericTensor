@@ -1,9 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
-using GenericTensor.Functions;
+using GenericTensor.Core;
 
-namespace GenericTensor.Core
+namespace GenericTensor.Functions
 {
-    public partial class GenTensor<T>
+    internal static class Inversion<T>
     {
         /// <summary>
         /// Borrowed from here: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
@@ -11,7 +11,7 @@ namespace GenericTensor.Core
         /// O(N^2)
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void GetCofactor(GenTensor<T> a, GenTensor<T> temp, int rowId,
+        internal static void GetCofactor(GenTensor<T> a, GenTensor<T> temp, int rowId,
             int colId, int diagLength)
         {
             int i = 0, j = 0;
@@ -32,18 +32,14 @@ namespace GenericTensor.Core
             }
         }
 
-        /// <summary>
-        /// Returns adjugate matrix
-        ///
-        /// O(N^5)
-        /// </summary>
-        public GenTensor<T> Adjoint()
+        
+        public static GenTensor<T> Adjoint(GenTensor<T> t)
         {
             #if ALLOW_EXCEPTIONS
-            if (!IsSquareMatrix)
+            if (!t.IsSquareMatrix)
                 throw new InvalidShapeException("Matrix should be square");
             #endif
-            var diagLength = Shape.shape[0];
+            var diagLength = t.Shape.shape[0];
             var res = GenTensor<T>.CreateSquareMatrix(diagLength);
             var temp = SquareMatrixFactory<T>.GetMatrix(diagLength);
 
@@ -58,9 +54,11 @@ namespace GenericTensor.Core
             for (int x = 0; x < diagLength; x++)
             for (int y = 0; y < diagLength; y++)
             {
-                GetCofactor(this, temp, x, y, diagLength);
+                GetCofactor(t, temp, x, y, diagLength);
+
+                // TODO: is this statement correct?
                 toNegate = (x + y) % 2 == 1;
-                var det = temp.DeterminantGaussianSafeDivision(diagLength - 1);
+                var det = Determinant<T>.DeterminantGaussianSafeDivision(temp, diagLength - 1);
                 if (toNegate)
                     res.SetValueNoCheck(ConstantsAndFunctions<T>.Negate(det), y, x);
                 else
@@ -70,31 +68,25 @@ namespace GenericTensor.Core
             return res;
         }
 
-        /// <summary>
-        /// Inverts a matrix A to B so that A * B = I
-        /// Borrowed from here: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
-        ///
-        /// O(N^5)
-        /// </summary>
-        public void InvertMatrix()
+        public static void InvertMatrix(GenTensor<T> t)
         {
             #if ALLOW_EXCEPTIONS
-            if (!IsSquareMatrix)
+            if (!t.IsSquareMatrix)
                 throw new InvalidShapeException("this should be a square matrix");
             #endif
 
-            var diagLength = Shape.shape[0];
+            var diagLength = t.Shape.shape[0];
 
-            var det = DeterminantGaussianSafeDivision();
+            var det = Determinant<T>.DeterminantGaussianSafeDivision(t);
             #if ALLOW_EXCEPTIONS
             if (ConstantsAndFunctions<T>.IsZero(det))
                 throw new InvalidDeterminantException("Cannot invert a singular matrix");
             #endif
 
-            var adj = Adjoint();
+            var adj = Adjoint(t);
             for (int x = 0; x < diagLength; x++)
             for (int y = 0; y < diagLength; y++)
-                this.SetValueNoCheck(
+                t.SetValueNoCheck(
                     ConstantsAndFunctions<T>.Divide(
                         adj.GetValueNoCheck(x, y),
                         det
@@ -103,12 +95,6 @@ namespace GenericTensor.Core
                 );
         }
 
-        /// <summary>
-        /// A / B
-        /// Finds such C = A / B that A = C * B
-        ///
-        /// O(N^5)
-        /// </summary>
         public static GenTensor<T> MatrixDivide(GenTensor<T> a, GenTensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
@@ -119,7 +105,7 @@ namespace GenericTensor.Core
             #endif
             var fwd = b.Forward();
             fwd.InvertMatrix();
-            return MatrixMultiply(a, fwd);
+            return MatrixMultiplication<T>.Multiply(a, fwd);
         }
 
         public static GenTensor<T> TensorMatrixDivide(GenTensor<T> a, GenTensor<T> b)
@@ -142,14 +128,14 @@ namespace GenericTensor.Core
             return res;
         }
         
-        public void TensorMatrixInvert()
+        public static void TensorMatrixInvert(GenTensor<T> t)
         {
             #if ALLOW_EXCEPTIONS
-            InvalidShapeException.NeedTensorSquareMatrix(this);
+            InvalidShapeException.NeedTensorSquareMatrix(t);
             #endif
 
-            foreach (var ind in IterateOverMatrices())
-                GetSubtensor(ind).InvertMatrix();
+            foreach (var ind in t.IterateOverMatrices())
+                t.GetSubtensor(ind).InvertMatrix();
         }
     }
 }

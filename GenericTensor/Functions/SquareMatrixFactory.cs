@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GenericTensor.Core;
 
 namespace GenericTensor.Functions
@@ -11,9 +10,9 @@ namespace GenericTensor.Functions
 
         internal static GenTensor<T> GetMatrix(int diagLength)
         {
-            if (diagLength <= tensorTempFactorySquareMatrices.Count + 2)
+            if (diagLength >= tensorTempFactorySquareMatrices.Count + 2)
                 lock (tensorTempFactorySquareMatrices)
-                    if (diagLength <= tensorTempFactorySquareMatrices.Count + 2)
+                    if (diagLength >= tensorTempFactorySquareMatrices.Count + 2)
                         for (int i = tensorTempFactorySquareMatrices.Count + 1; i <= diagLength; i++)
                             tensorTempFactorySquareMatrices.Add(new GenTensor<T>(i, i));
             return tensorTempFactorySquareMatrices[diagLength - 2];

@@ -27,11 +27,11 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using GenericTensor.Functions;
+using GenericTensor.Core;
 
-namespace GenericTensor.Core
+namespace GenericTensor.Functions
 {
-    public partial class GenTensor<T>
+    internal static class Constructors<T>
     {
         /// <summary>
         /// Creates a tensor whose all matrices are identity matrices
@@ -53,11 +53,6 @@ namespace GenericTensor.Core
             return res;
         }
 
-        /// <summary>
-        /// Creates an indentity matrix whose width and height are equal to diag
-        /// <para>1 is achieved with <see cref="ConstantsAndFunctions{T}.CreateOne"/></para>
-        /// <para>0 is achieved with <see cref="ConstantsAndFunctions{T}.CreateZero"/></para>
-        /// </summary>
         public static GenTensor<T> CreateIdentityMatrix(int diag)
         {
             var res = new GenTensor<T>(diag, diag);
@@ -69,10 +64,6 @@ namespace GenericTensor.Core
             return res;
         }
 
-        /// <summary>
-        /// Creates a vector from an array of primitives
-        /// Its length will be equal to elements.Length
-        /// </summary>
         public static GenTensor<T> CreateVector(params T[] elements)
         {
             var res = new GenTensor<T>(elements.Length);
@@ -81,10 +72,6 @@ namespace GenericTensor.Core
             return res;
         }
 
-        /// <summary>
-        /// Creates a vector from an array of primitives
-        /// Its length will be equal to elements.Length
-        /// </summary>
         public static GenTensor<T> CreateVector(int length)
         {
             var res = new GenTensor<T>(length);
@@ -106,23 +93,11 @@ namespace GenericTensor.Core
             return (width, height);
         }
 
-        /// <summary>
-        /// Creates a matrix from a two-dimensional array of primitives
-        /// for example
-        /// <code>
-        /// var M = Tensor.CreateMatrix(new[,]
-        /// {
-        ///     {1, 2},
-        ///     {3, 4}
-        /// });
-        /// </code>
-        /// where yourData.GetLength(0) is Shape[0] and
-        /// yourData.GetLength(1) is Shape[1]
-        /// </summary>
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateMatrix(T[,] data)
         {
-            var (width, height) = GenTensor<T>.ExtractAndCheck(data);
+            var (width, height) = ExtractAndCheck(data);
             var res = new GenTensor<T>(width, height);
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)
@@ -130,37 +105,24 @@ namespace GenericTensor.Core
             return res;
         }
 
-        /// <summary>
-        /// Creates an uninitialized square matrix
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateSquareMatrix(int diagLength)
             => CreateMatrix(diagLength, diagLength);
 
-        /// <summary>
-        /// Creates a matrix of width and height size
-        /// and iterator for each pair of coordinate
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateMatrix(int width, int height, Func<int, int, T> stepper)
         {
-            var res = GenTensor<T>.CreateMatrix(width, height);
+            var res = CreateMatrix(width, height);
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)
                     res.SetValueNoCheck(stepper(x, y), x, y);
             return res;
         }
 
-        /// <summary>
-        /// Creates a matrix of width and height size
-        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateMatrix(int width, int height)
             => new GenTensor<T>(width, height);
 
-        /// <summary>
-        /// Creates a tensor of given size with iterator over its indices
-        /// (its only argument is an array of integers which are indices of the tensor)
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateTensor(TensorShape shape, Func<int[], T> operation)
         {
@@ -170,9 +132,6 @@ namespace GenericTensor.Core
             return res;
         }
 
-        /// <summary>
-        /// Creates a tensor from an array
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateTensor(T[] data)
         {
@@ -182,9 +141,6 @@ namespace GenericTensor.Core
             return res;
         }
 
-        /// <summary>
-        /// Creates a tensor from a two-dimensional array
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateTensor(T[,] data)
         {
@@ -195,9 +151,6 @@ namespace GenericTensor.Core
             return res;
         }
 
-        /// <summary>
-        /// Creates a tensor from a three-dimensional array
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateTensor(T[,,] data)
         {
@@ -210,9 +163,6 @@ namespace GenericTensor.Core
             return res;
         }
 
-        /// <summary>
-        /// Creates a tensor from an n-dimensional array
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> CreateTensor(Array data)
         {

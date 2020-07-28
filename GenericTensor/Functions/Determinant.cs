@@ -25,30 +25,30 @@
 #endregion
 
 
-using GenericTensor.Functions;
+using GenericTensor.Core;
 
-namespace GenericTensor.Core
+namespace GenericTensor.Functions
 {
-    public partial class GenTensor<T>
+    internal static class Determinant<T>
     {
         #region Matrix Determinant
         #region Laplace
-        internal T DeterminantLaplace(int diagLength)
+        internal static T DeterminantLaplace(GenTensor<T> t, int diagLength)
         {
             if (diagLength == 1)
-                return ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(0, 0));
+                return ConstantsAndFunctions<T>.Forward(t.GetValueNoCheck(0, 0));
             var det = ConstantsAndFunctions<T>.CreateZero();
             var sign = ConstantsAndFunctions<T>.CreateOne();
             var temp = SquareMatrixFactory<T>.GetMatrix(diagLength);
             for (int i = 0; i < diagLength; i++)
             {
-                GetCofactor(this, temp, 0, i, diagLength);
+                Inversion<T>.GetCofactor(t, temp, 0, i, diagLength);
                 det = ConstantsAndFunctions<T>.Add(det,
                     ConstantsAndFunctions<T>.Multiply(
                         sign,
                         ConstantsAndFunctions<T>.Multiply(
-                            this.GetValueNoCheck(0, i),
-                            temp.DeterminantLaplace(diagLength - 1)
+                            t.GetValueNoCheck(0, i),
+                            DeterminantLaplace(temp, diagLength - 1)
                         ))
                 );
                 sign = ConstantsAndFunctions<T>.Negate(sign);
@@ -56,23 +56,15 @@ namespace GenericTensor.Core
             return det;
         }
 
-        /// <summary>
-        /// Finds Determinant with the 100% precision for O(N!) where
-        /// N is your matrix' width
-        /// The matrix should be square
-        /// Borrowed from here: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
-        ///
-        /// O(N!)
-        /// </summary>
-        public T DeterminantLaplace()
+        public static T DeterminantLaplace(GenTensor<T> t)
         {
             #if ALLOW_EXCEPTIONS
-            if (!this.IsMatrix)
+            if (!t.IsMatrix)
                 throw new InvalidShapeException("Determinant function should be only called from a matrix");
-            if (Shape[0] != Shape[1])
+            if (t.Shape[0] != t.Shape[1])
                 throw new InvalidShapeException("Matrix should be square");
             #endif
-            return DeterminantLaplace(Shape[0]);
+            return DeterminantLaplace(t, t.Shape[0]);
         }
         #endregion
 
@@ -146,36 +138,24 @@ namespace GenericTensor.Core
 
         #endregion
 
-        /// <summary>
-        /// Finds Determinant with possible overflow
-        /// because it uses fractions for avoiding division
-        ///
-        /// O(N^3)
-        /// </summary>
-        public T DeterminantGaussianSafeDivision()
-            => DeterminantGaussianSafeDivision(Shape[0]);
+        public static T DeterminantGaussianSafeDivision(GenTensor<T> t)
+            => DeterminantGaussianSafeDivision(t, t.Shape[0]);
 
-        /// <summary>
-        /// Finds Determinant with possible overflow
-        /// because it uses fractions for avoiding division
-        ///
-        /// O(N^3)
-        /// </summary>
-        internal T DeterminantGaussianSafeDivision(int diagLength)
+        internal static T DeterminantGaussianSafeDivision(GenTensor<T> t, int diagLength)
         {
             InitIfNotInitted();
             #if ALLOW_EXCEPTIONS
-            if (!IsMatrix)
+            if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
-            if (Shape[0] != Shape[1])
+            if (t.Shape[0] != t.Shape[1])
                 throw new InvalidShapeException("this should be square matrix");
             #endif
 
-            if (Shape[0] == 1)
-                return ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(0, 0));
+            if (t.Shape[0] == 1)
+                return ConstantsAndFunctions<T>.Forward(t.GetValueNoCheck(0, 0));
 
             var n = diagLength;
-            var elemMatrix = InnerGaussianEliminationSafeDivision(n);
+            var elemMatrix = InnerGaussianEliminationSafeDivision(t, n);
 
             var det = 
                 ConstantsAndFunctions<SafeDivisionWrapper<T>>.CreateOne();
@@ -189,13 +169,13 @@ namespace GenericTensor.Core
             return det.Count();
         }
 
-        private GenTensor<SafeDivisionWrapper<T>> InnerGaussianEliminationSafeDivision(int n)
+        private static GenTensor<SafeDivisionWrapper<T>> InnerGaussianEliminationSafeDivision(GenTensor<T> t, int n)
         {
             InitIfNotInitted();
 
             var elemMatrix = GenTensor<SafeDivisionWrapper<T>>
                 .CreateMatrix(n, n,
-                    (x, y) => new SafeDivisionWrapper<T>(ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(x, y)))
+                    (x, y) => new SafeDivisionWrapper<T>(ConstantsAndFunctions<T>.Forward(t.GetValueNoCheck(x, y)))
                 );
             for (int k = 1; k < n; k++)
             for (int j = k; j < n; j++)
@@ -220,39 +200,32 @@ namespace GenericTensor.Core
             return elemMatrix;
         }
 
-        public GenTensor<T> GaussianEliminationSafeDivision()
+        public static GenTensor<T> GaussianEliminationSafeDivision(GenTensor<T> t)
         {
             #if ALLOW_EXCEPTIONS
-            if (!IsMatrix)
+            if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
-            if (Shape[0] != Shape[1])
+            if (t.Shape[0] != t.Shape[1])
                 throw new InvalidShapeException("this should be square matrix");
             #endif
-            var wrp = InnerGaussianEliminationSafeDivision(Shape[0]);
-            return GenTensor<T>.CreateMatrix(Shape[0], Shape[1], (x, y) => wrp.GetValueNoCheck(x, y).Count());
+            var wrp = InnerGaussianEliminationSafeDivision(t, t.Shape[0]);
+            return GenTensor<T>.CreateMatrix(t.Shape[0], t.Shape[1], (x, y) => wrp.GetValueNoCheck(x, y).Count());
         }
 
-        
-        // TODO: how to avoid code duplication?
-        /// <summary>
-        /// Performs simple Gaussian elimination method on a tensor
-        ///
-        /// O(N^3)
-        /// </summary>
-        public T DeterminantGaussianSimple()
+        public static T DeterminantGaussianSimple(GenTensor<T> t)
         {
             #if ALLOW_EXCEPTIONS
-            if (!IsMatrix)
+            if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
-            if (Shape[0] != Shape[1])
+            if (t.Shape[0] != t.Shape[1])
                 throw new InvalidShapeException("this should be square matrix");
             #endif
-            if (Shape[0] == 1)
-                return ConstantsAndFunctions<T>.Forward(this.GetValueNoCheck(0, 0));
+            if (t.Shape[0] == 1)
+                return ConstantsAndFunctions<T>.Forward(t.GetValueNoCheck(0, 0));
 
-            var n = Shape[0];
+            var n = t.Shape[0];
 
-            var elemMatrix = this.Forward();
+            var elemMatrix = t.Forward();
             for (int k = 1; k < n; k++)
             for (int j = k; j < n; j++)
             {
@@ -286,36 +259,36 @@ namespace GenericTensor.Core
 
         #region Tensor Determinant
 
-        public GenTensor<T> TensorDeterminantLaplace()
+        public static GenTensor<T> TensorDeterminantLaplace(GenTensor<T> t)
         {
             #if ALLOW_EXCEPTIONS
-            InvalidShapeException.NeedTensorSquareMatrix(this);
+            InvalidShapeException.NeedTensorSquareMatrix(t);
             #endif
 
-            var res = GenTensor<T>.CreateTensor(Shape.SubShape(0, 2),
-                ind => GetSubtensor(ind).DeterminantLaplace());
+            var res = GenTensor<T>.CreateTensor(t.Shape.SubShape(0, 2),
+                ind => t.GetSubtensor(ind).DeterminantLaplace());
             return res;
         }
 
-        public GenTensor<T> TensorDeterminantGaussianSafeDivision()
+        public static GenTensor<T> TensorDeterminantGaussianSafeDivision(GenTensor<T> t)
         {
             #if ALLOW_EXCEPTIONS
-            InvalidShapeException.NeedTensorSquareMatrix(this);
+            InvalidShapeException.NeedTensorSquareMatrix(t);
             #endif
 
-            var res = GenTensor<T>.CreateTensor(Shape.SubShape(0, 2),
-                ind => GetSubtensor(ind).DeterminantGaussianSafeDivision());
+            var res = GenTensor<T>.CreateTensor(t.Shape.SubShape(0, 2),
+                ind => t.GetSubtensor(ind).DeterminantGaussianSafeDivision());
             return res;
         }
 
-        public GenTensor<T> TensorDeterminantGaussianSimple()
+        public static GenTensor<T> TensorDeterminantGaussianSimple(GenTensor<T> t)
         {
             #if ALLOW_EXCEPTIONS
-            InvalidShapeException.NeedTensorSquareMatrix(this);
+            InvalidShapeException.NeedTensorSquareMatrix(t);
             #endif
 
-            var res = GenTensor<T>.CreateTensor(Shape.SubShape(0, 2),
-                ind => GetSubtensor(ind).DeterminantGaussianSimple());
+            var res = GenTensor<T>.CreateTensor(t.Shape.SubShape(0, 2),
+                ind => t.GetSubtensor(ind).DeterminantGaussianSimple());
             return res;
         }
 

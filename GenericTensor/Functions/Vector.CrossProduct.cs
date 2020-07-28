@@ -26,18 +26,13 @@
 
 
 using System;
-using GenericTensor.Functions;
+using GenericTensor.Core;
 
-namespace GenericTensor.Core
+namespace GenericTensor.Functions
 {
-    public partial class GenTensor<T>
+    internal static partial class VectorProduct<T>
     {
-        /// <summary>
-        /// Finds a perpendicular vector to two given
-        /// TODO: So far only implemented for 3D vectors
-        /// </summary>
-        public static GenTensor<T> VectorCrossProduct(GenTensor<T> a,
-            GenTensor<T> b)
+        public static GenTensor<T> VectorCrossProduct(GenTensor<T> a, GenTensor<T> b)
         {
             #if ALLOW_EXCEPTIONS
             if (!a.IsVector || !b.IsVector)
@@ -62,9 +57,6 @@ namespace GenericTensor.Core
             );
         }
 
-        /// <summary>
-        /// Calls VectorCrossProduct for every vector in the tensor
-        /// </summary>
         public static GenTensor<T> TensorVectorCrossProduct(GenTensor<T> a,
             GenTensor<T> b)
         {

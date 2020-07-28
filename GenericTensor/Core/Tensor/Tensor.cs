@@ -31,8 +31,8 @@ namespace GenericTensor.Core
 {
     public partial class GenTensor<T> : ICloneable
     {
-        private readonly T[] data;
-        private readonly int[] blocks; // 3 x 4 x 5
+        internal readonly T[] data;
+        internal readonly int[] blocks; // 3 x 4 x 5
         private int volume = -1;
         /// <summary>
         /// Number of elements in tensor overall
@@ -73,9 +73,6 @@ namespace GenericTensor.Core
         public object Clone()
             => Copy(copyElements: true);
 
-        /// <summary>
-        /// Creates an uninitialized tensor where each element is just created wrapper
-        /// </summary>
         public GenTensor(TensorShape dimensions)
         {
             Shape = dimensions;
@@ -93,9 +90,6 @@ namespace GenericTensor.Core
             BlockRecompute();
         }
 
-        /// <summary>
-        /// Creates an uninitialized tensor where each element is just created wrapper
-        /// </summary>
         public GenTensor(params int[] dimensions) : this(new TensorShape(dimensions)) { }
     }
 }
