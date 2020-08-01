@@ -26,7 +26,7 @@ namespace Benchmark
         private static TS createdMatrix20 = CreateMatrix(20);
         private static TS createdTensorMatrix15 = CreateTensor(40, 15);
         private static TS createdMatrix100 = CreateMatrix(100);
-        /*
+        
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();
         [Benchmark] public void MatrixAndLaplace6()
@@ -98,7 +98,7 @@ namespace Benchmark
             {
                 var c = createdMatrix9.GetValueNoCheck(i, j);
             }
-        }*/
+        }
         
     }
 }
