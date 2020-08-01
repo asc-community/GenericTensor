@@ -365,7 +365,7 @@ We know how important it is to use fast tools. That is why we prepared a report 
 |                 Transpose20 |              3 ns | Transpose matrix 20x20             |
 |          MatrixAndMultiply6 |          2,156 ns | Multiply two matrices 6x6          |
 |         MatrixAndMultiply20 |         74,956 ns | Multiply two matrices 20x20        |
-|         TensorAndMultiply15 |      1.684,234 ns | M-ply 2 T 40x15x15                 |
+|         TensorAndMultiply15 |      1,684,234 ns | M-ply 2 T 40x15x15                 |
 |  MatrixAndMultiply6Parallel |         30,021 ns | M-ply 2 M 6x6 in multithread       |
 | MatrixAndMultiply20Parallel |         29,776 ns | M-ply 2 M 20x20 in multithread     |
 | TensorAndMultiply15Parallel |        515,976 ns | M-ply 2 T 40x15x15 in multithread  |
