@@ -116,6 +116,14 @@ namespace GenericTensor.Core
             => Constructors<T>.CreateTensor(shape, operation);
 
         /// <summary>
+        /// Creates a tensor of given size with iterator over its indices
+        /// (its only argument is an array of integers which are indices of the tensor)
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> CreateTensorParallel(TensorShape shape, Func<int[], T> operation)
+            => Constructors<T>.CreateTensorParallel(shape, operation);
+
+        /// <summary>
         /// Creates a tensor from an array
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -259,7 +267,18 @@ namespace GenericTensor.Core
         /// O(N^3)
         /// </summary>
         public static GenTensor<T> MatrixMultiply(GenTensor<T> a, GenTensor<T> b)
-            => MatrixMultiplication<T>.Multiply(a, b);
+            => MatrixMultiplication<T>.Multiply(a, b, parallel: false);
+
+        /// <summary>
+        /// Finds matrix multiplication result in parallel
+        /// a and b are matrices
+        /// a.Shape[1] should be equal to b.Shape[0]
+        /// the resulting matrix is [a.Shape[0] x b.Shape[1]] shape
+        ///
+        /// O(N^3)
+        /// </summary>
+        public static GenTensor<T> MatrixMultiplyParallel(GenTensor<T> a, GenTensor<T> b)
+            => MatrixMultiplication<T>.Multiply(a, b, parallel: true);
 
         /// <summary>
         /// Applies matrix dot product operation for
@@ -268,7 +287,16 @@ namespace GenericTensor.Core
         /// O(N^3)
         /// </summary>
         public static GenTensor<T> TensorMatrixMultiply(GenTensor<T> a, GenTensor<T> b)
-            => MatrixMultiplication<T>.TensorMultiply(a, b);
+            => MatrixMultiplication<T>.TensorMultiply(a, b, false);
+
+        /// <summary>
+        /// Applies matrix dot product operation for
+        /// all matrices in tensors
+        ///
+        /// O(N^3)
+        /// </summary>
+        public static GenTensor<T> TensorMatrixMultiplyParallel(GenTensor<T> a, GenTensor<T> b)
+            => MatrixMultiplication<T>.TensorMultiply(a, b, true);
 
         #endregion
 
@@ -281,6 +309,7 @@ namespace GenericTensor.Core
         public static GenTensor<T> Zip(GenTensor<T> a, GenTensor<T> b, Func<T, T, T> operation)
             => PiecewiseArithmetics<T>.Zip(a, b, operation);
 
+            #region Not parallel
         /// <summary>
         /// T1 + T2
         /// </summary>
@@ -350,6 +379,82 @@ namespace GenericTensor.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T> PiecewiseDivide(T a, GenTensor<T> b)
             => PiecewiseArithmetics<T>.PiecewiseDivide(a, b);
+
+        #endregion
+
+            #region Parallel
+
+        /// <summary>
+        /// T1 + T2
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> PiecewiseAddParallel(GenTensor<T> a, GenTensor<T> b)
+            => PiecewiseArithmetics<T>.PiecewiseAddParallel(a, b);
+
+        /// <summary>
+        /// T1 - T2
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> PiecewiseSubtractParallel(GenTensor<T> a, GenTensor<T> b)
+            => PiecewiseArithmetics<T>.PiecewiseSubtractParallel(a, b);
+
+        /// <summary>
+        /// T1 * T2
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> PiecewiseMultiplyParallel(GenTensor<T> a, GenTensor<T> b)
+            => PiecewiseArithmetics<T>.PiecewiseMultiplyParallel(a, b);
+
+        /// <summary>
+        /// T1 / T2
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> PiecewiseDivideParallel(GenTensor<T> a, GenTensor<T> b)
+            => PiecewiseArithmetics<T>.PiecewiseDivideParallel(a, b);
+
+        /// <summary>
+        /// T1 + const
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> PiecewiseAddParallel(GenTensor<T> a, T b)
+            => PiecewiseArithmetics<T>.PiecewiseAddParallel(a, b);
+
+        /// <summary>
+        /// T1 - const
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> PiecewiseSubtractParallel(GenTensor<T> a, T b)
+            => PiecewiseArithmetics<T>.PiecewiseSubtractParallel(a, b);
+
+        /// <summary>
+        /// const - T1
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> PiecewiseSubtractParallel(T a, GenTensor<T> b)
+            => PiecewiseArithmetics<T>.PiecewiseSubtractParallel(a, b);
+
+        /// <summary>
+        /// T1 * const
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> PiecewiseMultiplyParallel(GenTensor<T> a, T b)
+            => PiecewiseArithmetics<T>.PiecewiseMultiplyParallel(a, b);
+
+        /// <summary>
+        /// T1 / const
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> PiecewiseDivideParallel(GenTensor<T> a, T b)
+            => PiecewiseArithmetics<T>.PiecewiseDivideParallel(a, b);
+
+        /// <summary>
+        /// const / T1
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> PiecewiseDivideParallel(T a, GenTensor<T> b)
+            => PiecewiseArithmetics<T>.PiecewiseDivideParallel(a, b);
+
+        #endregion
 
         #endregion
 

@@ -26,6 +26,7 @@
 
 
 using System;
+using System.Threading.Tasks;
 using GenericTensor.Core;
 
 namespace GenericTensor.Functions
@@ -33,35 +34,67 @@ namespace GenericTensor.Functions
     internal static class PiecewiseArithmetics<T>
     {
         public static GenTensor<T> Zip(GenTensor<T> a,
-            GenTensor<T> b, Func<T, T, T> operation)
+            GenTensor<T> b, Func<T, T, T> operation, bool parallel = false)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException("Arguments should be of the same shape");
             #endif
             var res = new GenTensor<T>(a.Shape);
-            
-            if (res.Shape.shape.Length == 1)
-                for (int x = 0; x < res.Shape.shape[0]; x++)
-                    res.data[x] = ConstantsAndFunctions<T>.Forward(
-                        operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
-            else if (res.Shape.shape.Length == 2)
-                for (int x = 0; x < res.Shape.shape[0]; x++)
-                    for(int y = 0; y < res.Shape.shape[1]; y++)
+
+            if (!parallel)
+            {
+
+                if (res.Shape.shape.Length == 1)
+                    for (int x = 0; x < res.Shape.shape[0]; x++)
+                        res.data[x] = ConstantsAndFunctions<T>.Forward(
+                            operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
+                else if (res.Shape.shape.Length == 2)
+                    for (int x = 0; x < res.Shape.shape[0]; x++)
+                    for (int y = 0; y < res.Shape.shape[1]; y++)
                         res.data[x * res.blocks[0] + y] = ConstantsAndFunctions<T>.Forward(
                             operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
-            else if (res.Shape.shape.Length == 3)
-                for (int x = 0; x < res.Shape.shape[0]; x++)
+                else if (res.Shape.shape.Length == 3)
+                    for (int x = 0; x < res.Shape.shape[0]; x++)
                     for (int y = 0; y < res.Shape.shape[1]; y++)
                     for (int z = 0; z < res.Shape.shape[2]; z++)
                         res.data[x * res.blocks[0] + y * res.blocks[1] + z] = ConstantsAndFunctions<T>.Forward(
                             operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z)));
+                else
+                    foreach (var index in res.IterateOverElements())
+                        res.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(
+                            operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))), index);
+            }
             else
-                foreach (var index in res.IterateOverElements())
-                    res.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(
-                        operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))), index);
+            {
+                if (res.Shape.shape.Length == 1)
+                    for (int x = 0; x < res.Shape.shape[0]; x++)
+                        res.data[x] = ConstantsAndFunctions<T>.Forward(
+                            operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
+                else if (res.Shape.shape.Length == 2)
+                    Parallel.For(0, res.Shape.shape[0], x =>
+                    {
+                        for (int y = 0; y < res.Shape.shape[1]; y++)
+                            res.data[x * res.blocks[0] + y] = ConstantsAndFunctions<T>.Forward(
+                                operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
+                    });
+                else if (res.Shape.shape.Length == 3)
+                    Parallel.For(0, res.Shape.shape[0], x =>
+                    {
+                        for (int y = 0; y < res.Shape.shape[1]; y++)
+                        for (int z = 0; z < res.Shape.shape[2]; z++)
+                            res.data[x * res.blocks[0] + y * res.blocks[1] + z] = ConstantsAndFunctions<T>.Forward(
+                                operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z)));
+                    });
+                else
+                    foreach (var index in res.IterateOverElements())
+                        res.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(
+                            operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))), index);
+            }
             return res;
         }
+
+        #region Not parallel
 
         public static GenTensor<T> PiecewiseAdd(GenTensor<T> a,
             GenTensor<T> b)
@@ -108,5 +141,56 @@ namespace GenericTensor.Functions
             T a, GenTensor<T> b)
             => Constructors<T>.CreateTensor(b.Shape, ind => 
                 ConstantsAndFunctions<T>.Divide(a, b[ind]));
+        #endregion
+
+        #region Parallel
+
+        public static GenTensor<T> PiecewiseAddParallel(GenTensor<T> a,
+            GenTensor<T> b)
+            => Zip(a, b, ConstantsAndFunctions<T>.Add, parallel: true);
+
+        public static GenTensor<T> PiecewiseSubtractParallel(GenTensor<T> a,
+            GenTensor<T> b)
+            => Zip(a, b, ConstantsAndFunctions<T>.Subtract, parallel: true);
+
+        public static GenTensor<T> PiecewiseMultiplyParallel(GenTensor<T> a,
+            GenTensor<T> b)
+            => Zip(a, b, ConstantsAndFunctions<T>.Multiply, parallel: true);
+
+        public static GenTensor<T> PiecewiseDivideParallel(GenTensor<T> a,
+            GenTensor<T> b)
+            => Zip(a, b, ConstantsAndFunctions<T>.Divide, parallel: true);
+
+        public static GenTensor<T> PiecewiseAddParallel(GenTensor<T> a,
+            T b)
+            => Constructors<T>.CreateTensorParallel(a.Shape, ind => 
+                ConstantsAndFunctions<T>.Add(a[ind], b));
+
+        public static GenTensor<T> PiecewiseSubtractParallel(GenTensor<T> a,
+            T b)
+            => Constructors<T>.CreateTensorParallel(a.Shape, ind => 
+                ConstantsAndFunctions<T>.Subtract(a[ind], b));
+
+        public static GenTensor<T> PiecewiseSubtractParallel(
+            T a, GenTensor<T> b)
+            => Constructors<T>.CreateTensorParallel(b.Shape, ind => 
+                ConstantsAndFunctions<T>.Subtract(a, b[ind]));
+
+        public static GenTensor<T> PiecewiseMultiplyParallel(GenTensor<T> a,
+            T b)
+            => Constructors<T>.CreateTensorParallel(a.Shape, ind => 
+                ConstantsAndFunctions<T>.Multiply(a[ind], b));
+
+        public static GenTensor<T> PiecewiseDivideParallel(GenTensor<T> a,
+            T b)
+            => Constructors<T>.CreateTensorParallel(a.Shape, ind => 
+                ConstantsAndFunctions<T>.Divide(a[ind], b));
+
+        public static GenTensor<T> PiecewiseDivideParallel(
+            T a, GenTensor<T> b)
+            => Constructors<T>.CreateTensorParallel(b.Shape, ind => 
+                ConstantsAndFunctions<T>.Divide(a, b[ind]));
+
+        #endregion
     }
 }

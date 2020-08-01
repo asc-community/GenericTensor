@@ -17,6 +17,7 @@
     <RepositoryType>public</RepositoryType>
     <PackageReleaseNotes>All available functions can be found on the official repo: https://github.com/WhiteBlackGoose/GenericTensor</PackageReleaseNotes>
     <PackageIcon>ico1.png</PackageIcon>
+    <PackageTags>tensor, generic, matrix, vector, performance</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

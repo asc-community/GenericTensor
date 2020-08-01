@@ -27,6 +27,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using GenericTensor.Core;
 
 namespace GenericTensor.Functions
@@ -129,6 +130,16 @@ namespace GenericTensor.Functions
             var res = new GenTensor<T>(shape);
             foreach (var ind in res.IterateOverElements())
                 res.SetValueNoCheck(operation(ind), ind);
+            return res;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GenTensor<T> CreateTensorParallel(TensorShape shape, Func<int[], T> operation)
+        {
+            var res = new GenTensor<T>(shape);
+            Parallel.ForEach(res.IterateOverElements(), 
+                (ind, state) => res.SetValueNoCheck(operation(ind), ind)
+                );
             return res;
         }
 

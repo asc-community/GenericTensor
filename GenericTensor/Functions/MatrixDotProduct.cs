@@ -25,14 +25,16 @@
 #endregion
 
 
+using System.Linq;
+using System.Threading.Tasks;
 using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
     internal static class MatrixMultiplication<T>
     {
-        public static GenTensor<T> Multiply(GenTensor<T> a,
-            GenTensor<T> b)
+        internal static GenTensor<T> Multiply(GenTensor<T> a,
+            GenTensor<T> b, bool parallel = false)
         {
             #if ALLOW_EXCEPTIONS
             if (!a.IsMatrix || !b.IsMatrix)
@@ -45,31 +47,47 @@ namespace GenericTensor.Functions
             var height = b.Shape[1];
             var row = a.Shape[1];
             var res = Constructors<T>.CreateMatrix(width, height);
-            for (int x = 0; x < width; x++)
+
+            if (!parallel)
             {
-                for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
                 {
-                    var s = ConstantsAndFunctions<T>.CreateZero();
-                    for (int i = 0; i < row; i++)
+                    for (int y = 0; y < height; y++)
                     {
-                        var v1 = a.GetValueNoCheck(x, i);
-                        var v2 = b.GetValueNoCheck(i, y);
-                        s = ConstantsAndFunctions<T>.Add(s, ConstantsAndFunctions<T>.Multiply(v1, v2));
+                        var s = ConstantsAndFunctions<T>.CreateZero();
+                        for (int i = 0; i < row; i++)
+                        {
+                            var v1 = a.GetValueNoCheck(x, i);
+                            var v2 = b.GetValueNoCheck(i, y);
+                            s = ConstantsAndFunctions<T>.Add(s, ConstantsAndFunctions<T>.Multiply(v1, v2));
+                        }
+                        res.SetValueNoCheck(s, x, y);
                     }
-                    res.SetValueNoCheck(s, x, y);
                 }
             }
+            else
+            {
+                Parallel.For(0, width, x =>
+                {
+                    for (int y = 0; y < height; y++)
+                    {
+                        var s = ConstantsAndFunctions<T>.CreateZero();
+                        for (int i = 0; i < row; i++)
+                        {
+                            var v1 = a.GetValueNoCheck(x, i);
+                            var v2 = b.GetValueNoCheck(i, y);
+                            s = ConstantsAndFunctions<T>.Add(s, ConstantsAndFunctions<T>.Multiply(v1, v2));
+                        }
+                        res.SetValueNoCheck(s, x, y);
+                    }
+                });
+            }
+
             return res;
         }
 
-        /// <summary>
-        /// Applies matrix dot product operation for
-        /// all matrices in tensors
-        ///
-        /// O(N^3)
-        /// </summary>
         public static GenTensor<T> TensorMultiply(GenTensor<T> a,
-            GenTensor<T> b)
+            GenTensor<T> b, bool parallel = false)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape.Count < 2 || b.Shape.Count < 2)
@@ -84,10 +102,26 @@ namespace GenericTensor.Functions
             newShape[newShape.Length - 2] = a.Shape[a.Shape.Length - 2];
             newShape[newShape.Length - 1] = b.Shape[b.Shape.Length - 1];
             var resTensor = new GenTensor<T>(newShape);
-            foreach (var subDimensions in a.IterateOverMatrices())
+
+            if (!parallel)
             {
-                var product = Multiply(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions));
-                resTensor.SetSubtensor(product, subDimensions);
+                foreach (var subDimensions in a.IterateOverMatrices())
+                {
+                    var product = Multiply(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions));
+                    resTensor.SetSubtensor(product, subDimensions);
+                }
+            }
+            else
+            {
+                var subdims = a.IterateOverCopy(2).ToArray();
+
+                Parallel.For(0, subdims.Length, subId =>
+                {
+                    var subDimensions = subdims[subId];
+                    var product = Multiply(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions), parallel: false);
+                    resTensor.SetSubtensor(product, subDimensions);
+                });
+
             }
             return resTensor;
         }
