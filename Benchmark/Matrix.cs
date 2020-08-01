@@ -25,7 +25,8 @@ namespace Benchmark
         private static TS createdMatrix9 = CreateMatrix(9);
         private static TS createdMatrix20 = CreateMatrix(20);
         private static TS createdTensorMatrix15 = CreateTensor(40, 15);
-        
+        private static TS createdMatrix100 = CreateMatrix(100);
+        /*
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();
         [Benchmark] public void MatrixAndLaplace6()
@@ -57,29 +58,29 @@ namespace Benchmark
         [Benchmark] public void MatrixAndMultiply20()
             => TS.MatrixMultiply(createdMatrix20, createdMatrix20);
 
-        [Benchmark] public void MatrixAndMultiply6Parallel()
-            => TS.MatrixMultiplyParallel(createdMatrix20, createdMatrix20);
-
-        [Benchmark] public void MatrixAndMultiply20Parallel()
-            => TS.MatrixMultiplyParallel(createdMatrix20, createdMatrix20);
-
-        [Benchmark] public void TensorAndMultiply15Parallel()
-            => TS.TensorMatrixMultiplyParallel(createdTensorMatrix15, createdTensorMatrix15);
-
         [Benchmark] public void TensorAndMultiply15()
             => TS.TensorMatrixMultiply(createdTensorMatrix15, createdTensorMatrix15);
 
-        [Benchmark] public void MatrixAndAdd6()
-            => TS.PiecewiseAdd(createdMatrix6, createdMatrix6);
+        [Benchmark] public void MatrixAndMultiply6Parallel()
+            => TS.MatrixMultiply(createdMatrix20, createdMatrix20, Threading.Multi);
+
+        [Benchmark] public void MatrixAndMultiply20Parallel()
+            => TS.MatrixMultiply(createdMatrix20, createdMatrix20, Threading.Multi);
+
+        [Benchmark] public void TensorAndMultiply15Parallel()
+            => TS.TensorMatrixMultiply(createdTensorMatrix15, createdTensorMatrix15, Threading.Multi);
 
         [Benchmark] public void MatrixAndAdd20()
             => TS.PiecewiseAdd(createdMatrix20, createdMatrix20);
 
-        [Benchmark] public void MatrixAndAdd6Parallel()
-            => TS.PiecewiseAddParallel(createdMatrix6, createdMatrix6);
+        [Benchmark] public void MatrixAndAdd100()
+            => TS.PiecewiseAdd(createdMatrix100, createdMatrix100);
 
         [Benchmark] public void MatrixAndAdd20Parallel()
-            => TS.PiecewiseAddParallel(createdMatrix20, createdMatrix20);
+            => TS.PiecewiseAdd(createdMatrix20, createdMatrix20, Threading.Multi);
+
+        [Benchmark] public void MatrixAndAdd100Parallel()
+            => TS.PiecewiseAdd(createdMatrix100, createdMatrix100, Threading.Multi);
 
         [Benchmark] public void SafeIndexing()
         {
@@ -97,6 +98,7 @@ namespace Benchmark
             {
                 var c = createdMatrix9.GetValueNoCheck(i, j);
             }
-        }
+        }*/
+        
     }
 }

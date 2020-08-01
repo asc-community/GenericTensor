@@ -34,7 +34,7 @@ namespace GenericTensor.Functions
     internal static class MatrixMultiplication<T>
     {
         internal static GenTensor<T> Multiply(GenTensor<T> a,
-            GenTensor<T> b, bool parallel = false)
+            GenTensor<T> b, Threading threading = Threading.Single)
         {
             #if ALLOW_EXCEPTIONS
             if (!a.IsMatrix || !b.IsMatrix)
@@ -47,6 +47,8 @@ namespace GenericTensor.Functions
             var height = b.Shape[1];
             var row = a.Shape[1];
             var res = Constructors<T>.CreateMatrix(width, height);
+
+            var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 400);
 
             if (!parallel)
             {
@@ -87,7 +89,7 @@ namespace GenericTensor.Functions
         }
 
         public static GenTensor<T> TensorMultiply(GenTensor<T> a,
-            GenTensor<T> b, bool parallel = false)
+            GenTensor<T> b, Threading threading = Threading.Single)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape.Count < 2 || b.Shape.Count < 2)
@@ -102,6 +104,8 @@ namespace GenericTensor.Functions
             newShape[newShape.Length - 2] = a.Shape[a.Shape.Length - 2];
             newShape[newShape.Length - 1] = b.Shape[b.Shape.Length - 1];
             var resTensor = new GenTensor<T>(newShape);
+
+            var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 300 && a.Shape[0] > 2);
 
             if (!parallel)
             {
@@ -118,7 +122,7 @@ namespace GenericTensor.Functions
                 Parallel.For(0, subdims.Length, subId =>
                 {
                     var subDimensions = subdims[subId];
-                    var product = Multiply(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions), parallel: false);
+                    var product = Multiply(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions), Threading.Single);
                     resTensor.SetSubtensor(product, subDimensions);
                 });
 

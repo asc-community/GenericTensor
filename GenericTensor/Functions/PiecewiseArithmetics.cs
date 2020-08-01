@@ -34,13 +34,16 @@ namespace GenericTensor.Functions
     internal static class PiecewiseArithmetics<T>
     {
         public static GenTensor<T> Zip(GenTensor<T> a,
-            GenTensor<T> b, Func<T, T, T> operation, bool parallel = false)
+            GenTensor<T> b, Func<T, T, T> operation, Threading threading = Threading.Single)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException("Arguments should be of the same shape");
             #endif
             var res = new GenTensor<T>(a.Shape);
+
+            var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 8000);
+
 
             if (!parallel)
             {
@@ -94,103 +97,50 @@ namespace GenericTensor.Functions
             return res;
         }
 
-        #region Not parallel
-
         public static GenTensor<T> PiecewiseAdd(GenTensor<T> a,
-            GenTensor<T> b)
-            => Zip(a, b, ConstantsAndFunctions<T>.Add);
+            GenTensor<T> b, Threading threading)
+            => Zip(a, b, ConstantsAndFunctions<T>.Add, threading);
 
         public static GenTensor<T> PiecewiseSubtract(GenTensor<T> a,
-            GenTensor<T> b)
-            => Zip(a, b, ConstantsAndFunctions<T>.Subtract);
+            GenTensor<T> b, Threading threading)
+            => Zip(a, b, ConstantsAndFunctions<T>.Subtract, threading);
 
         public static GenTensor<T> PiecewiseMultiply(GenTensor<T> a,
-            GenTensor<T> b)
-            => Zip(a, b, ConstantsAndFunctions<T>.Multiply);
+            GenTensor<T> b, Threading threading)
+            => Zip(a, b, ConstantsAndFunctions<T>.Multiply, threading);
 
         public static GenTensor<T> PiecewiseDivide(GenTensor<T> a,
-            GenTensor<T> b)
-            => Zip(a, b, ConstantsAndFunctions<T>.Divide);
+            GenTensor<T> b, Threading threading)
+            => Zip(a, b, ConstantsAndFunctions<T>.Divide, threading);
 
         public static GenTensor<T> PiecewiseAdd(GenTensor<T> a,
-            T b)
+            T b, Threading threading)
             => Constructors<T>.CreateTensor(a.Shape, ind => 
-                ConstantsAndFunctions<T>.Add(a[ind], b));
+                ConstantsAndFunctions<T>.Add(a[ind], b), threading);
 
         public static GenTensor<T> PiecewiseSubtract(GenTensor<T> a,
-            T b)
+            T b, Threading threading)
             => Constructors<T>.CreateTensor(a.Shape, ind => 
-                ConstantsAndFunctions<T>.Subtract(a[ind], b));
+                ConstantsAndFunctions<T>.Subtract(a[ind], b), threading);
 
         public static GenTensor<T> PiecewiseSubtract(
-            T a, GenTensor<T> b)
+            T a, GenTensor<T> b, Threading threading)
             => Constructors<T>.CreateTensor(b.Shape, ind => 
-                ConstantsAndFunctions<T>.Subtract(a, b[ind]));
+                ConstantsAndFunctions<T>.Subtract(a, b[ind]), threading);
 
         public static GenTensor<T> PiecewiseMultiply(GenTensor<T> a,
-            T b)
+            T b, Threading threading)
             => Constructors<T>.CreateTensor(a.Shape, ind => 
-                ConstantsAndFunctions<T>.Multiply(a[ind], b));
+                ConstantsAndFunctions<T>.Multiply(a[ind], b), threading);
 
         public static GenTensor<T> PiecewiseDivide(GenTensor<T> a,
-            T b)
+            T b, Threading threading)
             => Constructors<T>.CreateTensor(a.Shape, ind => 
-                ConstantsAndFunctions<T>.Divide(a[ind], b));
+                ConstantsAndFunctions<T>.Divide(a[ind], b), threading);
 
         public static GenTensor<T> PiecewiseDivide(
-            T a, GenTensor<T> b)
+            T a, GenTensor<T> b, Threading threading)
             => Constructors<T>.CreateTensor(b.Shape, ind => 
-                ConstantsAndFunctions<T>.Divide(a, b[ind]));
-        #endregion
-
-        #region Parallel
-
-        public static GenTensor<T> PiecewiseAddParallel(GenTensor<T> a,
-            GenTensor<T> b)
-            => Zip(a, b, ConstantsAndFunctions<T>.Add, parallel: true);
-
-        public static GenTensor<T> PiecewiseSubtractParallel(GenTensor<T> a,
-            GenTensor<T> b)
-            => Zip(a, b, ConstantsAndFunctions<T>.Subtract, parallel: true);
-
-        public static GenTensor<T> PiecewiseMultiplyParallel(GenTensor<T> a,
-            GenTensor<T> b)
-            => Zip(a, b, ConstantsAndFunctions<T>.Multiply, parallel: true);
-
-        public static GenTensor<T> PiecewiseDivideParallel(GenTensor<T> a,
-            GenTensor<T> b)
-            => Zip(a, b, ConstantsAndFunctions<T>.Divide, parallel: true);
-
-        public static GenTensor<T> PiecewiseAddParallel(GenTensor<T> a,
-            T b)
-            => Constructors<T>.CreateTensorParallel(a.Shape, ind => 
-                ConstantsAndFunctions<T>.Add(a[ind], b));
-
-        public static GenTensor<T> PiecewiseSubtractParallel(GenTensor<T> a,
-            T b)
-            => Constructors<T>.CreateTensorParallel(a.Shape, ind => 
-                ConstantsAndFunctions<T>.Subtract(a[ind], b));
-
-        public static GenTensor<T> PiecewiseSubtractParallel(
-            T a, GenTensor<T> b)
-            => Constructors<T>.CreateTensorParallel(b.Shape, ind => 
-                ConstantsAndFunctions<T>.Subtract(a, b[ind]));
-
-        public static GenTensor<T> PiecewiseMultiplyParallel(GenTensor<T> a,
-            T b)
-            => Constructors<T>.CreateTensorParallel(a.Shape, ind => 
-                ConstantsAndFunctions<T>.Multiply(a[ind], b));
-
-        public static GenTensor<T> PiecewiseDivideParallel(GenTensor<T> a,
-            T b)
-            => Constructors<T>.CreateTensorParallel(a.Shape, ind => 
-                ConstantsAndFunctions<T>.Divide(a[ind], b));
-
-        public static GenTensor<T> PiecewiseDivideParallel(
-            T a, GenTensor<T> b)
-            => Constructors<T>.CreateTensorParallel(b.Shape, ind => 
-                ConstantsAndFunctions<T>.Divide(a, b[ind]));
-
-        #endregion
+                ConstantsAndFunctions<T>.Divide(a, b[ind]), threading);
     }
 }

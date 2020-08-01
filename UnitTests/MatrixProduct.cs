@@ -147,7 +147,7 @@ namespace UnitTests
 
             A.TransposeMatrix();
             B.TransposeMatrix();
-            Assert.AreEqual(GenTensor<int>.MatrixMultiplyParallel(A, B), GenTensor<int>.CreateMatrix(
+            Assert.AreEqual(GenTensor<int>.MatrixMultiply(A, B, Threading.Multi), GenTensor<int>.CreateMatrix(
                 new [,]
                 {
                     { 12, 0, 36, 0 },
@@ -212,7 +212,7 @@ namespace UnitTests
 
             var exp = GenTensor<int>.Stack(exp1, exp2);
 
-            Assert.AreEqual(exp, GenTensor<int>.TensorMatrixMultiplyParallel(T1, T2));
+            Assert.AreEqual(exp, GenTensor<int>.TensorMatrixMultiply(T1, T2, Threading.Multi));
         }
     }
 }
