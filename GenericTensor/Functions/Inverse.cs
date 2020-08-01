@@ -59,10 +59,7 @@ namespace GenericTensor.Functions
                 // TODO: is this statement correct?
                 toNegate = (x + y) % 2 == 1;
                 var det = Determinant<T>.DeterminantGaussianSafeDivision(temp, diagLength - 1);
-                if (toNegate)
-                    res.SetValueNoCheck(ConstantsAndFunctions<T>.Negate(det), y, x);
-                else
-                    res.SetValueNoCheck(det, y, x);
+                res.SetValueNoCheck(toNegate ? ConstantsAndFunctions<T>.Negate(det) : det, y, x);
             }
 
             return res;

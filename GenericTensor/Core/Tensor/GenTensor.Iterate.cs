@@ -208,12 +208,12 @@ namespace GenericTensor.Core
         /// <returns></returns>
         public IEnumerable<int[]> IterateOver(int offsetFromLeft)
         {
-            static int Sum(int[] arr)
+            static bool SumIsNot0(int[] arr)
             {
-                int s = 0;
-                for (int i = 0; i < arr.Length; i++)
-                    s += arr[i];
-                return s;
+                foreach (var a in arr)
+                    if (a != 0)
+                        return true;
+                return false;
             }
 
             var indices = new int[Shape.Count - offsetFromLeft];
@@ -221,7 +221,7 @@ namespace GenericTensor.Core
             {
                 yield return indices;
                 NextIndex(indices, indices.Length - 1);
-            } while (Sum(indices) != 0); // for tensor 4 x 3 x 2 the first violating index would be 5  0  0 
+            } while (SumIsNot0(indices)); // for tensor 4 x 3 x 2 the first violating index would be 5  0  0 
         }
 
         /// <summary>

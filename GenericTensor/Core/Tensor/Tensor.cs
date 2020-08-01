@@ -25,7 +25,6 @@
 #endregion
 
 using System;
-using System.Linq;
 
 namespace GenericTensor.Core
 {
@@ -59,7 +58,6 @@ namespace GenericTensor.Core
                 blocks[i] = len;
                 len *= Shape[i];
             }
-            blocks.Reverse();
         }
 
         protected GenTensor(TensorShape dimensions, int[] blocks, int[] axesOrder, T[] data)

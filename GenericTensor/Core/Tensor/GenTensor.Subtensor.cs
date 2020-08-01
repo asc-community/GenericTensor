@@ -92,8 +92,10 @@ namespace GenericTensor.Core
                     newAxesOrder[i] -= 1;
             newAxesOrder.RemoveAt(0);
             var newShape = Shape.CutOffset1();
-            var result = new GenTensor<T>(newShape, newBlocks.ToArray(), newAxesOrder.ToArray(), data);
-            result.LinOffset = newLinIndexDelta;
+            var result = new GenTensor<T>(newShape, newBlocks.ToArray(), newAxesOrder.ToArray(), data)
+            {
+                LinOffset = newLinIndexDelta
+            };
             return result;
         }
 

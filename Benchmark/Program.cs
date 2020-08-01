@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Running;
+﻿using System;
+using BenchmarkDotNet.Running;
 using GenericTensor.Functions;
 
 namespace Benchmark
@@ -7,8 +8,8 @@ namespace Benchmark
     {
         static void Main(string[] args)
         {
-            BuiltinTypeInitter.InitForInt();
-            BenchmarkRunner.Run<MatrixBenchmark>();
+            BuiltinTypeInitter.InitForFloat();
+            BenchmarkRunner.Run<OneVsMulti>();
         }
     }
 }

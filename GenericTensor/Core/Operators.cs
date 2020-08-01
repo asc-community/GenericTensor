@@ -59,6 +59,8 @@ namespace GenericTensor.Core
 
         public bool Equals(GenTensor<T> obj)
         {
+            if (obj is null)
+                return false;
             if (obj.Shape != Shape)
                 return false;
             foreach (var (index, _) in obj.Iterate())
@@ -68,10 +70,10 @@ namespace GenericTensor.Core
         }
 
         public static bool operator ==(GenTensor<T> a, GenTensor<T> b)
-            => a.Equals(b);
+            => object.ReferenceEquals(a, b) || (a is {} && a.Equals(b));
 
         public static bool operator !=(GenTensor<T> a, GenTensor<T> b)
-            => a.Equals(b);
+            => !(a == b);
 
         
     }

@@ -5,13 +5,13 @@ using GenericTensor.Core;
 
 namespace Benchmark
 {
-    using TS = GenTensor<int>;
+    using TS = GenTensor<float>;
 
     public class MatrixBenchmark
     {
         public MatrixBenchmark()
         {
-            BuiltinTypeInitter.InitForInt();
+            BuiltinTypeInitter.InitForFloat();
         }
 
         static TS CreateMatrix(int size)
@@ -20,12 +20,12 @@ namespace Benchmark
         static TS CreateTensor(int W, int size)
             => TS.Stack(Enumerable.Range(0, W).Select(c => CreateMatrix(size)).ToArray());
 
-        private static TS createdMatrix3 = CreateMatrix(3);
-        private static TS createdMatrix6 = CreateMatrix(6);
-        private static TS createdMatrix9 = CreateMatrix(9);
-        private static TS createdMatrix20 = CreateMatrix(20);
-        private static TS createdTensorMatrix15 = CreateTensor(40, 15);
-        private static TS createdMatrix100 = CreateMatrix(100);
+        private static readonly TS createdMatrix3 = CreateMatrix(3);
+        private static readonly TS createdMatrix6 = CreateMatrix(6);
+        private static readonly TS createdMatrix9 = CreateMatrix(9);
+        private static readonly TS createdMatrix20 = CreateMatrix(20);
+        private static readonly TS createdTensorMatrix15 = CreateTensor(40, 15);
+        private static readonly TS createdMatrix100 = CreateMatrix(100);
         
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();
