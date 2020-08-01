@@ -220,10 +220,16 @@ Works for O(V)
 ```cs
 public static GenTensor<T> MatrixMultiply(GenTensor<T> a, GenTensor<T> b);
 public static GenTensor<T> TensorMatrixMultiply(GenTensor<T> a, GenTensor<T> b);
+
+public static GenTensor<T> MatrixMultiplyParallel(GenTensor<T> a, GenTensor<T> b);
+public static GenTensor<T> TensorMatrixMultiplyParallel(GenTensor<T> a, GenTensor<T> b);
 ```
 
 Performs matrix multiplication operation of two matrices. One's height should be the same
 as Another's width.
+
+MatrixMultiplyParallel performs parallel computations over the first axis, TensorMatrixMultiplyParallel
+performs parallel computations over matrices.
 
 Works for O(N^3)
 </p></details>
@@ -301,9 +307,15 @@ public static GenTensor<T> PiecewiseAdd(GenTensor<T> a, GenTensor<T> b);
 public static GenTensor<T> PiecewiseSubtract(GenTensor<T> a, GenTensor<T> b);
 public static GenTensor<T> PiecewiseMultiply(GenTensor<T> a, GenTensor<T> b);
 public static GenTensor<T> PiecewiseDivide(GenTensor<T> a, GenTensor<T> b);
+
+public static GenTensor<T> PiecewiseAddParallel(GenTensor<T> a, GenTensor<T> b);
+public static GenTensor<T> PiecewiseSubtractParallel(GenTensor<T> a, GenTensor<T> b);
+public static GenTensor<T> PiecewiseMultiplyParallel(GenTensor<T> a, GenTensor<T> b);
+public static GenTensor<T> PiecewiseDivideParallel(GenTensor<T> a, GenTensor<T> b);
 ```
 
-Returns a tensor of an operation being applied to every matching pair so that Add is
+Returns a tensor of an operation being applied to every matching pair so that Add is.
+Those with Parallel in its name are ran on multiple cores (via Parallel.For).
 
 ```
 result[i, j, k...] = a[i, j, k...] + b[i, j, k...]
@@ -321,9 +333,47 @@ public static GenTensor<T> PiecewiseSubtract(T a, GenTensor<T> b);
 public static GenTensor<T> PiecewiseMultiply(GenTensor<T> a, T b);
 public static GenTensor<T> PiecewiseDivide(GenTensor<T> a, T b);
 public static GenTensor<T> PiecewiseDivide(T a, GenTensor<T> b);
+
+public static GenTensor<T> PiecewiseAddParallel(GenTensor<T> a, T b);
+public static GenTensor<T> PiecewiseSubtractParallel(GenTensor<T> a, T b);
+public static GenTensor<T> PiecewiseSubtractParallel(T a, GenTensor<T> b);
+public static GenTensor<T> PiecewiseMultiplyParallel(GenTensor<T> a, T b);
+public static GenTensor<T> PiecewiseDivideParallel(GenTensor<T> a, T b);
+public static GenTensor<T> PiecewiseDivideParallel(T a, GenTensor<T> b);
 ```
 
 Performs an operation on each of tensor's element and forwards them to the result
+Those with Parallel in its name are ran on multiple cores (via Parallel.For).
 
 Works for O(V)
 </p></details>
+
+## Performance
+
+We know how important it is to use fast tools. That is why we prepared a report via Dot Net Benchmark:
+
+|                      Method |              Mean |                        Explanation |
+|---------------------------- |------------------:|-----------------------------------:|
+|           MatrixAndLaplace3 |            285 ns | Det via Laplace on M 3x3           |
+|           MatrixAndLaplace6 |         47,222 ns | Det via Laplace on M 6x6           |
+|           MatrixAndLaplace9 |     22,960,529 ns | Det via Laplace on M 9x9           |
+|          MatrixAndGaussian3 |            700 ns | Det via Gaussian elim on M 3x3     |
+|          MatrixAndGaussian6 |          4,418 ns | Det via Gaussian elim on M 6x6     |
+|          MatrixAndGaussian9 |         14,143 ns | Det via Gaussian elim on M 9x9     |
+|            CreatingMatrix20 |          1,580 ns | Init matrix 20x20                  |
+|            CreatingMatrix50 |          9,066 ns | Init matrix 50x50                  |
+|                 Transpose20 |              3 ns | Transpose matrix 20x20             |
+|          MatrixAndMultiply6 |          2,156 ns | Multiply two matrices 6x6          |
+|         MatrixAndMultiply20 |         74,956 ns | Multiply two matrices 20x20        |
+|         TensorAndMultiply15 |      1.684,234 ns | M-ply 2 T 40x15x15                 |
+|  MatrixAndMultiply6Parallel |         30,021 ns | M-ply 2 M 6x6 in multithread       |
+| MatrixAndMultiply20Parallel |         29,776 ns | M-ply 2 M 20x20 in multithread     |
+| TensorAndMultiply15Parallel |        515,976 ns | M-ply 2 T 40x15x15 in multithread  |
+|               MatrixAndAdd6 |            553 ns | Piecewise addition on M 6x6        |
+|              MatrixAndAdd20 |          4,854 ns | Piecewise addition on M 20x20      |
+|       MatrixAndAdd6Parallel |          3,519 ns | P-se add in multithread on M 6x6   |
+|      MatrixAndAdd20Parallel |          7,541 ns | P-se add in multithread on M 20x20 |
+|                SafeIndexing |            481 ns | Addressing to [i, j] with checks   |
+|                FastIndexing |            247 ns | Addressing to [i, j] w/0 checks    |
+
+Machine: i7-7700HQ (4 cores, 8 threads) with minimum background activity.

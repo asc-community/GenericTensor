@@ -66,6 +66,9 @@ namespace Benchmark
         [Benchmark] public void TensorAndMultiply15Parallel()
             => TS.TensorMatrixMultiplyParallel(createdTensorMatrix15, createdTensorMatrix15);
 
+        [Benchmark] public void TensorAndMultiply15()
+            => TS.TensorMatrixMultiply(createdTensorMatrix15, createdTensorMatrix15);
+
         [Benchmark] public void MatrixAndAdd6()
             => TS.PiecewiseAdd(createdMatrix6, createdMatrix6);
 
