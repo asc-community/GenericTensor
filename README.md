@@ -426,6 +426,7 @@ operation.
 
 
 |               Method | Width | Height |       Mean |      Error |     StdDev |     Median |
+|--------------------- |------ |------- |-----------:|-----------:|-----------:|-----------:|
 |    PiecewiseMultiply |     5 |      5 |   2.033 us |  0.0403 us |  0.0651 us |   2.043 us |
 | PiecewiseMultiplyPar |     5 |      5 |   5.014 us |  0.0346 us |  0.0307 us |   5.020 us |
 |    PiecewiseMultiply |    15 |      5 |   5.329 us |  0.0658 us |  0.0583 us |   5.329 us |
