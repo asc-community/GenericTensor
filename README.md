@@ -357,6 +357,7 @@ Short version:
 
 <details><summary><strong>Full report</strong></summary>
 
+
 |                      Method |              Mean |                          Explanation |
 |---------------------------- |------------------:|-------------------------------------:|
 |           MatrixAndLaplace3 |            285 ns | Det via Laplace on M 3x3             |
@@ -385,11 +386,12 @@ Short version:
 
 <details><summary><strong>Multihreading</strong></summary>
 
+
 Multithreading is a useful tool if you want to make computations faster. We do not support GPU computations and never will because our aim to keep GenericTensor supporting
 custom type, while GPU only works with fixed types like `int`, `float`, and a few others.
 
 However, even on CPU it is sometimes better to keep single-core computations. So here we find out when it is better to keep single and where it is better to switch to
-multi-core. Here we provide grapgs for multiplication of matrices and piecewise product for tensors of different sizes
+multi-core. Here we provide graphs for multiplication of matrices and piecewise product for tensors of different sizes
 in those two modes (`Threading.Single` and `Threading.Multi`). `Y`-axis shows number of microseconds spent on one
 operation.
 
@@ -398,6 +400,7 @@ operation.
 <img src="./Benchmark/matrixmultiplication.png">
 
 <details><summary>Raw data</summary>
+
 
 |               Method | Width | Height |       Mean |      Error |     StdDev |     Median |
 |--------------------- |------ |------- |-----------:|-----------:|-----------:|-----------:|
@@ -420,6 +423,8 @@ operation.
 <img src="./Benchmark/piecewisemultiplication.PNG">
 
 <details><summary>Raw data</summary>
+
+
 |               Method | Width | Height |       Mean |      Error |     StdDev |     Median |
 |    PiecewiseMultiply |     5 |      5 |   2.033 us |  0.0403 us |  0.0651 us |   2.043 us |
 | PiecewiseMultiplyPar |     5 |      5 |   5.014 us |  0.0346 us |  0.0307 us |   5.020 us |
