@@ -389,7 +389,9 @@ Multithreading is a useful tool if you want to make computations faster. We do n
 custom type, while GPU only works with fixed types like `int`, `float`, and a few others.
 
 However, even on CPU it is sometimes better to keep single-core computations. So here we find out when it is better to keep single and where it is better to switch to
-multi-core.
+multi-core. Here we provide grapgs for multiplication of matrices and piecewise product for tensors of different sizes
+in those two modes (`Threading.Single` and `Threading.Multi`). `Y`-axis shows number of microseconds spent on one
+operation.
 
 #### Matrix multiplication
 
@@ -415,7 +417,7 @@ multi-core.
 
 #### Piecewise product
 
-<img src="./Benchmark/piecewisemultiplication.png">
+<img src="./Benchmark/piecewisemultiplication.PNG">
 
 <details><summary>Raw data</summary>
 |               Method | Width | Height |       Mean |      Error |     StdDev |     Median |
