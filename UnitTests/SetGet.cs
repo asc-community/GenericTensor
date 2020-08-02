@@ -40,7 +40,7 @@ namespace UnitTests
             BuiltinTypeInitter.InitForInt();
         }
 
-        private GenTensor<int> GetT() => new GenTensor<int>(2, 3, 4);
+        private GenTensor<int, IntegerWrapper> GetT() => new GenTensor<int, IntegerWrapper>(2, 3, 4);
 
         [TestMethod]
         public void SetGet1()

@@ -27,41 +27,135 @@
 
 using System;
 using System.Globalization;
+using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    public static class BuiltinTypeInitter
+    public struct IntegerWrapper : IOperations<int>
     {
-        public static void InitForInt()
+
+        public int Add(int a, int b)
         {
-            ConstantsAndFunctions<int>.Add = (a, b) => a + b;
-            ConstantsAndFunctions<int>.Subtract = (a, b) => a - b;
-            ConstantsAndFunctions<int>.Multiply = (a, b) => a * b;
-            ConstantsAndFunctions<int>.Divide = (a, b) => a / b;
-            ConstantsAndFunctions<int>.CreateZero = () => 0;
-            ConstantsAndFunctions<int>.CreateOne = () => 1;
-            ConstantsAndFunctions<int>.AreEqual = (a, b) => a == b;
-            ConstantsAndFunctions<int>.Negate = a => -a;
-            ConstantsAndFunctions<int>.IsZero = a => a == 0;
-            ConstantsAndFunctions<int>.Copy = a => a;
-            ConstantsAndFunctions<int>.Forward = a => a;
-            ConstantsAndFunctions<int>.ToString = a => a.ToString(CultureInfo.CurrentCulture);
+            return a + b;
         }
 
-        public static void InitForFloat()
+        public int Subtract(int a, int b)
         {
-            ConstantsAndFunctions<float>.Add = (a, b) => a + b;
-            ConstantsAndFunctions<float>.Subtract = (a, b) => a - b;
-            ConstantsAndFunctions<float>.Multiply = (a, b) => a * b;
-            ConstantsAndFunctions<float>.Divide = (a, b) => a / b;
-            ConstantsAndFunctions<float>.CreateZero = () => 0;
-            ConstantsAndFunctions<float>.CreateOne = () => 1;
-            ConstantsAndFunctions<float>.AreEqual = (a, b) => Math.Abs(a - b) < 1e-5;
-            ConstantsAndFunctions<float>.Negate = a => -a;
-            ConstantsAndFunctions<float>.IsZero = a => Math.Abs(a) < 1e-5;
-            ConstantsAndFunctions<float>.Copy = a => a;
-            ConstantsAndFunctions<float>.Forward = a => a;
-            ConstantsAndFunctions<float>.ToString = a => a.ToString(CultureInfo.CurrentCulture);
+            return a - b;
+        }
+
+        public int Multiply(int a, int b)
+        {
+            return a * b;
+        }
+
+        public int Negate(int a)
+        {
+            return -a;
+        }
+
+        public int Divide(int a, int b)
+        {
+            return a / b;
+        }
+
+        public int CreateOne()
+        {
+            return 1;
+        }
+
+        public int CreateZero()
+        {
+            return 0;
+        }
+
+        public int Copy(int a)
+        {
+            return a;
+        }
+
+        public int Forward(int a)
+        {
+            return a;
+        }
+
+        public bool AreEqual(int a, int b)
+        {
+            return a == b;
+        }
+
+        public bool IsZero(int a)
+        {
+            return a == 0;
+        }
+
+        public string ToString(int a)
+        {
+            return a.ToString();
+        }
+    }
+
+    public struct FloatWrapper : IOperations<float>
+    {
+
+        public float Add(float a, float b)
+        {
+            return a + b;
+        }
+
+        public float Subtract(float a, float b)
+        {
+            return a - b;
+        }
+
+        public float Multiply(float a, float b)
+        {
+            return a * b;
+        }
+
+        public float Negate(float a)
+        {
+            return -a;
+        }
+
+        public float Divide(float a, float b)
+        {
+            return a / b;
+        }
+
+        public float CreateOne()
+        {
+            return 1;
+        }
+
+        public float CreateZero()
+        {
+            return 0;
+        }
+
+        public float Copy(float a)
+        {
+            return a;
+        }
+
+        public float Forward(float a)
+        {
+            return a;
+        }
+
+        public bool AreEqual(float a, float b)
+        {
+            return Math.Abs(a - b) < 1e-6;
+        }
+
+        public bool IsZero(float a)
+        {
+            return Math.Abs(a) < 1e-6;
+        }
+
+        public string ToString(float a)
+        {
+            return a.ToString();
         }
     }
 }

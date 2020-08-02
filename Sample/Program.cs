@@ -32,7 +32,7 @@ public static class Samples
 {
     public static void CreatingMatrix()
     {
-        var myMatrix = GenTensor<float>.CreateMatrix(
+        var myMatrix = GenTensor<float, FloatWrapper>.CreateMatrix(
             new float[,]
             {
                 {1, 2, 3},
@@ -45,7 +45,7 @@ public static class Samples
 
     public static void CreatingMatrixAndMultiply()
     {
-        var myMatrix = GenTensor<float>.CreateMatrix(
+        var myMatrix = GenTensor<float, FloatWrapper>.CreateMatrix(
             new float[,]
             {
                 {1, 2, 3},
@@ -53,7 +53,7 @@ public static class Samples
                 {7, 8, 9}
             }
         );
-        Console.WriteLine(GenTensor<float>.MatrixMultiply(myMatrix, myMatrix));
+        Console.WriteLine(GenTensor<float, FloatWrapper>.MatrixMultiply(myMatrix, myMatrix));
     }
 }
 

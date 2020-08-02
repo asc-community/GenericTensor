@@ -37,12 +37,12 @@ namespace UnitTests
     [TestClass]
     public class Constructors
     {
-        void AssertTensor<T>(IEnumerable<T> expected, GenTensor<T> actual) =>
+        void AssertTensor<T, TWrapper>(IEnumerable<T> expected, GenTensor<T, TWrapper> actual) where TWrapper : struct, IOperations<T> =>
             CollectionAssert.AreEqual(expected.ToList(), actual.Iterate().Select(tup => tup.Value).ToList());
         [TestMethod]
         public void CreateMatrix()
         {
-            var x = GenTensor<int>.CreateMatrix(
+            var x = GenTensor<int, IntegerWrapper>.CreateMatrix(
                 new[,]
                 {
                     { 1, 2 },
@@ -61,7 +61,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateVector()
         {
-            var x = GenTensor<int>.CreateVector(new[] { 1, 2, 3, 4 });
+            var x = GenTensor<int, IntegerWrapper>.CreateVector(new[] { 1, 2, 3, 4 });
             Assert.IsTrue(x.IsVector);
             Assert.IsFalse(x.IsMatrix);
             Assert.IsFalse(x.IsSquareMatrix);
@@ -72,7 +72,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor1D()
         {
-            var x = GenTensor<int>.CreateTensor(new[] { 1, 2, 3, 4 });
+            var x = GenTensor<int, IntegerWrapper>.CreateTensor(new[] { 1, 2, 3, 4 });
             Assert.IsTrue(x.IsVector);
             Assert.IsFalse(x.IsMatrix);
             Assert.IsFalse(x.IsSquareMatrix);
@@ -83,7 +83,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor2D()
         {
-            var x = GenTensor<int>.CreateTensor(
+            var x = GenTensor<int, IntegerWrapper>.CreateTensor(
                 new[,]
                 {
                     { 1, 2 },
@@ -100,7 +100,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor3D()
         {
-            var x = GenTensor<int>.CreateTensor(
+            var x = GenTensor<int, IntegerWrapper>.CreateTensor(
                 new[, ,]
                 {
                     { {  1,  2,  3 }, {  4,  5,  6 } },
@@ -118,7 +118,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor4D()
         {
-            var x = GenTensor<int>.CreateTensor(
+            var x = GenTensor<int, IntegerWrapper>.CreateTensor(
                 new[, , ,]
                 {
                     { { {  1,  2,  3 }, {  4,  5,  6 } },
@@ -140,7 +140,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor5D()
         {
-            var x = GenTensor<int>.CreateTensor(
+            var x = GenTensor<int, IntegerWrapper>.CreateTensor(
                 new[, , , ,]
                 { {
                     { { {  1,  2,  3 }, {  4,  5,  6 } },
@@ -162,7 +162,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor6D()
         {
-            var x = GenTensor<int>.CreateTensor(new int[0, 0, 0, 0, 0, 0]);
+            var x = GenTensor<int, IntegerWrapper>.CreateTensor(new int[0, 0, 0, 0, 0, 0]);
             Assert.IsFalse(x.IsVector);
             Assert.IsFalse(x.IsMatrix);
             Assert.IsFalse(x.IsSquareMatrix);
@@ -223,8 +223,8 @@ namespace UnitTests
         [TestMethod]
         public void CreateIdentityMatrix()
         {
-            ConstantsAndFunctions<bool?>.CreateOne = () => true;
-            ConstantsAndFunctions<bool?>.CreateZero = () => false;
+            ConstantsAndFunctionsForwarder<bool?>.CreateOne = () => true;
+            ConstantsAndFunctionsForwarder<bool?>.CreateZero = () => false;
             var x = GenTensor<bool?>.CreateIdentityMatrix(5);
             Assert.IsFalse(x.IsVector);
             Assert.IsTrue(x.IsMatrix);
@@ -240,9 +240,9 @@ namespace UnitTests
         [TestMethod]
         public void CreateIdentityTensor()
         {
-            ConstantsAndFunctions<char>.CreateOne = () => 'x';
-            ConstantsAndFunctions<char>.CreateZero = () => 'y';
-            ConstantsAndFunctions<char>.Forward = x => x;
+            ConstantsAndFunctionsForwarder<char>.CreateOne = () => 'x';
+            ConstantsAndFunctionsForwarder<char>.CreateZero = () => 'y';
+            ConstantsAndFunctionsForwarder<char>.Forward = x => x;
             var x = GenTensor<char>.CreateIdentityTensor(new[] { 2, 3 }, 4);
             Assert.IsFalse(x.IsVector);
             Assert.IsFalse(x.IsMatrix);
@@ -255,8 +255,8 @@ namespace UnitTests
         static Constructors()
         {
             // Needed for test method display
-            ConstantsAndFunctions<BigInteger>.ToString = x => x.ToString();
-            ConstantsAndFunctions<Complex>.ToString = x => x.ToString();
+            ConstantsAndFunctionsForwarder<BigInteger>.ToString = x => x.ToString();
+            ConstantsAndFunctionsForwarder<Complex>.ToString = x => x.ToString();
         }
 
         static IEnumerable<object[]> CreateUninitializedMatrixData =>

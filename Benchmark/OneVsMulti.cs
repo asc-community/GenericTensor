@@ -4,7 +4,7 @@ using GenericTensor.Core;
 
 namespace Benchmark
 {
-    using TS = GenTensor<float>;
+    using TS = GenTensor<float, FloatWrapper>;
 
     public class OneVsMulti
     {

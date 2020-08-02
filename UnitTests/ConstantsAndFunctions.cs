@@ -37,7 +37,7 @@ namespace UnitTests
         [TestMethod]
         public void AllFunctionsThrowWithCorrectMessage()
         {
-            foreach (var m in typeof(ConstantsAndFunctions<object>).GetMethods(Public | Static))
+            foreach (var m in typeof(ConstantsAndFunctionsForwarder<object>).GetMethods(Public | Static))
                 Assert.ThrowsException<System.NotImplementedException>(() =>
                     m.Invoke(null, new object[m.GetParameters().Length]),
                     $"This operation requires ConstantsAndFunctions<System.Object>.{m.Name} to be defined.");

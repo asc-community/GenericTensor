@@ -32,9 +32,9 @@ using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    internal static class DefaultOverridings<T>
+    internal static class DefaultOverridings<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
-        public static string InToString(GenTensor<T> t)
+        public static string InToString(GenTensor<T, TWrapper> t)
         {
             if (t.IsMatrix)
             {
@@ -43,7 +43,7 @@ namespace GenericTensor.Functions
                 for (int i = 0; i < t.Shape[0]; i++)
                 for (int j = 0; j < t.Shape[1]; j++)
                 {
-                    stringArray[i, j] = ConstantsAndFunctions<T>.ToString(t.GetValueNoCheck(i, j));
+                    stringArray[i, j] = default(TWrapper).ToString(t.GetValueNoCheck(i, j));
                     maxLength = Math.Max(maxLength, stringArray[i, j].Length);
                 }
                 var rows = new List<string>();
@@ -67,7 +67,7 @@ namespace GenericTensor.Functions
             {
                 var els = new List<string>();
                 for (int i = 0; i < t.Shape[0]; i++)
-                    els.Add(ConstantsAndFunctions<T>.ToString(t.GetValueNoCheck(i)));
+                    els.Add(default(TWrapper).ToString(t.GetValueNoCheck(i)));
                 return string.Join(" ", els);
             }
             var sb = new StringBuilder();
@@ -83,7 +83,7 @@ namespace GenericTensor.Functions
         }
 
         // TODO: make it faster
-        public static int GetHashCode(GenTensor<T> t)
+        public static int GetHashCode(GenTensor<T, TWrapper> t)
         {
             var res = 0;
             unchecked

@@ -3,7 +3,7 @@ using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    internal static class Inversion<T>
+    internal static class Inversion<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
         /// <summary>
         /// Borrowed from here: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
@@ -11,7 +11,7 @@ namespace GenericTensor.Functions
         /// O(N^2)
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void GetCofactor(GenTensor<T> a, GenTensor<T> temp, int rowId,
+        internal static void GetCofactor(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> temp, int rowId,
             int colId, int diagLength)
         {
             int i = 0, j = 0;
@@ -33,19 +33,19 @@ namespace GenericTensor.Functions
         }
 
         
-        public static GenTensor<T> Adjoint(GenTensor<T> t)
+        public static GenTensor<T, TWrapper> Adjoint(GenTensor<T, TWrapper> t)
         {
             #if ALLOW_EXCEPTIONS
             if (!t.IsSquareMatrix)
                 throw new InvalidShapeException("Matrix should be square");
             #endif
             var diagLength = t.Shape.shape[0];
-            var res = GenTensor<T>.CreateSquareMatrix(diagLength);
+            var res = GenTensor<T, TWrapper>.CreateSquareMatrix(diagLength);
             var temp = SquareMatrixFactory<T>.GetMatrix(diagLength);
 
             if (diagLength == 1)
             {
-                res.SetValueNoCheck(ConstantsAndFunctions<T>.CreateOne(), 0, 0);
+                res.SetValueNoCheck(default(TWrapper).CreateOne(), 0, 0);
                 return res;
             }
 
@@ -59,13 +59,13 @@ namespace GenericTensor.Functions
                 // TODO: is this statement correct?
                 toNegate = (x + y) % 2 == 1;
                 var det = Determinant<T>.DeterminantGaussianSafeDivision(temp, diagLength - 1);
-                res.SetValueNoCheck(toNegate ? ConstantsAndFunctions<T>.Negate(det) : det, y, x);
+                res.SetValueNoCheck(toNegate ? default(TWrapper).Negate(det) : det, y, x);
             }
 
             return res;
         }
 
-        public static void InvertMatrix(GenTensor<T> t)
+        public static void InvertMatrix(GenTensor<T, TWrapper> t)
         {
             #if ALLOW_EXCEPTIONS
             if (!t.IsSquareMatrix)
@@ -76,7 +76,7 @@ namespace GenericTensor.Functions
 
             var det = Determinant<T>.DeterminantGaussianSafeDivision(t);
             #if ALLOW_EXCEPTIONS
-            if (ConstantsAndFunctions<T>.IsZero(det))
+            if (default(TWrapper).IsZero(det))
                 throw new InvalidDeterminantException("Cannot invert a singular matrix");
             #endif
 
@@ -84,7 +84,7 @@ namespace GenericTensor.Functions
             for (int x = 0; x < diagLength; x++)
             for (int y = 0; y < diagLength; y++)
                 t.SetValueNoCheck(
-                    ConstantsAndFunctions<T>.Divide(
+                    default(TWrapper).Divide(
                         adj.GetValueNoCheck(x, y),
                         det
                     ),
@@ -92,7 +92,7 @@ namespace GenericTensor.Functions
                 );
         }
 
-        public static GenTensor<T> MatrixDivide(GenTensor<T> a, GenTensor<T> b)
+        public static GenTensor<T, TWrapper> MatrixDivide(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b)
         {
             #if ALLOW_EXCEPTIONS
             if (!a.IsSquareMatrix || !b.IsSquareMatrix)
@@ -105,7 +105,7 @@ namespace GenericTensor.Functions
             return MatrixMultiplication<T>.Multiply(a, fwd);
         }
 
-        public static GenTensor<T> TensorMatrixDivide(GenTensor<T> a, GenTensor<T> b)
+        public static GenTensor<T, TWrapper> TensorMatrixDivide(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b)
         {
             #if ALLOW_EXCEPTIONS
             InvalidShapeException.NeedTensorSquareMatrix(a);
@@ -114,7 +114,7 @@ namespace GenericTensor.Functions
                 throw new InvalidShapeException("Should be of the same shape");
             #endif
 
-            var res = new GenTensor<T>(a.Shape);
+            var res = new GenTensor<T, TWrapper>(a.Shape);
             foreach (var ind in res.IterateOverMatrices())
                 res.SetSubtensor(
                     MatrixDivide(
@@ -125,7 +125,7 @@ namespace GenericTensor.Functions
             return res;
         }
         
-        public static void TensorMatrixInvert(GenTensor<T> t)
+        public static void TensorMatrixInvert(GenTensor<T, TWrapper> t)
         {
             #if ALLOW_EXCEPTIONS
             InvalidShapeException.NeedTensorSquareMatrix(t);

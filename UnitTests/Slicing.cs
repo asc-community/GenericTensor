@@ -42,7 +42,7 @@ namespace UnitTests
         [TestMethod]
         public void Test1()
         {
-            var A = GenTensor<float>.CreateMatrix(
+            var A = GenTensor<float, FloatWrapper>.CreateMatrix(
                 new float[,]
                 {
                     {1,  2,  3,  4},
@@ -55,7 +55,7 @@ namespace UnitTests
             A.TransposeMatrix();
             var sl2 = A.Slice(1, 3);
             Assert.AreEqual(
-                GenTensor<float>.CreateMatrix(
+                GenTensor<float, FloatWrapper>.CreateMatrix(
                     new float[,]
                     {
                         {5,  6,  7,  8},
@@ -64,7 +64,7 @@ namespace UnitTests
                     ), sl1
                 );
             Assert.AreEqual(
-                GenTensor<float>.CreateMatrix(
+                GenTensor<float, FloatWrapper>.CreateMatrix(
                     new float[,]
                     {
                         {2,  6,  10,  14},

@@ -31,7 +31,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = GenTensor<int>;
+    using TS = GenTensor<int, IntegerWrapper>;
 
     [TestClass]
     public class Determinant
@@ -45,7 +45,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleLaplace1()
         {
-            var M = GenTensor<int>.CreateMatrix(new[,]
+            var M = GenTensor<int, IntegerWrapper>.CreateMatrix(new[,]
             {
                 {1, 2},
                 {3, 4}
@@ -56,7 +56,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleLaplace2()
         {
-            var M = GenTensor<int>.CreateMatrix(new[,]
+            var M = GenTensor<int, IntegerWrapper>.CreateMatrix(new[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
@@ -72,7 +72,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleGaussian1()
         {
-            var M = GenTensor<int>.CreateMatrix(new[,]
+            var M = GenTensor<int, IntegerWrapper>.CreateMatrix(new[,]
             {
                 {1, 2},
                 {3, 4}
@@ -83,7 +83,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleGaussian2()
         {
-            var M = GenTensor<int>.CreateMatrix(new int[,]
+            var M = GenTensor<int, IntegerWrapper>.CreateMatrix(new int[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
@@ -99,7 +99,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleGaussian3()
         {
-            var M = GenTensor<float>.CreateMatrix(new float[,]
+            var M = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {1, 2},
                 {3, 4}
@@ -110,7 +110,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleGaussian4()
         {
-            var M = GenTensor<float>.CreateMatrix(new float[,]
+            var M = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
@@ -122,7 +122,7 @@ namespace UnitTests
         [TestMethod]
         public void TensorLaplace()
         {
-            var T = GenTensor<float>.CreateTensor(new float[,,]
+            var T = GenTensor<float, FloatWrapper>.CreateTensor(new float[,,]
             {
                 {
                     {1, 2}, // -2
@@ -138,7 +138,7 @@ namespace UnitTests
                 }
             });
             Assert.AreEqual(
-                GenTensor<float>.CreateVector(-2, -4, 15),
+                GenTensor<float, FloatWrapper>.CreateVector(-2, -4, 15),
                 T.TensorDeterminantLaplace()
                 );
         }
@@ -146,7 +146,7 @@ namespace UnitTests
         [TestMethod]
         public void TensorGaussian()
         {
-            var T = GenTensor<float>.CreateTensor(new float[,,]
+            var T = GenTensor<float, FloatWrapper>.CreateTensor(new float[,,]
             {
                 {
                     {1, 2}, // -2
@@ -162,7 +162,7 @@ namespace UnitTests
                 }
             });
             Assert.AreEqual(
-                GenTensor<float>.CreateVector(-2, -4, 15),
+                GenTensor<float, FloatWrapper>.CreateVector(-2, -4, 15),
                 T.TensorDeterminantGaussianSafeDivision()
             );
         }
