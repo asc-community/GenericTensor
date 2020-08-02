@@ -31,14 +31,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = GenTensor<int, IntegerWrapper>;
+    using TS = GenTensor<int, IntWrapper>;
 
     [TestClass]
     public class Piecewise
     {
-        GenTensor<int, IntegerWrapper> GetA()
+        GenTensor<int, IntWrapper> GetA()
         {
-            var res = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var res = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     {1, 2},
@@ -48,9 +48,9 @@ namespace UnitTests
             return res;
         }
 
-        GenTensor<int, IntegerWrapper> GetB()
+        GenTensor<int, IntWrapper> GetB()
         {
-            var res = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var res = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     {6, 7},
@@ -60,9 +60,9 @@ namespace UnitTests
             return res;
         }
 
-        GenTensor<int, IntegerWrapper> GetT()
+        GenTensor<int, IntWrapper> GetT()
         {
-            var res = GenTensor<int, IntegerWrapper>.CreateTensor(
+            var res = GenTensor<int, IntWrapper>.CreateTensor(
                 new [,,]
                 {
                     {
@@ -78,9 +78,9 @@ namespace UnitTests
             return res;
         }
 
-        GenTensor<int, IntegerWrapper> GetV()
+        GenTensor<int, IntWrapper> GetV()
         {
-            var res = GenTensor<int, IntegerWrapper>.CreateTensor(
+            var res = GenTensor<int, IntWrapper>.CreateTensor(
                 new []
                 {
                     1, 2, 3
@@ -94,14 +94,14 @@ namespace UnitTests
         [TestMethod]
         public void T1()
         {
-            Assert.AreEqual(GenTensor<int, IntegerWrapper>.CreateVector(2, 4, 6), GenTensor<int, IntegerWrapper>.PiecewiseAdd(GetV(), GetV()));
+            Assert.AreEqual(GenTensor<int, IntWrapper>.CreateVector(2, 4, 6), GenTensor<int, IntWrapper>.PiecewiseAdd(GetV(), GetV()));
         }
 
         [TestMethod]
         public void T3()
         {
             Assert.AreEqual(
-                    GenTensor<int, IntegerWrapper>.CreateTensor(
+                    GenTensor<int, IntWrapper>.CreateTensor(
                         new [,,]
                         {
                             {
@@ -114,7 +114,7 @@ namespace UnitTests
                             },
                         }
                     ),
-                    GenTensor<int, IntegerWrapper>.PiecewiseAdd(GetT(), GetT())
+                    GenTensor<int, IntWrapper>.PiecewiseAdd(GetT(), GetT())
                 );
         }
 
@@ -122,8 +122,8 @@ namespace UnitTests
         public void AddMat()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseAdd(GetA(), GetB()),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseAdd(GetA(), GetB()),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {7,  9},
@@ -137,8 +137,8 @@ namespace UnitTests
         public void SubMat()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseSubtract(GetA(), GetB()),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseSubtract(GetA(), GetB()),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {-5,  -5},
@@ -152,8 +152,8 @@ namespace UnitTests
         public void MpMat()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseMultiply(GetA(), GetB()),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseMultiply(GetA(), GetB()),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {6,  14},
@@ -167,8 +167,8 @@ namespace UnitTests
         public void DivMat()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseDivide(GetA(), GetB()),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseDivide(GetA(), GetB()),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {0, 0},
@@ -182,8 +182,8 @@ namespace UnitTests
         public void AddEl()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseAdd(GetA(), 2),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseAdd(GetA(), 2),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {3, 4},
@@ -196,8 +196,8 @@ namespace UnitTests
         public void SubEl()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseSubtract(GetA(), 2),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseSubtract(GetA(), 2),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {-1, 0},
@@ -210,8 +210,8 @@ namespace UnitTests
         public void MulEl()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseMultiply(GetA(), 2),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseMultiply(GetA(), 2),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {2, 4},
@@ -224,8 +224,8 @@ namespace UnitTests
         public void DivEl()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseDivide(GetA(), 2),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseDivide(GetA(), 2),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {0, 1},
@@ -241,14 +241,14 @@ namespace UnitTests
         [TestMethod]
         public void T1Par()
         {
-            Assert.AreEqual(GenTensor<int, IntegerWrapper>.CreateVector(2, 4, 6), GenTensor<int, IntegerWrapper>.PiecewiseAdd(GetV(), GetV(), Threading.Multi));
+            Assert.AreEqual(GenTensor<int, IntWrapper>.CreateVector(2, 4, 6), GenTensor<int, IntWrapper>.PiecewiseAdd(GetV(), GetV(), Threading.Multi));
         }
 
         [TestMethod]
         public void T3Par()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.CreateTensor(
+                GenTensor<int, IntWrapper>.CreateTensor(
                     new [,,]
                     {
                         {
@@ -261,7 +261,7 @@ namespace UnitTests
                         },
                     }
                 ),
-                GenTensor<int, IntegerWrapper>.PiecewiseAdd(GetT(), GetT(), Threading.Multi)
+                GenTensor<int, IntWrapper>.PiecewiseAdd(GetT(), GetT(), Threading.Multi)
             );
         }
 
@@ -269,8 +269,8 @@ namespace UnitTests
         public void AddMatPar()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseAdd(GetA(), GetB(), Threading.Multi),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseAdd(GetA(), GetB(), Threading.Multi),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {7,  9},
@@ -284,8 +284,8 @@ namespace UnitTests
         public void SubMatPar()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseSubtract(GetA(), GetB(), Threading.Multi),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseSubtract(GetA(), GetB(), Threading.Multi),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {-5,  -5},
@@ -299,8 +299,8 @@ namespace UnitTests
         public void MpMatPar()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseMultiply(GetA(), GetB(), Threading.Multi),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseMultiply(GetA(), GetB(), Threading.Multi),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {6,  14},
@@ -314,8 +314,8 @@ namespace UnitTests
         public void DivMatPar()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseDivide(GetA(), GetB(), Threading.Multi),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseDivide(GetA(), GetB(), Threading.Multi),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {0, 0},
@@ -329,8 +329,8 @@ namespace UnitTests
         public void AddElPar()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseAdd(GetA(), 2, Threading.Multi),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseAdd(GetA(), 2, Threading.Multi),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {3, 4},
@@ -343,8 +343,8 @@ namespace UnitTests
         public void SubElPar()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseSubtract(GetA(), 2, Threading.Multi),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseSubtract(GetA(), 2, Threading.Multi),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {-1, 0},
@@ -357,8 +357,8 @@ namespace UnitTests
         public void MulElPar()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseMultiply(GetA(), 2, Threading.Multi),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseMultiply(GetA(), 2, Threading.Multi),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {2, 4},
@@ -371,8 +371,8 @@ namespace UnitTests
         public void DivElPar()
         {
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.PiecewiseDivide(GetA(), 2, Threading.Multi),
-                GenTensor<int, IntegerWrapper>.CreateMatrix(
+                GenTensor<int, IntWrapper>.PiecewiseDivide(GetA(), 2, Threading.Multi),
+                GenTensor<int, IntWrapper>.CreateMatrix(
                     new [,]
                     {
                         {0, 1},

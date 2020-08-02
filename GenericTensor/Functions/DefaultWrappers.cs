@@ -27,135 +27,97 @@
 
 using System;
 using System.Globalization;
+using System.Numerics;
 using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    public struct IntegerWrapper : IOperations<int>
+    public struct IntWrapper : IOperations<int>
     {
-
-        public int Add(int a, int b)
-        {
-            return a + b;
-        }
-
-        public int Subtract(int a, int b)
-        {
-            return a - b;
-        }
-
-        public int Multiply(int a, int b)
-        {
-            return a * b;
-        }
-
-        public int Negate(int a)
-        {
-            return -a;
-        }
-
-        public int Divide(int a, int b)
-        {
-            return a / b;
-        }
-
-        public int CreateOne()
-        {
-            return 1;
-        }
-
-        public int CreateZero()
-        {
-            return 0;
-        }
-
-        public int Copy(int a)
-        {
-            return a;
-        }
-
-        public int Forward(int a)
-        {
-            return a;
-        }
-
-        public bool AreEqual(int a, int b)
-        {
-            return a == b;
-        }
-
-        public bool IsZero(int a)
-        {
-            return a == 0;
-        }
-
-        public string ToString(int a)
-        {
-            return a.ToString();
-        }
+        public int Add(int a, int b) => a + b;
+        public int Subtract(int a, int b) => a - b;
+        public int Multiply(int a, int b) => a * b;
+        public int Negate(int a) => -a;
+        public int Divide(int a, int b) => a / b;
+        public int CreateOne() => 1;
+        public int CreateZero() => 0;
+        public int Copy(int a) => a;
+        public int Forward(int a) => a;
+        public bool AreEqual(int a, int b) => a == b;
+        public bool IsZero(int a) => a == 0;
+        public string ToString(int a) => a.ToString();
     }
+
+
 
     public struct FloatWrapper : IOperations<float>
     {
+        public float Add(float a, float b) => a + b;
+        public float Subtract(float a, float b) => a - b;
+        public float Multiply(float a, float b) => a * b;
+        public float Negate(float a) => -a;
+        public float Divide(float a, float b) => a / b;
+        public float CreateOne() => 1;
+        public float CreateZero() => 0;
+        public float Copy(float a) => a;
+        public float Forward(float a) => a;
+        public bool AreEqual(float a, float b) => Math.Abs(a - b) < 1e-5;
+        public bool IsZero(float a) => Math.Abs(a) < 1e-5;
+        public string ToString(float a) => a.ToString();
+    }
 
-        public float Add(float a, float b)
-        {
-            return a + b;
-        }
 
-        public float Subtract(float a, float b)
-        {
-            return a - b;
-        }
 
-        public float Multiply(float a, float b)
-        {
-            return a * b;
-        }
+    public struct DoubleWrapper : IOperations<double>
+    {
+        public double Add(double a, double b) => a + b;
+        public double Subtract(double a, double b) => a - b;
+        public double Multiply(double a, double b) => a * b;
+        public double Negate(double a) => -a;
+        public double Divide(double a, double b) => a / b;
+        public double CreateOne() => 1;
+        public double CreateZero() => 0;
+        public double Copy(double a) => a;
+        public double Forward(double a) => a;
+        public bool AreEqual(double a, double b) => Math.Abs(a - b) < 1e-7;
+        public bool IsZero(double a) => Math.Abs(a) < 1e-7;
+        public string ToString(double a) => a.ToString();
+    }
 
-        public float Negate(float a)
-        {
-            return -a;
-        }
 
-        public float Divide(float a, float b)
-        {
-            return a / b;
-        }
 
-        public float CreateOne()
-        {
-            return 1;
-        }
+    public struct ComplexWrapper : IOperations<Complex>
+    {
+        public Complex Add(Complex a, Complex b) => a + b;
+        public Complex Subtract(Complex a, Complex b) => a - b;
+        public Complex Multiply(Complex a, Complex b) => a * b;
+        public Complex Negate(Complex a) => -a;
+        public Complex Divide(Complex a, Complex b) => a / b;
+        public Complex CreateOne() => 1;
+        public Complex CreateZero() => 0;
+        public Complex Copy(Complex a) => a;
+        public Complex Forward(Complex a) => a;
+        public bool AreEqual(Complex a, Complex b) => a == b;
+        public bool IsZero(Complex a) => a == 0;
+        public string ToString(Complex a) => a.ToString();
+    }
 
-        public float CreateZero()
-        {
-            return 0;
-        }
 
-        public float Copy(float a)
-        {
-            return a;
-        }
 
-        public float Forward(float a)
-        {
-            return a;
-        }
-
-        public bool AreEqual(float a, float b)
-        {
-            return Math.Abs(a - b) < 1e-6;
-        }
-
-        public bool IsZero(float a)
-        {
-            return Math.Abs(a) < 1e-6;
-        }
-
-        public string ToString(float a)
-        {
-            return a.ToString();
-        }
+    public struct BigIntWrapper : IOperations<BigInteger>
+    {
+        public BigInteger Add(BigInteger a, BigInteger b) => a + b;
+        public BigInteger Subtract(BigInteger a, BigInteger b) => a - b;
+        public BigInteger Multiply(BigInteger a, BigInteger b) => a * b;
+        public BigInteger Negate(BigInteger a) => -a;
+        public BigInteger Divide(BigInteger a, BigInteger b) => a / b;
+        public BigInteger CreateOne() => 1;
+        public BigInteger CreateZero() => 0;
+        public BigInteger Copy(BigInteger a) => a;
+        public BigInteger Forward(BigInteger a) => a;
+        public bool AreEqual(BigInteger a, BigInteger b) => a == b;
+        public bool IsZero(BigInteger a) => a == 0;
+        public string ToString(BigInteger a) => a.ToString();
     }
 }
+

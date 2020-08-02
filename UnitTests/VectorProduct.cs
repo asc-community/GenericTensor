@@ -42,64 +42,64 @@ namespace UnitTests
         [TestMethod]
         public void TestVectorDotProduct1()
         {
-            var v1 = GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3);
-            var v2 = GenTensor<int, IntegerWrapper>.CreateVector(-3, 5, 3);
-            Assert.AreEqual(16, GenTensor<int, IntegerWrapper>.VectorDotProduct(v1, v2));
+            var v1 = GenTensor<int, IntWrapper>.CreateVector(1, 2, 3);
+            var v2 = GenTensor<int, IntWrapper>.CreateVector(-3, 5, 3);
+            Assert.AreEqual(16, GenTensor<int, IntWrapper>.VectorDotProduct(v1, v2));
         }
 
         [TestMethod]
         public void TestVectorDotProduct2()
         {
-            var v1 = GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3);
-            var v2 = GenTensor<int, IntegerWrapper>.CreateVector(-3, 5);
-            Assert.ThrowsException<InvalidShapeException>(() => GenTensor<int, IntegerWrapper>.VectorDotProduct(v1, v2));
+            var v1 = GenTensor<int, IntWrapper>.CreateVector(1, 2, 3);
+            var v2 = GenTensor<int, IntWrapper>.CreateVector(-3, 5);
+            Assert.ThrowsException<InvalidShapeException>(() => GenTensor<int, IntWrapper>.VectorDotProduct(v1, v2));
         }
 
         [TestMethod]
         public void TestTensorVectorDotProduct1()
         {
-            var v1_1 = GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3);
-            var v1_2 = GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3);
-            var v2_1 = GenTensor<int, IntegerWrapper>.CreateVector(-3, 5, 3);
-            var v2_2 = GenTensor<int, IntegerWrapper>.CreateVector(-3, 5, 3);
-            var v1 = GenTensor<int, IntegerWrapper>.Stack(v1_1, v1_2);
-            var v2 = GenTensor<int, IntegerWrapper>.Stack(v2_1, v2_2);
-            Assert.AreEqual(GenTensor<int, IntegerWrapper>.CreateVector(16, 16), GenTensor<int, IntegerWrapper>.TensorVectorDotProduct(v1, v2));
+            var v1_1 = GenTensor<int, IntWrapper>.CreateVector(1, 2, 3);
+            var v1_2 = GenTensor<int, IntWrapper>.CreateVector(1, 2, 3);
+            var v2_1 = GenTensor<int, IntWrapper>.CreateVector(-3, 5, 3);
+            var v2_2 = GenTensor<int, IntWrapper>.CreateVector(-3, 5, 3);
+            var v1 = GenTensor<int, IntWrapper>.Stack(v1_1, v1_2);
+            var v2 = GenTensor<int, IntWrapper>.Stack(v2_1, v2_2);
+            Assert.AreEqual(GenTensor<int, IntWrapper>.CreateVector(16, 16), GenTensor<int, IntWrapper>.TensorVectorDotProduct(v1, v2));
         }
 
         [TestMethod]
         public void TestTensorVectorDotProduct2()
         {
-            var v1_1 = GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3);
-            var v1_2 = GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3);
-            var v2_1 = GenTensor<int, IntegerWrapper>.CreateVector(-3, 5);
-            var v2_2 = GenTensor<int, IntegerWrapper>.CreateVector(3, 5);
-            var v1 = GenTensor<int, IntegerWrapper>.Stack(v1_1, v1_2);
-            var v2 = GenTensor<int, IntegerWrapper>.Stack(v2_1, v2_2);
-            Assert.ThrowsException<InvalidShapeException>(() => GenTensor<int, IntegerWrapper>.TensorVectorDotProduct(v1, v2));
+            var v1_1 = GenTensor<int, IntWrapper>.CreateVector(1, 2, 3);
+            var v1_2 = GenTensor<int, IntWrapper>.CreateVector(1, 2, 3);
+            var v2_1 = GenTensor<int, IntWrapper>.CreateVector(-3, 5);
+            var v2_2 = GenTensor<int, IntWrapper>.CreateVector(3, 5);
+            var v1 = GenTensor<int, IntWrapper>.Stack(v1_1, v1_2);
+            var v2 = GenTensor<int, IntWrapper>.Stack(v2_1, v2_2);
+            Assert.ThrowsException<InvalidShapeException>(() => GenTensor<int, IntWrapper>.TensorVectorDotProduct(v1, v2));
         }
 
         [TestMethod]
         public void TestVectorCrossProduct1()
         {
-            var v1 = GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3);
-            var v2 = GenTensor<int, IntegerWrapper>.CreateVector(-3, 5, 3);
-            Assert.AreEqual(GenTensor<int, IntegerWrapper>.CreateVector(-9, -12, 11), GenTensor<int, IntegerWrapper>.VectorCrossProduct(v1, v2));
+            var v1 = GenTensor<int, IntWrapper>.CreateVector(1, 2, 3);
+            var v2 = GenTensor<int, IntWrapper>.CreateVector(-3, 5, 3);
+            Assert.AreEqual(GenTensor<int, IntWrapper>.CreateVector(-9, -12, 11), GenTensor<int, IntWrapper>.VectorCrossProduct(v1, v2));
         }
 
         [TestMethod]
         public void TestTensorVectorCrossProduct1()
         {
-            var v1_1 = GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3);
-            var v1_2 = GenTensor<int, IntegerWrapper>.CreateVector(-3, 5, 3);
-            var v2_1 = GenTensor<int, IntegerWrapper>.CreateVector(-3, 5, 3);
-            var v2_2 = GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3);
-            var T1 = GenTensor<int, IntegerWrapper>.Stack(v1_1, v1_2);
-            var T2 = GenTensor<int, IntegerWrapper>.Stack(v2_1, v2_2);
+            var v1_1 = GenTensor<int, IntWrapper>.CreateVector(1, 2, 3);
+            var v1_2 = GenTensor<int, IntWrapper>.CreateVector(-3, 5, 3);
+            var v2_1 = GenTensor<int, IntWrapper>.CreateVector(-3, 5, 3);
+            var v2_2 = GenTensor<int, IntWrapper>.CreateVector(1, 2, 3);
+            var T1 = GenTensor<int, IntWrapper>.Stack(v1_1, v1_2);
+            var T2 = GenTensor<int, IntWrapper>.Stack(v2_1, v2_2);
 
-            var exp = GenTensor<int, IntegerWrapper>.CreateVector(-9, -12, 11);
-            var res = GenTensor<int, IntegerWrapper>.Stack(exp, GenTensor<int, IntegerWrapper>.PiecewiseMultiply(exp, -1));
-            Assert.AreEqual(res, GenTensor<int, IntegerWrapper>.TensorVectorCrossProduct(T1, T2));
+            var exp = GenTensor<int, IntWrapper>.CreateVector(-9, -12, 11);
+            var res = GenTensor<int, IntWrapper>.Stack(exp, GenTensor<int, IntWrapper>.PiecewiseMultiply(exp, -1));
+            Assert.AreEqual(res, GenTensor<int, IntWrapper>.TensorVectorCrossProduct(T1, T2));
         }
     }
 }

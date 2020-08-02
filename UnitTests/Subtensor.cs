@@ -39,9 +39,9 @@ namespace UnitTests
             
         }
 
-        private GenTensor<int, IntegerWrapper> GetSmall()
+        private GenTensor<int, IntWrapper> GetSmall()
         {
-            var res = new GenTensor<int, IntegerWrapper>(2, 3);
+            var res = new GenTensor<int, IntWrapper>(2, 3);
             foreach (var (index, _) in res.Iterate())
             {
                 res[index] = 3 * index[0] + index[1];
@@ -49,9 +49,9 @@ namespace UnitTests
             return res;
         }
 
-        private GenTensor<int, IntegerWrapper> GetBig()
+        private GenTensor<int, IntWrapper> GetBig()
         {
-            var res = new GenTensor<int, IntegerWrapper>(2, 3, 4);
+            var res = new GenTensor<int, IntWrapper>(2, 3, 4);
             foreach (var (index, _) in res.Iterate())
             {
                 res[index] = index[0] * 12 + index[1] * 4 + index[2];
@@ -63,48 +63,48 @@ namespace UnitTests
         public void SubMatrix1()
         {
             var t = GetSmall();
-            Assert.AreEqual(t.GetSubtensor(0), GenTensor<int, IntegerWrapper>.CreateVector(0, 1, 2));
+            Assert.AreEqual(t.GetSubtensor(0), GenTensor<int, IntWrapper>.CreateVector(0, 1, 2));
             t.Transpose(0, 1);
-            Assert.AreEqual(t.GetSubtensor(0), GenTensor<int, IntegerWrapper>.CreateVector(0, 3));
+            Assert.AreEqual(t.GetSubtensor(0), GenTensor<int, IntWrapper>.CreateVector(0, 3));
             t.Transpose(0, 1);
-            Assert.AreEqual(t.GetSubtensor(0), GenTensor<int, IntegerWrapper>.CreateVector(0, 1, 2));
+            Assert.AreEqual(t.GetSubtensor(0), GenTensor<int, IntWrapper>.CreateVector(0, 1, 2));
         }
 
         [TestMethod]
         public void SubMatrix2()
         {
             var t = GetSmall();
-            Assert.AreEqual(t.GetSubtensor(1), GenTensor<int, IntegerWrapper>.CreateVector(3, 4, 5));
+            Assert.AreEqual(t.GetSubtensor(1), GenTensor<int, IntWrapper>.CreateVector(3, 4, 5));
             t.Transpose(0, 1);
-            Assert.AreEqual(t.GetSubtensor(1), GenTensor<int, IntegerWrapper>.CreateVector(1, 4));
+            Assert.AreEqual(t.GetSubtensor(1), GenTensor<int, IntWrapper>.CreateVector(1, 4));
             t.Transpose(0, 1);
-            Assert.AreEqual(t.GetSubtensor(1), GenTensor<int, IntegerWrapper>.CreateVector(3, 4, 5));
+            Assert.AreEqual(t.GetSubtensor(1), GenTensor<int, IntWrapper>.CreateVector(3, 4, 5));
         }
 
         [TestMethod]
         public void SubTensor()
         {
             var t = GetBig();
-            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int, IntegerWrapper>.CreateVector(0, 1, 2, 3));
+            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int, IntWrapper>.CreateVector(0, 1, 2, 3));
             t.Transpose(1, 2);
-            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int, IntegerWrapper>.CreateVector(0, 4, 8));
+            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int, IntWrapper>.CreateVector(0, 4, 8));
             t.Transpose(1, 2);
-            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int, IntegerWrapper>.CreateVector(0, 1, 2, 3));
+            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int, IntWrapper>.CreateVector(0, 1, 2, 3));
 
             t.Transpose(0, 1);
-            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int, IntegerWrapper>.CreateVector(0, 1, 2, 3));
-            Assert.AreEqual(t.GetSubtensor(new []{0, 1}), GenTensor<int, IntegerWrapper>.CreateVector(12 + 0, 12 + 1, 12 + 2, 12 + 3));
+            Assert.AreEqual(t.GetSubtensor(new []{0, 0}), GenTensor<int, IntWrapper>.CreateVector(0, 1, 2, 3));
+            Assert.AreEqual(t.GetSubtensor(new []{0, 1}), GenTensor<int, IntWrapper>.CreateVector(12 + 0, 12 + 1, 12 + 2, 12 + 3));
         }
 
         [TestMethod]
         public void SubMatrixSet()
         {
             var t = GetSmall();
-            t.SetSubtensor(GenTensor<int, IntegerWrapper>.CreateVector(10, 10, 10), 1);
+            t.SetSubtensor(GenTensor<int, IntWrapper>.CreateVector(10, 10, 10), 1);
             var k = t.ToString();
             t.Transpose(0, 1);
-            Assert.AreEqual(t.GetSubtensor(0), GenTensor<int, IntegerWrapper>.CreateVector(0, 10));
-            Assert.AreEqual(t.GetSubtensor(1), GenTensor<int, IntegerWrapper>.CreateVector(1, 10));
+            Assert.AreEqual(t.GetSubtensor(0), GenTensor<int, IntWrapper>.CreateVector(0, 10));
+            Assert.AreEqual(t.GetSubtensor(1), GenTensor<int, IntWrapper>.CreateVector(1, 10));
         }
     }
 }

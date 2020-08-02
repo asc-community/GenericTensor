@@ -31,7 +31,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = GenTensor<int, IntegerWrapper>;
+    using TS = GenTensor<int, IntWrapper>;
 
     [TestClass]
     public class Determinant
@@ -45,7 +45,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleLaplace1()
         {
-            var M = GenTensor<int, IntegerWrapper>.CreateMatrix(new[,]
+            var M = GenTensor<int, IntWrapper>.CreateMatrix(new[,]
             {
                 {1, 2},
                 {3, 4}
@@ -56,7 +56,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleLaplace2()
         {
-            var M = GenTensor<int, IntegerWrapper>.CreateMatrix(new[,]
+            var M = GenTensor<int, IntWrapper>.CreateMatrix(new[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
@@ -72,7 +72,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleGaussian1()
         {
-            var M = GenTensor<int, IntegerWrapper>.CreateMatrix(new[,]
+            var M = GenTensor<int, IntWrapper>.CreateMatrix(new[,]
             {
                 {1, 2},
                 {3, 4}
@@ -83,7 +83,7 @@ namespace UnitTests
         [TestMethod]
         public void SimpleGaussian2()
         {
-            var M = GenTensor<int, IntegerWrapper>.CreateMatrix(new int[,]
+            var M = GenTensor<int, IntWrapper>.CreateMatrix(new int[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},

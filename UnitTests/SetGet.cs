@@ -40,7 +40,7 @@ namespace UnitTests
             
         }
 
-        private GenTensor<int, IntegerWrapper> GetT() => new GenTensor<int, IntegerWrapper>(2, 3, 4);
+        private GenTensor<int, IntWrapper> GetT() => new GenTensor<int, IntWrapper>(2, 3, 4);
 
         [TestMethod]
         public void SetGet1()

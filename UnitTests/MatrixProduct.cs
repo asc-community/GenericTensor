@@ -42,13 +42,13 @@ namespace UnitTests
         [TestMethod]
         public void MatrixDotProduct1()
         {
-            var A = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var A = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 12, -1, 1 },
                     { 0,   1, 4 },
                 });
-            var B = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var B = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 1, -1 },
@@ -59,7 +59,7 @@ namespace UnitTests
 
             A.TransposeMatrix();
             B.TransposeMatrix();
-            Assert.AreEqual(GenTensor<int, IntegerWrapper>.MatrixMultiply(A, B), GenTensor<int, IntegerWrapper>.CreateMatrix(
+            Assert.AreEqual(GenTensor<int, IntWrapper>.MatrixMultiply(A, B), GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 12, 0, 36, 0 },
@@ -72,23 +72,23 @@ namespace UnitTests
         [TestMethod]
         public void MatrixTensorMp()
         {
-            var a = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var a = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 1, 2 },
                     { 3, 4 }
                 }
                 );
-            var b = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var b = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 5, 7 },
                     { 6, 8 }
                 }
             );
-            var T1 = GenTensor<int, IntegerWrapper>.Stack(a, b);
+            var T1 = GenTensor<int, IntWrapper>.Stack(a, b);
 
-            var c = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var c = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { -3, 2 },
@@ -96,7 +96,7 @@ namespace UnitTests
                 }
             );
 
-            var d = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var d = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { -3, 2 },
@@ -104,9 +104,9 @@ namespace UnitTests
                 }
             );
 
-            var T2 = GenTensor<int, IntegerWrapper>.Stack(c, d);
+            var T2 = GenTensor<int, IntWrapper>.Stack(c, d);
 
-            var exp1 = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var exp1 = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 3, 12 },
@@ -114,7 +114,7 @@ namespace UnitTests
                 }
             );
 
-            var exp2 = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var exp2 = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 146, 45 },
@@ -122,21 +122,21 @@ namespace UnitTests
                 }
             );
 
-            var exp = GenTensor<int, IntegerWrapper>.Stack(exp1, exp2);
+            var exp = GenTensor<int, IntWrapper>.Stack(exp1, exp2);
 
-            Assert.AreEqual(exp, GenTensor<int, IntegerWrapper>.TensorMatrixMultiply(T1, T2));
+            Assert.AreEqual(exp, GenTensor<int, IntWrapper>.TensorMatrixMultiply(T1, T2));
         }
 
         [TestMethod]
         public void MatrixDotProduct1Par()
         {
-            var A = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var A = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 12, -1, 1 },
                     { 0,   1, 4 },
                 });
-            var B = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var B = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 1, -1 },
@@ -147,7 +147,7 @@ namespace UnitTests
 
             A.TransposeMatrix();
             B.TransposeMatrix();
-            Assert.AreEqual(GenTensor<int, IntegerWrapper>.MatrixMultiply(A, B, Threading.Multi), GenTensor<int, IntegerWrapper>.CreateMatrix(
+            Assert.AreEqual(GenTensor<int, IntWrapper>.MatrixMultiply(A, B, Threading.Multi), GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 12, 0, 36, 0 },
@@ -160,23 +160,23 @@ namespace UnitTests
         [TestMethod]
         public void MatrixTensorMpPar()
         {
-            var a = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var a = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 1, 2 },
                     { 3, 4 }
                 }
                 );
-            var b = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var b = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 5, 7 },
                     { 6, 8 }
                 }
             );
-            var T1 = GenTensor<int, IntegerWrapper>.Stack(a, b);
+            var T1 = GenTensor<int, IntWrapper>.Stack(a, b);
 
-            var c = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var c = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { -3, 2 },
@@ -184,7 +184,7 @@ namespace UnitTests
                 }
             );
 
-            var d = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var d = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { -3, 2 },
@@ -192,9 +192,9 @@ namespace UnitTests
                 }
             );
 
-            var T2 = GenTensor<int, IntegerWrapper>.Stack(c, d);
+            var T2 = GenTensor<int, IntWrapper>.Stack(c, d);
 
-            var exp1 = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var exp1 = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 3, 12 },
@@ -202,7 +202,7 @@ namespace UnitTests
                 }
             );
 
-            var exp2 = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var exp2 = GenTensor<int, IntWrapper>.CreateMatrix(
                 new [,]
                 {
                     { 146, 45 },
@@ -210,9 +210,9 @@ namespace UnitTests
                 }
             );
 
-            var exp = GenTensor<int, IntegerWrapper>.Stack(exp1, exp2);
+            var exp = GenTensor<int, IntWrapper>.Stack(exp1, exp2);
 
-            Assert.AreEqual(exp, GenTensor<int, IntegerWrapper>.TensorMatrixMultiply(T1, T2, Threading.Multi));
+            Assert.AreEqual(exp, GenTensor<int, IntWrapper>.TensorMatrixMultiply(T1, T2, Threading.Multi));
         }
     }
 }

@@ -31,7 +31,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = GenTensor<int, IntegerWrapper>;
+    using TS = GenTensor<int, IntWrapper>;
 
     [TestClass]
     public class Power

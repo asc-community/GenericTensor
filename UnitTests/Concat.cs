@@ -42,7 +42,7 @@ namespace UnitTests
         [TestMethod]
         public void Matrices()
         {
-            var mat1 = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var mat1 = GenTensor<int, IntWrapper>.CreateMatrix(
                 new[,]
                 {
                     {1, 2},
@@ -51,7 +51,7 @@ namespace UnitTests
                 }
                 );
 
-            var mat2 = GenTensor<int, IntegerWrapper>.CreateMatrix(
+            var mat2 = GenTensor<int, IntWrapper>.CreateMatrix(
                 new[,]
                 {
                     {7, 8},
@@ -60,7 +60,7 @@ namespace UnitTests
             );
 
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.CreateMatrix(new [,]
+                GenTensor<int, IntWrapper>.CreateMatrix(new [,]
                 {
                     {1, 2},
                     {3, 4},
@@ -68,18 +68,18 @@ namespace UnitTests
                     {7, 8},
                     {9, 10}
                 }),
-                GenTensor<int, IntegerWrapper>.Concat(mat1, mat2)
+                GenTensor<int, IntWrapper>.Concat(mat1, mat2)
                 );
         }
 
         [TestMethod]
         public void Vecs()
         {
-            var vec1 = GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3);
-            var vec2 = GenTensor<int, IntegerWrapper>.CreateVector(4, 5);
+            var vec1 = GenTensor<int, IntWrapper>.CreateVector(1, 2, 3);
+            var vec2 = GenTensor<int, IntWrapper>.CreateVector(4, 5);
             Assert.AreEqual(
-                GenTensor<int, IntegerWrapper>.CreateVector(1, 2, 3, 4, 5),
-                GenTensor<int, IntegerWrapper>.Concat(vec1, vec2)
+                GenTensor<int, IntWrapper>.CreateVector(1, 2, 3, 4, 5),
+                GenTensor<int, IntWrapper>.Concat(vec1, vec2)
                 );
         }
     }
