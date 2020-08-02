@@ -42,7 +42,7 @@ namespace GenericTensor.Functions
             #endif
             var res = new GenTensor<T>(a.Shape);
 
-            var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 8000);
+            var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 850);
 
 
             if (!parallel)

@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Collections.Generic;
+using BenchmarkDotNet.Attributes;
 using GenericTensor.Core;
 
 namespace Benchmark
@@ -14,35 +15,22 @@ namespace Benchmark
             => TS.CreateTensor(new TensorShape(width, size, size), (ind) => ind[0] + ind[1] + ind[2], Threading.Multi);
 
         private TS created;
-        private int width;
 
-        [Params(3, 10, 20)]
-        public int Width
+        private Dictionary<(int width, int height), TS> storage = new Dictionary<(int width, int height), TS>();
+
+        private TS GetT(int width, int height)
         {
-            get => width;
-            set
-            {
-                width = value;
-                if (Height != 0)
-                    created = CreateTensor(Width, Height);
-            }
-        }
-        
-
-        private int height;
-
-        [Params(3, 10, 20)]
-        public int Height
-        {
-            get => height;
-            set
-            {
-                height = value;
-                if (Width != 0)
-                    created = CreateTensor(Width, Height);
-            }
+            var key = (width, height);
+            if (!storage.ContainsKey(key))
+                storage[key] = CreateTensor(width, height);
+            return storage[key];
         }
 
+
+        [Params(5, 15)] public int Width { set; get; }
+        [Params(5, 15)] public int Height { set; get; }
+
+        /*
         [Benchmark]
         public void CreatingTensor()
             => CreateTensor(Width, Height);
@@ -50,22 +38,22 @@ namespace Benchmark
         [Benchmark]
         public void CreatingTensorPar()
             => CreateTensorPar(Width, Height);
-
+            */
         [Benchmark]
         public void Multiply()
-            => TS.TensorMatrixMultiply(created, created);
+            => TS.TensorMatrixMultiply(GetT(Width, Height), GetT(Width, Height));
 
         [Benchmark]
         public void MultiplyPar()
-            => TS.TensorMatrixMultiply(created, created, Threading.Multi);
+            => TS.TensorMatrixMultiply(GetT(Width, Height), GetT(Width, Height), Threading.Multi);
 
         [Benchmark]
         public void PiecewiseMultiply()
-            => TS.PiecewiseMultiply(created, created);
+            => TS.PiecewiseMultiply(GetT(Width, Height), GetT(Width, Height));
 
         [Benchmark]
         public void PiecewiseMultiplyPar()
-            => TS.PiecewiseMultiply(created, created, Threading.Multi);
+            => TS.PiecewiseMultiply(GetT(Width, Height), GetT(Width, Height), Threading.Multi);
 
     }
 }
