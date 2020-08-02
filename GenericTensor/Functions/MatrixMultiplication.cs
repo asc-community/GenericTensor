@@ -48,7 +48,7 @@ namespace GenericTensor.Functions
             var row = a.Shape[1];
             var res = Constructors<T>.CreateMatrix(width, height);
 
-            var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 400);
+            var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 125);
 
             if (!parallel)
             {
