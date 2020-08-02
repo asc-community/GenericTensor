@@ -41,7 +41,7 @@ namespace GenericTensor.Functions
             #endif
             var diagLength = t.Shape.shape[0];
             var res = GenTensor<T, TWrapper>.CreateSquareMatrix(diagLength);
-            var temp = SquareMatrixFactory<T>.GetMatrix(diagLength);
+            var temp = SquareMatrixFactory<T, TWrapper>.GetMatrix(diagLength);
 
             if (diagLength == 1)
             {
@@ -58,7 +58,7 @@ namespace GenericTensor.Functions
 
                 // TODO: is this statement correct?
                 toNegate = (x + y) % 2 == 1;
-                var det = Determinant<T>.DeterminantGaussianSafeDivision(temp, diagLength - 1);
+                var det = Determinant<T, TWrapper>.DeterminantGaussianSafeDivision(temp, diagLength - 1);
                 res.SetValueNoCheck(toNegate ? default(TWrapper).Negate(det) : det, y, x);
             }
 
@@ -74,7 +74,7 @@ namespace GenericTensor.Functions
 
             var diagLength = t.Shape.shape[0];
 
-            var det = Determinant<T>.DeterminantGaussianSafeDivision(t);
+            var det = Determinant<T, TWrapper>.DeterminantGaussianSafeDivision(t);
             #if ALLOW_EXCEPTIONS
             if (default(TWrapper).IsZero(det))
                 throw new InvalidDeterminantException("Cannot invert a singular matrix");
@@ -102,7 +102,7 @@ namespace GenericTensor.Functions
             #endif
             var fwd = b.Forward();
             fwd.InvertMatrix();
-            return MatrixMultiplication<T>.Multiply(a, fwd);
+            return MatrixMultiplication<T, TWrapper>.Multiply(a, fwd);
         }
 
         public static GenTensor<T, TWrapper> TensorMatrixDivide(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b)

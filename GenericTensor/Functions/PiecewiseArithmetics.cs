@@ -115,32 +115,32 @@ namespace GenericTensor.Functions
 
         public static GenTensor<T, TWrapper> PiecewiseAdd(GenTensor<T, TWrapper> a,
             T b, Threading threading)
-            => Constructors<T>.CreateTensor(a.Shape, ind => 
+            => Constructors<T, TWrapper>.CreateTensor(a.Shape, ind => 
                 default(TWrapper).Add(a[ind], b), threading);
 
         public static GenTensor<T, TWrapper> PiecewiseSubtract(GenTensor<T, TWrapper> a,
             T b, Threading threading)
-            => Constructors<T>.CreateTensor(a.Shape, ind => 
+            => Constructors<T, TWrapper>.CreateTensor(a.Shape, ind => 
                 default(TWrapper).Subtract(a[ind], b), threading);
 
         public static GenTensor<T, TWrapper> PiecewiseSubtract(
             T a, GenTensor<T, TWrapper> b, Threading threading)
-            => Constructors<T>.CreateTensor(b.Shape, ind => 
+            => Constructors<T, TWrapper>.CreateTensor(b.Shape, ind => 
                 default(TWrapper).Subtract(a, b[ind]), threading);
 
         public static GenTensor<T, TWrapper> PiecewiseMultiply(GenTensor<T, TWrapper> a,
             T b, Threading threading)
-            => Constructors<T>.CreateTensor(a.Shape, ind => 
+            => Constructors<T, TWrapper>.CreateTensor(a.Shape, ind => 
                 default(TWrapper).Multiply(a[ind], b), threading);
 
         public static GenTensor<T, TWrapper> PiecewiseDivide(GenTensor<T, TWrapper> a,
             T b, Threading threading)
-            => Constructors<T>.CreateTensor(a.Shape, ind => 
+            => Constructors<T, TWrapper>.CreateTensor(a.Shape, ind => 
                 default(TWrapper).Divide(a[ind], b), threading);
 
         public static GenTensor<T, TWrapper> PiecewiseDivide(
             T a, GenTensor<T, TWrapper> b, Threading threading)
-            => Constructors<T>.CreateTensor(b.Shape, ind => 
+            => Constructors<T, TWrapper>.CreateTensor(b.Shape, ind => 
                 default(TWrapper).Divide(a, b[ind]), threading);
     }
 }

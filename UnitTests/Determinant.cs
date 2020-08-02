@@ -38,8 +38,8 @@ namespace UnitTests
     {
         public Determinant()
         {
-            BuiltinTypeInitter.InitForInt();
-            BuiltinTypeInitter.InitForFloat();
+            
+            
         }
 
         [TestMethod]

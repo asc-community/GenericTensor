@@ -36,7 +36,7 @@ namespace UnitTests
     {
         public VectorProduct()
         {
-            BuiltinTypeInitter.InitForInt();
+            
         }
 
         [TestMethod]

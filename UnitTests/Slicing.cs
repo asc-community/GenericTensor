@@ -36,7 +36,7 @@ namespace UnitTests
     {
         public Slicing()
         {
-            BuiltinTypeInitter.InitForFloat();
+            
         }
 
         [TestMethod]

@@ -34,6 +34,7 @@ namespace UnitTests
     [TestClass]
     public class ConstantsAndFunctions
     {
+        /*
         [TestMethod]
         public void AllFunctionsThrowWithCorrectMessage()
         {
@@ -41,6 +42,6 @@ namespace UnitTests
                 Assert.ThrowsException<System.NotImplementedException>(() =>
                     m.Invoke(null, new object[m.GetParameters().Length]),
                     $"This operation requires ConstantsAndFunctions<System.Object>.{m.Name} to be defined.");
-        }
+        }*/
     }
 }

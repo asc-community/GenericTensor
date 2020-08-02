@@ -11,7 +11,7 @@ namespace Benchmark
     {
         public MatrixBenchmark()
         {
-            BuiltinTypeInitter.InitForFloat();
+            
         }
 
         static TS CreateMatrix(int size)

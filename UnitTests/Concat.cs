@@ -36,7 +36,7 @@ namespace UnitTests
     {
         public Concat()
         {
-            BuiltinTypeInitter.InitForInt();
+            
         }
 
         [TestMethod]

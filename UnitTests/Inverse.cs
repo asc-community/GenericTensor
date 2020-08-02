@@ -36,7 +36,7 @@ namespace UnitTests
     {
         public Inverse()
         {
-            BuiltinTypeInitter.InitForFloat();
+            
         }
 
         [TestMethod]

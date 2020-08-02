@@ -36,7 +36,7 @@ namespace UnitTests
     {
         public Subtensor()
         {
-            BuiltinTypeInitter.InitForInt();
+            
         }
 
         private GenTensor<int, IntegerWrapper> GetSmall()

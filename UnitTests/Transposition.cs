@@ -36,7 +36,7 @@ namespace UnitTests
     {
         public Transposition()
         {
-            BuiltinTypeInitter.InitForInt();
+            
         }
 
         private GenTensor<int, IntegerWrapper> GetBig()

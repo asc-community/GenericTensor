@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using GenericTensor.Core;
+using GenericTensor.Functions;
 
 namespace Benchmark
 {

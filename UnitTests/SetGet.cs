@@ -37,7 +37,7 @@ namespace UnitTests
     {
         public GetSet()
         {
-            BuiltinTypeInitter.InitForInt();
+            
         }
 
         private GenTensor<int, IntegerWrapper> GetT() => new GenTensor<int, IntegerWrapper>(2, 3, 4);
