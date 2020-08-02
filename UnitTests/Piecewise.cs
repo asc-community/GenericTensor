@@ -65,7 +65,63 @@ namespace UnitTests
             return res;
         }
 
+        GenTensor<int> GetT()
+        {
+            var res = GenTensor<int>.CreateTensor(
+                new [,,]
+                {
+                    {
+                        {1, 2},
+                        {3, 4}
+                    },
+                    {
+                        {5, 6},
+                        {7, 8}
+                    },
+                }
+            );
+            return res;
+        }
+
+        GenTensor<int> GetV()
+        {
+            var res = GenTensor<int>.CreateTensor(
+                new []
+                {
+                    1, 2, 3
+                }
+            );
+            return res;
+        }
+
         #region One thread
+
+        [TestMethod]
+        public void T1()
+        {
+            Assert.AreEqual(GenTensor<int>.CreateVector(2, 4, 6), GenTensor<int>.PiecewiseAdd(GetV(), GetV()));
+        }
+
+        [TestMethod]
+        public void T3()
+        {
+            Assert.AreEqual(
+                    GenTensor<int>.CreateTensor(
+                        new [,,]
+                        {
+                            {
+                                {2, 4},
+                                {6, 8}
+                            },
+                            {
+                                {10, 12},
+                                {14, 16}
+                            },
+                        }
+                    ),
+                    GenTensor<int>.PiecewiseAdd(GetT(), GetT())
+                );
+        }
 
         [TestMethod]
         public void AddMat()
@@ -186,6 +242,33 @@ namespace UnitTests
         #endregion
 
         #region Parallel
+
+        [TestMethod]
+        public void T1Par()
+        {
+            Assert.AreEqual(GenTensor<int>.CreateVector(2, 4, 6), GenTensor<int>.PiecewiseAdd(GetV(), GetV(), Threading.Multi));
+        }
+
+        [TestMethod]
+        public void T3Par()
+        {
+            Assert.AreEqual(
+                GenTensor<int>.CreateTensor(
+                    new [,,]
+                    {
+                        {
+                            {2, 4},
+                            {6, 8}
+                        },
+                        {
+                            {10, 12},
+                            {14, 16}
+                        },
+                    }
+                ),
+                GenTensor<int>.PiecewiseAdd(GetT(), GetT(), Threading.Multi)
+            );
+        }
 
         [TestMethod]
         public void AddMatPar()
