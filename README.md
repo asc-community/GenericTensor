@@ -336,7 +336,26 @@ Works for O(V)
 
 ## Performance
 
-We know how important it is to use fast tools. That is why we prepared a report via Dot Net Benchmark:
+We know how important it is to use fast tools. That is why we prepared a report via Dot Net Benchmark.
+
+Conditions: i7-7700HQ (4 cores, 8 threads) with minimum background activity.
+
+Short version:
+
+|                      Method |              Mean |                          Explanation |
+|---------------------------- |------------------:|-------------------------------------:|
+|          MatrixAndGaussian6 |          4,418 ns | Det via Gaussian elim on M 6x6       |
+|            CreatingMatrix20 |          1,580 ns | Init matrix 20x20                    |
+|            CreatingMatrix50 |          9,066 ns | Init matrix 50x50                    |
+|                 Transpose20 |              3 ns | Transpose matrix 20x20               |
+|          MatrixAndMultiply6 |          2,156 ns | Multiply two matrices 6x6            |
+|         MatrixAndMultiply20 |         74,956 ns | Multiply two matrices 20x20          |
+|              MatrixAndAdd20 |          4,854 ns | Piecewise addition on M 20x20        |
+|             MatrixAndAdd100 |        111,424 ns | Piecewise addition on M 100x100      |
+|                SafeIndexing |            481 ns | Addressing to [i, j] with checks     |
+|                FastIndexing |            247 ns | Addressing to [i, j] w/0 checks      |
+
+<details><summary><strong>Full report</strong></summary>
 
 |                      Method |              Mean |                          Explanation |
 |---------------------------- |------------------:|-------------------------------------:|
@@ -362,4 +381,55 @@ We know how important it is to use fast tools. That is why we prepared a report 
 |                SafeIndexing |            481 ns | Addressing to [i, j] with checks     |
 |                FastIndexing |            247 ns | Addressing to [i, j] w/0 checks      |
 
-Machine: i7-7700HQ (4 cores, 8 threads) with minimum background activity.
+</details>
+
+<details><summary><strong>Multihreading</strong></summary>
+
+Multithreading is a useful tool if you want to make computations faster. We do not support GPU computations and never will because our aim to keep GenericTensor supporting
+custom type, while GPU only works with fixed types like `int`, `float`, and a few others.
+
+However, even on CPU it is sometimes better to keep single-core computations. So here we find out when it is better to keep single and where it is better to switch to
+multi-core.
+
+#### Matrix multiplication
+
+<img src="./Benchmark/matrixmultiplication.png">
+
+<details><summary>Raw data</summary>
+
+|               Method | Width | Height |       Mean |      Error |     StdDev |     Median |
+|--------------------- |------ |------- |-----------:|-----------:|-----------:|-----------:|
+|             Multiply |     5 |      5 |  15.586 us |  0.1910 us |  0.1693 us |  15.547 us |
+|          MultiplyPar |     5 |      5 |  15.947 us |  0.2838 us |  0.2655 us |  15.993 us |
+|             Multiply |    15 |      5 |  45.978 us |  0.6593 us |  0.6167 us |  45.999 us |
+|          MultiplyPar |    15 |      5 |  26.951 us |  0.3766 us |  0.3338 us |  26.915 us |
+|             Multiply |     5 |     15 | 209.747 us |  4.0958 us | 11.2810 us | 205.307 us |
+|          MultiplyPar |     5 |     15 |  88.836 us |  1.0807 us |  0.9025 us |  89.268 us |
+|             Multiply |    15 |     15 | 609.780 us | 12.1927 us | 13.0461 us | 607.876 us |
+|          MultiplyPar |    15 |     15 | 204.045 us |  3.7626 us |  3.3354 us | 203.853 us |
+
+`Par` at the end of the name means one is ran in parallel mode (multithreading). The tensor is of size `Width` x `Height` x `Height`
+
+</details>
+
+
+#### Piecewise product
+
+<img src="./Benchmark/piecewisemultiplication.png">
+
+<details><summary>Raw data</summary>
+|               Method | Width | Height |       Mean |      Error |     StdDev |     Median |
+|    PiecewiseMultiply |     5 |      5 |   2.033 us |  0.0403 us |  0.0651 us |   2.043 us |
+| PiecewiseMultiplyPar |     5 |      5 |   5.014 us |  0.0346 us |  0.0307 us |   5.020 us |
+|    PiecewiseMultiply |    15 |      5 |   5.329 us |  0.0658 us |  0.0583 us |   5.329 us |
+| PiecewiseMultiplyPar |    15 |      5 |   8.071 us |  0.0351 us |  0.0328 us |   8.074 us |
+|    PiecewiseMultiply |     5 |     15 |  16.301 us |  0.3177 us |  0.3782 us |  16.179 us |
+| PiecewiseMultiplyPar |     5 |     15 |  13.042 us |  0.0530 us |  0.0496 us |  13.042 us |
+|    PiecewiseMultiply |    15 |     15 |  46.757 us |  0.7590 us |  0.7100 us |  46.892 us |
+| PiecewiseMultiplyPar |    15 |     15 |  24.539 us |  0.4893 us |  1.0322 us |  24.528 us |
+
+`Par` at the end of the name means one is ran in parallel mode (multithreading). The tensor is of size `Width` x `Height` x `Height`
+
+</details>
+
+</details>
