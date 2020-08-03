@@ -32,6 +32,13 @@ using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
+    public sealed class IntTensor : GenTensor<int, IntWrapper> { }
+    public sealed class LongTensor : GenTensor<long, LongWrapper> { }
+    public sealed class FloatTensor : GenTensor<float, FloatWrapper> { }
+    public sealed class DoubleTensor : GenTensor<double, DoubleWrapper> { }
+    public sealed class ComplexTensor : GenTensor<Complex, ComplexWrapper> { }
+    public sealed class BigIntTensor : GenTensor<BigInteger, BigIntWrapper> { }
+
     public struct IntWrapper : IOperations<int>
     {
         public int Add(int a, int b) => a + b;
@@ -46,6 +53,22 @@ namespace GenericTensor.Functions
         public bool AreEqual(int a, int b) => a == b;
         public bool IsZero(int a) => a == 0;
         public string ToString(int a) => a.ToString();
+    }
+
+    public struct LongWrapper : IOperations<long>
+    {
+        public long Add(long a, long b) => a + b;
+        public long Subtract(long a, long b) => a - b;
+        public long Multiply(long a, long b) => a * b;
+        public long Negate(long a) => -a;
+        public long Divide(long a, long b) => a / b;
+        public long CreateOne() => 1;
+        public long CreateZero() => 0;
+        public long Copy(long a) => a;
+        public long Forward(long a) => a;
+        public bool AreEqual(long a, long b) => a == b;
+        public bool IsZero(long a) => a == 0;
+        public string ToString(long a) => a.ToString();
     }
 
 

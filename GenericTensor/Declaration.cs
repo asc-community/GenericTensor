@@ -304,8 +304,8 @@ namespace GenericTensor.Core
         /// [i, j, k...]th element of the resulting tensor is
         /// operation(a[i, j, k...], b[i, j, k...])
         /// </summary>
-        public static GenTensor<T, TWrapper> Zip(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b, Func<T, T, T> operation)
-            => PiecewiseArithmetics<T, TWrapper>.Zip(a, b, operation);
+        public static GenTensor<T, TWrapper> Zip<TOperator>(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b) where TOperator : struct, IZipOperator<T>
+            => PiecewiseArithmetics<T, TWrapper>.Zip<TOperator>(a, b);
 
         /// <summary>
         /// T1 + T2
@@ -395,14 +395,14 @@ namespace GenericTensor.Core
         ///
         /// O(log(power) * N^3)
         /// </summary>
-        public GenTensor<T, TWrapper> MatrixPower(int power)
-            => Power<T, TWrapper>.MatrixPower(this, power);
+        public GenTensor<T, TWrapper> MatrixPower(int power, Threading threading = Threading.Single)
+            => Power<T, TWrapper>.MatrixPower(this, power, threading);
 
         /// <summary>
         /// Performs MatrixPower operation on all matrices from this tensor
         /// </summary>
-        public GenTensor<T, TWrapper> TensorMatrixPower(int power)
-            => Power<T, TWrapper>.TensorMatrixPower(this, power);
+        public GenTensor<T, TWrapper> TensorMatrixPower(int power, Threading threading = Threading.Single)
+            => Power<T, TWrapper>.TensorMatrixPower(this, power, threading);
 
         #endregion
 

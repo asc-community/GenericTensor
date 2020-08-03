@@ -81,7 +81,7 @@ namespace Benchmark
 
         [Benchmark] public void MatrixAndAdd100Parallel()
             => TS.PiecewiseAdd(createdMatrix100, createdMatrix100, Threading.Multi);
-
+        
         [Benchmark] public void SafeIndexing()
         {
             for (int i = 0; i < createdMatrix9.Shape[0]; i++)
@@ -99,6 +99,5 @@ namespace Benchmark
                 var c = createdMatrix9.GetValueNoCheck(i, j);
             }
         }
-        
     }
 }

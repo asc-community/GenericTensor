@@ -26,15 +26,23 @@
 
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
+    public interface IZipOperator<T>
+    {
+        T Operation(T a, T b);
+    }
+
     internal static class PiecewiseArithmetics<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
-        public static GenTensor<T, TWrapper> Zip(GenTensor<T, TWrapper> a,
-            GenTensor<T, TWrapper> b, Func<T, T, T> operation, Threading threading = Threading.Single)
+        
+
+        public static GenTensor<T, TWrapper> Zip<TOperator>(GenTensor<T, TWrapper> a,
+            GenTensor<T, TWrapper> b, Threading threading = Threading.Single) where TOperator : struct, IZipOperator<T>
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
@@ -47,39 +55,47 @@ namespace GenericTensor.Functions
 
             if (!parallel)
             {
+                switch (res.Shape.shape.Length)
+                {
 
-                if (res.Shape.shape.Length == 1)
-                    for (int x = 0; x < res.Shape.shape[0]; x++)
-                        res.data[x] = default(TWrapper).Forward(
-                            operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
-                else if (res.Shape.shape.Length == 2)
-                    for (int x = 0; x < res.Shape.shape[0]; x++)
-                    for (int y = 0; y < res.Shape.shape[1]; y++)
-                        res.data[x * res.blocks[0] + y] = default(TWrapper).Forward(
-                            operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
-                else if (res.Shape.shape.Length == 3)
-                    for (int x = 0; x < res.Shape.shape[0]; x++)
-                    for (int y = 0; y < res.Shape.shape[1]; y++)
-                    for (int z = 0; z < res.Shape.shape[2]; z++)
-                        res.data[x * res.blocks[0] + y * res.blocks[1] + z] = default(TWrapper).Forward(
-                            operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z)));
-                else
-                    foreach (var index in res.IterateOverElements())
-                        res.SetValueNoCheck(default(TWrapper).Forward(
-                            operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))), index);
+                    case 1:
+                        for (int x = 0; x < res.Shape.shape[0]; x++)
+                            res.data[x] = default(TWrapper).Forward(
+                                default(TOperator).Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
+                        break;
+                    case 2:
+                        for (int x = 0; x < res.Shape.shape[0]; x++)
+                        for (int y = 0; y < res.Shape.shape[1]; y++)
+                            res.data[x * res.blocks[0] + y] = default(TWrapper).Forward(
+                                default(TOperator).Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
+                        break;
+                    case 3:
+                        for (int x = 0; x < res.Shape.shape[0]; x++)
+                        for (int y = 0; y < res.Shape.shape[1]; y++)
+                        for (int z = 0; z < res.Shape.shape[2]; z++)
+                            res.data[x * res.blocks[0] + y * res.blocks[1] + z] = default(TWrapper).Forward(
+                                default(TOperator).Operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z)));
+                        break;
+                    default:
+                        foreach (var index in res.IterateOverElements())
+                            res.SetValueNoCheck(default(TWrapper).Forward(
+                                    default(TOperator).Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))),
+                                index);
+                        break;
+                }
             }
             else
             {
                 if (res.Shape.shape.Length == 1)
                     for (int x = 0; x < res.Shape.shape[0]; x++)
                         res.data[x] = default(TWrapper).Forward(
-                            operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
+                            default(TOperator).Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
                 else if (res.Shape.shape.Length == 2)
                     Parallel.For(0, res.Shape.shape[0], x =>
                     {
                         for (int y = 0; y < res.Shape.shape[1]; y++)
                             res.data[x * res.blocks[0] + y] = default(TWrapper).Forward(
-                                operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
+                                default(TOperator).Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
                     });
                 else if (res.Shape.shape.Length == 3)
                     Parallel.For(0, res.Shape.shape[0], x =>
@@ -87,31 +103,51 @@ namespace GenericTensor.Functions
                         for (int y = 0; y < res.Shape.shape[1]; y++)
                         for (int z = 0; z < res.Shape.shape[2]; z++)
                             res.data[x * res.blocks[0] + y * res.blocks[1] + z] = default(TWrapper).Forward(
-                                operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z)));
+                                default(TOperator).Operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z)));
                     });
                 else
                     foreach (var index in res.IterateOverElements())
                         res.SetValueNoCheck(default(TWrapper).Forward(
-                            operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))), index);
+                            default(TOperator).Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))), index);
             }
             return res;
         }
 
+        internal struct AddWrapper : IZipOperator<T>
+        {
+            public T Operation(T a, T b) => default(TWrapper).Add(a, b);
+        }
+
+        internal struct SubtractWrapper : IZipOperator<T>
+        {
+            public T Operation(T a, T b) => default(TWrapper).Subtract(a, b);
+        }
+
+        internal struct MultiplyWrapper : IZipOperator<T>
+        {
+            public T Operation(T a, T b) => default(TWrapper).Multiply(a, b);
+        }
+
+        internal struct DivideWrapper : IZipOperator<T>
+        {
+            public T Operation(T a, T b) => default(TWrapper).Divide(a, b);
+        }
+
         public static GenTensor<T, TWrapper> PiecewiseAdd(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip(a, b, default(TWrapper).Add, threading);
+            => Zip<AddWrapper>(a, b, threading);
 
         public static GenTensor<T, TWrapper> PiecewiseSubtract(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip(a, b, default(TWrapper).Subtract, threading);
+            => Zip<SubtractWrapper>(a, b, threading);
 
         public static GenTensor<T, TWrapper> PiecewiseMultiply(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip(a, b, default(TWrapper).Multiply, threading);
+            => Zip<MultiplyWrapper>(a, b, threading);
 
         public static GenTensor<T, TWrapper> PiecewiseDivide(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip(a, b, default(TWrapper).Divide, threading);
+            => Zip<DivideWrapper>(a, b, threading);
 
         public static GenTensor<T, TWrapper> PiecewiseAdd(GenTensor<T, TWrapper> a,
             T b, Threading threading)

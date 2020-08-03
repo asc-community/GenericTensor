@@ -32,7 +32,7 @@ public static class Samples
 {
     public static void CreatingMatrix()
     {
-        var myMatrix = GenTensor<float, FloatWrapper>.CreateMatrix(
+        var myMatrix = FloatTensor.CreateMatrix(
             new float[,]
             {
                 {1, 2, 3},
@@ -45,7 +45,7 @@ public static class Samples
 
     public static void CreatingMatrixAndMultiply()
     {
-        var myMatrix = GenTensor<float, FloatWrapper>.CreateMatrix(
+        var myMatrix = FloatTensor.CreateMatrix(
             new float[,]
             {
                 {1, 2, 3},
@@ -53,7 +53,11 @@ public static class Samples
                 {7, 8, 9}
             }
         );
-        Console.WriteLine(GenTensor<float, FloatWrapper>.MatrixMultiply(myMatrix, myMatrix));
+        var multipled = FloatTensor.MatrixMultiply(myMatrix, myMatrix);
+        Console.WriteLine(FloatTensor.MatrixMultiply(myMatrix, multipled));
+        var t = FloatTensor.Stack(myMatrix, myMatrix);
+        t.Transpose(0, 2);
+        Console.WriteLine(t);
     }
 }
 
@@ -62,26 +66,6 @@ class Program
 {
     static void Main(string[] args)
     {
-        var m = GenTensor<int, IntWrapper>.CreateMatrix(new int[,]
-        {
-            { 1,  2, -3,  8, -3},
-            { 4, -5,  6, -9,  6},
-            { 7, -8,  9,  8,  9},
-            {-1, -3,  4,  6,  4},
-            { 4, -5,  6, -9,  6}
-        });
         
-        for (int i = 0; i < 1000000000; i++)
-        {
-            var det = m.DeterminantLaplace();
-            var x = det % 5;
-            var y = det / 2 % 5;
-            if (x < 0)
-                x = -x;
-            if (y < 0)
-                y = -y;
-            m.SetValueNoCheck(det % 10, x, y);
-        }
-        Console.WriteLine(m);
     }
 }
