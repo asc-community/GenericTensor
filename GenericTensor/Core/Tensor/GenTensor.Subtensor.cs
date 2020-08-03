@@ -84,15 +84,10 @@ namespace GenericTensor.Core
             #endif
             var newLinIndexDelta = GetFlattenedIndexSilent(index);
             var newBlocks = blocks.ToList();
-            var rootAxis = AxesOrder[0];
+            var rootAxis = 0;
             newBlocks.RemoveAt(rootAxis);
-            var newAxesOrder = AxesOrder.ToList();
-            for (int i = 0; i < newAxesOrder.Count; i++)
-                if (newAxesOrder[i] > rootAxis)
-                    newAxesOrder[i] -= 1;
-            newAxesOrder.RemoveAt(0);
             var newShape = Shape.CutOffset1();
-            var result = new GenTensor<T, TWrapper>(newShape, newBlocks.ToArray(), newAxesOrder.ToArray(), data)
+            var result = new GenTensor<T, TWrapper>(newShape, newBlocks.ToArray(), data)
             {
                 LinOffset = newLinIndexDelta
             };

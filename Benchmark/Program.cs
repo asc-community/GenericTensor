@@ -9,7 +9,7 @@ namespace Benchmark
         static void Main(string[] args)
         {
             
-            BenchmarkRunner.Run<OneVsMulti>();
+            BenchmarkRunner.Run<MatrixBenchmark>();
         }
     }
 }
