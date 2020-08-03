@@ -6,7 +6,7 @@
     <WarningsAsErrors>nullable</WarningsAsErrors>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.3-beta</Version>
+    <Version>0.1.0-beta</Version>
     <Authors>WhiteBlackGoose</Authors>
     <Company>AngouriSoft</Company>
     <Description>The only .NET tensor &amp; matrix library for generic types</Description>
@@ -15,7 +15,7 @@
     <PackageProjectUrl>https://github.com/WhiteBlackGoose/GenericTensor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/WhiteBlackGoose/GenericTensor</RepositoryUrl>
     <RepositoryType>public</RepositoryType>
-    <PackageReleaseNotes>Multi-threading added</PackageReleaseNotes>
+    <PackageReleaseNotes>New syntax, boosted by a lot</PackageReleaseNotes>
     <PackageIcon>ico1.png</PackageIcon>
     <PackageTags>tensor, generic, matrix, vector, performance</PackageTags>
   </PropertyGroup>
