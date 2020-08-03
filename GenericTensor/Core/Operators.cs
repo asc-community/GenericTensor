@@ -29,7 +29,7 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class GenTensor<T> : System.IEquatable<GenTensor<T>>
+    public partial class GenTensor<T, TWrapper> : System.IEquatable<GenTensor<T, TWrapper>>
     {
         /// <summary>
         /// A tensor is a matrix if has two dimensions, e. g. [3 x 4]
@@ -47,32 +47,32 @@ namespace GenericTensor.Core
         public bool IsSquareMatrix => IsMatrix && Shape.shape[0] == Shape.shape[1];
 
         /// <summary>
-        /// Calls your TWrapper.Equals
+        /// Calls your default(TWrapper).Equals
         /// Be sure to override it when using this function or ==, != operators
         /// </summary>
         public override bool Equals(object obj)
         {
-            if (obj is null || !(obj is GenTensor<T> ten))
+            if (obj is null || !(obj is GenTensor<T, TWrapper> ten))
                 return false;
             return Equals(ten);
         }
 
-        public bool Equals(GenTensor<T> obj)
+        public bool Equals(GenTensor<T, TWrapper> obj)
         {
             if (obj is null)
                 return false;
             if (obj.Shape != Shape)
                 return false;
             foreach (var (index, _) in obj.Iterate())
-                if (!ConstantsAndFunctions<T>.AreEqual(this.GetValueNoCheck(index), obj.GetValueNoCheck(index)))
+                if (!default(TWrapper).AreEqual(this.GetValueNoCheck(index), obj.GetValueNoCheck(index)))
                     return false;
             return true;
         }
 
-        public static bool operator ==(GenTensor<T> a, GenTensor<T> b)
+        public static bool operator ==(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b)
             => object.ReferenceEquals(a, b) || (a is {} && a.Equals(b));
 
-        public static bool operator !=(GenTensor<T> a, GenTensor<T> b)
+        public static bool operator !=(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b)
             => !(a == b);
 
         

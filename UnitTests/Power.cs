@@ -31,30 +31,25 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = GenTensor<int>;
+    using TS = GenTensor<int, IntWrapper>;
 
     [TestClass]
     public class Power
     {
-        public Power()
-        {
-            BuiltinTypeInitter.InitForFloat();
-        }
-
 
         [TestMethod]
         public void Test1()
         {
-            var M = GenTensor<float>.CreateMatrix(new float[,]
+            var M = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
                 {2,  8, 7}
             });
             var powered = M.MatrixPower(4);
-            var I = GenTensor<float>.CreateIdentityMatrix(3);
+            var I = GenTensor<float, FloatWrapper>.CreateIdentityMatrix(3);
             for (int i = 0; i < 4; i++)
-                I = GenTensor<float>.MatrixMultiply(I, M);
+                I = GenTensor<float, FloatWrapper>.MatrixMultiply(I, M);
 
             Assert.AreEqual(I, powered);
         }
@@ -62,16 +57,16 @@ namespace UnitTests
         [TestMethod]
         public void Test2()
         {
-            var M = GenTensor<float>.CreateMatrix(new float[,]
+            var M = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
                 {2,  8, 7}
             });
             var powered = M.MatrixPower(3);
-            var I = GenTensor<float>.CreateIdentityMatrix(3);
+            var I = GenTensor<float, FloatWrapper>.CreateIdentityMatrix(3);
             for (int i = 0; i < 3; i++)
-                I = GenTensor<float>.MatrixMultiply(I, M);
+                I = GenTensor<float, FloatWrapper>.MatrixMultiply(I, M);
 
             Assert.AreEqual(I, powered);
         }
@@ -79,7 +74,7 @@ namespace UnitTests
         [TestMethod]
         public void Test3()
         {
-            var M = GenTensor<float>.CreateMatrix(new float[,]
+            var M = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
@@ -88,9 +83,9 @@ namespace UnitTests
             var powered = M.MatrixPower(-4);
             M = M.Forward();
             M.InvertMatrix();
-            var I = GenTensor<float>.CreateIdentityMatrix(3);
+            var I = GenTensor<float, FloatWrapper>.CreateIdentityMatrix(3);
             for (int i = 0; i < 4; i++)
-                I = GenTensor<float>.MatrixMultiply(I, M);
+                I = GenTensor<float, FloatWrapper>.MatrixMultiply(I, M);
 
             Assert.AreEqual(I, powered);
         }
@@ -100,13 +95,13 @@ namespace UnitTests
         {
             var power = 3;
 
-            var M1 = GenTensor<float>.CreateMatrix(new float[,]
+            var M1 = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
                 {2,  8, 7}
             });
-            var M2 = GenTensor<float>.CreateMatrix(new float[,]
+            var M2 = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {1,  2, 9},
                 {2, 3, 5},
@@ -114,10 +109,10 @@ namespace UnitTests
             });
 
             Assert.AreEqual(
-                GenTensor<float>.Stack(
+                GenTensor<float, FloatWrapper>.Stack(
                     M1.MatrixPower(power),
                     M2.MatrixPower(power)),
-                GenTensor<float>.Stack(M1, M2).TensorMatrixPower(power)
+                GenTensor<float, FloatWrapper>.Stack(M1, M2).TensorMatrixPower(power)
             );
         }
     }

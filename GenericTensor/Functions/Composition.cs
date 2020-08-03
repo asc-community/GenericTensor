@@ -29,9 +29,9 @@ using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    internal static class Composition<T>
+    internal static class Composition<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
-        public static GenTensor<T> Stack(params GenTensor<T>[] elements)
+        public static GenTensor<T, TWrapper> Stack(params GenTensor<T, TWrapper>[] elements)
         {
             #if ALLOW_EXCEPTIONS
             if (elements.Length < 1)
@@ -47,13 +47,13 @@ namespace GenericTensor.Functions
             newShape[0] = elements.Length;
             for (int i = 1; i < newShape.Length; i++)
                 newShape[i] = desiredShape[i - 1];
-            var res = new GenTensor<T>(newShape);
+            var res = new GenTensor<T, TWrapper>(newShape);
             for (int i = 0; i < elements.Length; i++)
                 res.SetSubtensor(elements[i], i);
             return res;
         }
 
-        public static GenTensor<T> Concat(GenTensor<T> a, GenTensor<T> b)
+        public static GenTensor<T, TWrapper> Concat(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape.SubShape(1, 0) != b.Shape.SubShape(1, 0))
@@ -62,12 +62,12 @@ namespace GenericTensor.Functions
 
             if (a.IsVector)
             {
-                var resultingVector = GenTensor<T>.CreateVector(a.Shape.shape[0] + b.Shape.shape[0]);
+                var resultingVector = GenTensor<T, TWrapper>.CreateVector(a.Shape.shape[0] + b.Shape.shape[0]);
                 for (int i = 0; i < a.Shape.shape[0]; i++)
-                    resultingVector.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(a.GetValueNoCheck(i)), i);
+                    resultingVector.SetValueNoCheck(default(TWrapper).Forward(a.GetValueNoCheck(i)), i);
 
                 for (int i = 0; i < b.Shape.shape[0]; i++)
-                    resultingVector.SetValueNoCheck(ConstantsAndFunctions<T>.Forward(b.GetValueNoCheck(i)), i + a.Shape.shape[0]);
+                    resultingVector.SetValueNoCheck(default(TWrapper).Forward(b.GetValueNoCheck(i)), i + a.Shape.shape[0]);
 
                 return resultingVector;
             }
@@ -76,7 +76,7 @@ namespace GenericTensor.Functions
                 var newShape = a.Shape.Copy();
                 newShape.shape[0] = a.Shape.shape[0] + b.Shape.shape[0];
 
-                var res = new GenTensor<T>(newShape);
+                var res = new GenTensor<T, TWrapper>(newShape);
                 for (int i = 0; i < a.Shape.shape[0]; i++)
                     res.SetSubtensor(a.GetSubtensor(i), i);
 

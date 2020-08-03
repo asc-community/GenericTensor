@@ -29,16 +29,16 @@ using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    internal static partial class VectorProduct<T>
+    internal static partial class VectorProduct<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
-        public static GenTensor<T> TensorVectorDotProduct(GenTensor<T> a,
-            GenTensor<T> b)
+        public static GenTensor<T, TWrapper> TensorVectorDotProduct(GenTensor<T, TWrapper> a,
+            GenTensor<T, TWrapper> b)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape.SubShape(0, 1) != b.Shape.SubShape(0, 1))
                 throw new InvalidShapeException("Other dimensions of tensors should be equal");
             #endif
-            var resTensor = new GenTensor<T>(a.Shape.SubShape(0, 1));
+            var resTensor = new GenTensor<T, TWrapper>(a.Shape.SubShape(0, 1));
             foreach (var index in resTensor.IterateOverElements())
             {
                 var scal = VectorDotProduct(a.GetSubtensor(index), b.GetSubtensor(index));
@@ -47,8 +47,8 @@ namespace GenericTensor.Functions
             return resTensor;
         }
 
-        public static T VectorDotProduct(GenTensor<T> a,
-            GenTensor<T> b)
+        public static T VectorDotProduct(GenTensor<T, TWrapper> a,
+            GenTensor<T, TWrapper> b)
         {
             #if ALLOW_EXCEPTIONS
             if (!a.IsVector || !b.IsVector)
@@ -56,11 +56,11 @@ namespace GenericTensor.Functions
             if (a.Shape[0] != b.Shape[0])
                 throw new InvalidShapeException($"{nameof(a)}'s length should be the same as {nameof(b)}'s");
             #endif
-            var res = ConstantsAndFunctions<T>.CreateZero();
+            var res = default(TWrapper).CreateZero();
             for (int i = 0; i < a.Shape[0]; i++)
             {
-                res = ConstantsAndFunctions<T>.Add(res,
-                    ConstantsAndFunctions<T>.Multiply(a.GetValueNoCheck(i), b.GetValueNoCheck(i)));
+                res = default(TWrapper).Add(res,
+                    default(TWrapper).Multiply(a.GetValueNoCheck(i), b.GetValueNoCheck(i)));
             }
             return res;
         }

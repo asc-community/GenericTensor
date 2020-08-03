@@ -8,7 +8,6 @@ namespace Benchmark
     {
         static void Main(string[] args)
         {
-            BuiltinTypeInitter.InitForFloat();
             BenchmarkRunner.Run<OneVsMulti>();
         }
     }

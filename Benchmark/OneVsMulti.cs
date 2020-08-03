@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using GenericTensor.Core;
+using GenericTensor.Functions;
 
 namespace Benchmark
 {
-    using TS = GenTensor<float>;
+    using TS = GenTensor<float, FloatWrapper>;
 
     public class OneVsMulti
     {

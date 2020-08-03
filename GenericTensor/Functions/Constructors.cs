@@ -33,20 +33,20 @@ using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    internal static class Constructors<T>
+    internal static class Constructors<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
         /// <summary>
         /// Creates a tensor whose all matrices are identity matrices
-        /// <para>1 is achieved with <see cref="ConstantsAndFunctions{T}.CreateOne"/></para>
-        /// <para>0 is achieved with <see cref="ConstantsAndFunctions{T}.CreateZero"/></para>
+        /// <para>1 is achieved with <see cref="ConstantsAndFunctionsForwarder{T}.CreateOne"/></para>
+        /// <para>0 is achieved with <see cref="ConstantsAndFunctionsForwarder{T}.CreateZero"/></para>
         /// </summary>
-        public static GenTensor<T> CreateIdentityTensor(int[] dimensions, int finalMatrixDiag)
+        public static GenTensor<T, TWrapper> CreateIdentityTensor(int[] dimensions, int finalMatrixDiag)
         {
             var newDims = new int[dimensions.Length + 2];
             for (int i = 0; i < dimensions.Length; i++)
                 newDims[i] = dimensions[i];
             newDims[newDims.Length - 2] = newDims[newDims.Length - 1] = finalMatrixDiag;
-            var res = new GenTensor<T>(newDims);
+            var res = new GenTensor<T, TWrapper>(newDims);
             foreach (var index in res.IterateOverMatrices())
             {
                 var iden = CreateIdentityMatrix(finalMatrixDiag);
@@ -55,28 +55,28 @@ namespace GenericTensor.Functions
             return res;
         }
 
-        public static GenTensor<T> CreateIdentityMatrix(int diag)
+        public static GenTensor<T, TWrapper> CreateIdentityMatrix(int diag)
         {
-            var res = new GenTensor<T>(diag, diag);
+            var res = new GenTensor<T, TWrapper>(diag, diag);
             for (int i = 0; i < res.data.Length; i++)
-                res.data[i] = ConstantsAndFunctions<T>.CreateZero();
+                res.data[i] = default(TWrapper).CreateZero();
 
             for (int i = 0; i < diag; i++)
-                res.SetValueNoCheck(ConstantsAndFunctions<T>.CreateOne, i, i);
+                res.SetValueNoCheck(default(TWrapper).CreateOne, i, i);
             return res;
         }
 
-        public static GenTensor<T> CreateVector(params T[] elements)
+        public static GenTensor<T, TWrapper> CreateVector(params T[] elements)
         {
-            var res = new GenTensor<T>(elements.Length);
+            var res = new GenTensor<T, TWrapper>(elements.Length);
             for (int i = 0; i < elements.Length; i++)
                 res.SetValueNoCheck(elements[i], i);
             return res;
         }
 
-        public static GenTensor<T> CreateVector(int length)
+        public static GenTensor<T, TWrapper> CreateVector(int length)
         {
-            var res = new GenTensor<T>(length);
+            var res = new GenTensor<T, TWrapper>(length);
             return res;
         }
 
@@ -97,10 +97,10 @@ namespace GenericTensor.Functions
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T> CreateMatrix(T[,] data)
+        public static GenTensor<T, TWrapper> CreateMatrix(T[,] data)
         {
             var (width, height) = ExtractAndCheck(data);
-            var res = new GenTensor<T>(width, height);
+            var res = new GenTensor<T, TWrapper>(width, height);
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)
                     res.SetValueNoCheck(data[x, y], x, y);
@@ -108,11 +108,11 @@ namespace GenericTensor.Functions
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T> CreateSquareMatrix(int diagLength)
+        public static GenTensor<T, TWrapper> CreateSquareMatrix(int diagLength)
             => CreateMatrix(diagLength, diagLength);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T> CreateMatrix(int width, int height, Func<int, int, T> stepper)
+        public static GenTensor<T, TWrapper> CreateMatrix(int width, int height, Func<int, int, T> stepper)
         {
             var res = CreateMatrix(width, height);
             for (int x = 0; x < width; x++)
@@ -122,13 +122,13 @@ namespace GenericTensor.Functions
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T> CreateMatrix(int width, int height)
-            => new GenTensor<T>(width, height);
+        public static GenTensor<T, TWrapper> CreateMatrix(int width, int height)
+            => new GenTensor<T, TWrapper>(width, height);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T> CreateTensor(TensorShape shape, Func<int[], T> operation, Threading threading)
+        public static GenTensor<T, TWrapper> CreateTensor(TensorShape shape, Func<int[], T> operation, Threading threading)
         {
-            var res = new GenTensor<T>(shape);
+            var res = new GenTensor<T, TWrapper>(shape);
 
             if (threading == Threading.Multi || threading == Threading.Auto && shape.shape[0] > 5)
             {
@@ -148,18 +148,18 @@ namespace GenericTensor.Functions
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T> CreateTensor(T[] data)
+        public static GenTensor<T, TWrapper> CreateTensor(T[] data)
         {
-            var res = new GenTensor<T>(data.GetLength(0));
+            var res = new GenTensor<T, TWrapper>(data.GetLength(0));
             for (int x = 0; x < data.GetLength(0); x++)
                 res.SetValueNoCheck(data[x], x);
             return res;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T> CreateTensor(T[,] data)
+        public static GenTensor<T, TWrapper> CreateTensor(T[,] data)
         {
-            var res = new GenTensor<T>(data.GetLength(0), data.GetLength(1));
+            var res = new GenTensor<T, TWrapper>(data.GetLength(0), data.GetLength(1));
             for (int x = 0; x < data.GetLength(0); x++)
                 for (int y = 0; y < data.GetLength(1); y++)
                     res.SetValueNoCheck(data[x, y], x, y);
@@ -167,9 +167,9 @@ namespace GenericTensor.Functions
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T> CreateTensor(T[,,] data)
+        public static GenTensor<T, TWrapper> CreateTensor(T[,,] data)
         {
-            var res = new GenTensor<T>(data.GetLength(0),
+            var res = new GenTensor<T, TWrapper>(data.GetLength(0),
                 data.GetLength(1), data.GetLength(2));
             for (int x = 0; x < data.GetLength(0); x++)
                 for (int y = 0; y < data.GetLength(1); y++)
@@ -179,12 +179,12 @@ namespace GenericTensor.Functions
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T> CreateTensor(Array data)
+        public static GenTensor<T, TWrapper> CreateTensor(Array data)
         {
             var dimensions = new int[data.Rank];
             for (int i = 0; i < data.Rank; i++)
                 dimensions[i] = data.GetLength(i);
-            var res = new GenTensor<T>(dimensions);
+            var res = new GenTensor<T, TWrapper>(dimensions);
 
             dimensions = new int[data.Rank]; // Don't modify res
             var normalizedIndices = new int[data.Rank];

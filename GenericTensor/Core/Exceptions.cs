@@ -38,7 +38,7 @@ namespace GenericTensor.Core
         public InvalidShapeException(string msg) : base(msg) {}
         public InvalidShapeException() : base() {}
 
-        internal static void NeedTensorSquareMatrix<T>(GenTensor<T> m)
+        internal static void NeedTensorSquareMatrix<T, TWrapper>(GenTensor<T, TWrapper> m) where TWrapper : struct, IOperations<T>
         {
             if (m.Shape.Length <= 2)
                 throw new InvalidShapeException("Should be 3+ dimensional");

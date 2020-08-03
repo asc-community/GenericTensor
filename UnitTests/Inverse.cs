@@ -36,13 +36,13 @@ namespace UnitTests
     {
         public Inverse()
         {
-            BuiltinTypeInitter.InitForFloat();
+            
         }
 
         [TestMethod]
         public void Test1()
         {
-            var A = GenTensor<float>.CreateMatrix(new float[,]
+            var A = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
@@ -51,15 +51,15 @@ namespace UnitTests
             var B = A.Copy(true);
             B.InvertMatrix();
             Assert.AreEqual(
-                GenTensor<float>.CreateIdentityMatrix(3),
-                GenTensor<float>.MatrixMultiply(A, B)
+                GenTensor<float, FloatWrapper>.CreateIdentityMatrix(3),
+                GenTensor<float, FloatWrapper>.MatrixMultiply(A, B)
             );
         }
 
         [TestMethod]
         public void Test2()
         {
-            var A = GenTensor<float>.CreateMatrix(new float[,]
+            var A = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {1, 2},
                 {3, 4}
@@ -67,31 +67,31 @@ namespace UnitTests
             var B = A.Copy(true);
             B.InvertMatrix();
             Assert.AreEqual(
-                GenTensor<float>.CreateIdentityMatrix(2),
-                GenTensor<float>.MatrixMultiply(A, B)
+                GenTensor<float, FloatWrapper>.CreateIdentityMatrix(2),
+                GenTensor<float, FloatWrapper>.MatrixMultiply(A, B)
             );
         }
 
         [TestMethod]
         public void Division()
         {
-            var A = GenTensor<float>.CreateMatrix(new float[,]
+            var A = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
                 {2,  8, 7}
             });
 
-            var B = GenTensor<float>.CreateMatrix(new float[,]
+            var B = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -1, 5},
                 {2,  8, 7}
             });
 
-            var res = GenTensor<float>.MatrixDivide(A, B);
+            var res = GenTensor<float, FloatWrapper>.MatrixDivide(A, B);
             Assert.AreEqual(
-                GenTensor<float>.MatrixMultiply(res, B),
+                GenTensor<float, FloatWrapper>.MatrixMultiply(res, B),
                 A
                 );
         }
@@ -99,56 +99,56 @@ namespace UnitTests
         [TestMethod]
         public void TensorDivision()
         {
-            var A = GenTensor<float>.CreateMatrix(new float[,]
+            var A = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
                 {2,  8, 7}
             });
 
-            var B = GenTensor<float>.CreateMatrix(new float[,]
+            var B = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -1, 5},
                 {2,  8, 7}
             });
 
-            var T1 = GenTensor<float>.Stack(A, B);
-            var T2 = GenTensor<float>.Stack(B, A);
+            var T1 = GenTensor<float, FloatWrapper>.Stack(A, B);
+            var T2 = GenTensor<float, FloatWrapper>.Stack(B, A);
 
-            var res = GenTensor<float>.TensorMatrixDivide(T1, T2);
+            var res = GenTensor<float, FloatWrapper>.TensorMatrixDivide(T1, T2);
             Assert.AreEqual(
-                res.GetSubtensor(0), GenTensor<float>.MatrixDivide(A, B)
+                res.GetSubtensor(0), GenTensor<float, FloatWrapper>.MatrixDivide(A, B)
                 );
             Assert.AreEqual(
-                    res.GetSubtensor(1), GenTensor<float>.MatrixDivide(B, A)
+                    res.GetSubtensor(1), GenTensor<float, FloatWrapper>.MatrixDivide(B, A)
                 );
         }
 
         [TestMethod]
         public void TensorMatrixInverse()
         {
-            var A = GenTensor<float>.CreateMatrix(new float[,]
+            var A = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -2, 5},
                 {2,  8, 7}
             });
 
-            var B = GenTensor<float>.CreateMatrix(new float[,]
+            var B = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
             {
                 {6,  1, 1},
                 {4, -1, 5},
                 {2,  8, 7}
             });
 
-            var T = GenTensor<float>.Stack(A, B);
+            var T = GenTensor<float, FloatWrapper>.Stack(A, B);
             var K = T.Copy(true);
             T.TensorMatrixInvert();
 
             Assert.AreEqual(
-                GenTensor<float>.CreateIdentityTensor(T.Shape.SubShape(0, 2).ToArray(), 3),
-                GenTensor<float>.TensorMatrixMultiply(T, K)
+                GenTensor<float, FloatWrapper>.CreateIdentityTensor(T.Shape.SubShape(0, 2).ToArray(), 3),
+                GenTensor<float, FloatWrapper>.TensorMatrixMultiply(T, K)
                 );
         }
     }

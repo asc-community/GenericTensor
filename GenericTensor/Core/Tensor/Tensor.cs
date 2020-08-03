@@ -28,7 +28,7 @@ using System;
 
 namespace GenericTensor.Core
 {
-    public partial class GenTensor<T> : ICloneable
+    public partial class GenTensor<T, TWrapper> : ICloneable where TWrapper : struct, IOperations<T>
     {
         internal readonly T[] data;
         internal readonly int[] blocks; // 3 x 4 x 5
@@ -60,10 +60,9 @@ namespace GenericTensor.Core
             }
         }
 
-        protected GenTensor(TensorShape dimensions, int[] blocks, int[] axesOrder, T[] data)
+        protected GenTensor(TensorShape dimensions, int[] blocks, T[] data)
         {
             Shape = dimensions;
-            AxesOrder = axesOrder;
             this.blocks = blocks;
             this.data = data;
         }
@@ -75,11 +74,9 @@ namespace GenericTensor.Core
         {
             Shape = dimensions;
             int len = 1;
-            AxesOrder = new int[dimensions.Count];
             for (int i = 0; i < dimensions.Length; i++)
             {
                 len *= dimensions[i];
-                AxesOrder[i] = i;
             }
             var data = new T[len];
             this.data = data;

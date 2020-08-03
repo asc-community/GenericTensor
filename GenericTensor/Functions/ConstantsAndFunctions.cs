@@ -26,10 +26,11 @@
 
 
 using System;
+using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
-    public static class ConstantsAndFunctions<T>
+    public static class ConstantsAndFunctionsForwarder<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
         static Y AskForDefining<Y>([System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
             throw new NotImplementedException(

@@ -31,15 +31,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
-    using TS = GenTensor<int>;
+    using TS = GenTensor<int, IntWrapper>;
     [TestClass]
     public class Identity
     {
-        public Identity()
-        {
-            BuiltinTypeInitter.InitForInt();
-        }
-
         [TestMethod]
         public void IdenMatrix1()
         {

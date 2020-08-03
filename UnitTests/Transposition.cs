@@ -36,12 +36,12 @@ namespace UnitTests
     {
         public Transposition()
         {
-            BuiltinTypeInitter.InitForInt();
+            
         }
 
-        private GenTensor<int> GetBig()
+        private GenTensor<int, IntWrapper> GetBig()
         {
-            var res = new GenTensor<int>(2, 3, 4);
+            var res = new GenTensor<int, IntWrapper>(2, 3, 4);
             foreach (var (index, _) in res.Iterate())
             {
                 res[index] = index[0] * 12 + index[1] * 4 + index[2];
@@ -49,9 +49,9 @@ namespace UnitTests
             return res;
         }
 
-        private GenTensor<int> GetSmall()
+        private GenTensor<int, IntWrapper> GetSmall()
         {
-            var res = new GenTensor<int>(2, 3);
+            var res = new GenTensor<int, IntWrapper>(2, 3);
             foreach (var (index, _) in res.Iterate())
             {
                 res[index] = 3 * index[0] + index[1];

@@ -37,12 +37,13 @@ namespace UnitTests
     [TestClass]
     public class Constructors
     {
-        void AssertTensor<T>(IEnumerable<T> expected, GenTensor<T> actual) =>
+        
+        void AssertTensor<T, TWrapper>(IEnumerable<T> expected, GenTensor<T, TWrapper> actual) where TWrapper : struct, IOperations<T> =>
             CollectionAssert.AreEqual(expected.ToList(), actual.Iterate().Select(tup => tup.Value).ToList());
         [TestMethod]
         public void CreateMatrix()
         {
-            var x = GenTensor<int>.CreateMatrix(
+            var x = GenTensor<int, IntWrapper>.CreateMatrix(
                 new[,]
                 {
                     { 1, 2 },
@@ -61,7 +62,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateVector()
         {
-            var x = GenTensor<int>.CreateVector(new[] { 1, 2, 3, 4 });
+            var x = GenTensor<int, IntWrapper>.CreateVector(new[] { 1, 2, 3, 4 });
             Assert.IsTrue(x.IsVector);
             Assert.IsFalse(x.IsMatrix);
             Assert.IsFalse(x.IsSquareMatrix);
@@ -72,7 +73,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor1D()
         {
-            var x = GenTensor<int>.CreateTensor(new[] { 1, 2, 3, 4 });
+            var x = GenTensor<int, IntWrapper>.CreateTensor(new[] { 1, 2, 3, 4 });
             Assert.IsTrue(x.IsVector);
             Assert.IsFalse(x.IsMatrix);
             Assert.IsFalse(x.IsSquareMatrix);
@@ -83,7 +84,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor2D()
         {
-            var x = GenTensor<int>.CreateTensor(
+            var x = GenTensor<int, IntWrapper>.CreateTensor(
                 new[,]
                 {
                     { 1, 2 },
@@ -100,7 +101,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor3D()
         {
-            var x = GenTensor<int>.CreateTensor(
+            var x = GenTensor<int, IntWrapper>.CreateTensor(
                 new[, ,]
                 {
                     { {  1,  2,  3 }, {  4,  5,  6 } },
@@ -118,7 +119,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor4D()
         {
-            var x = GenTensor<int>.CreateTensor(
+            var x = GenTensor<int, IntWrapper>.CreateTensor(
                 new[, , ,]
                 {
                     { { {  1,  2,  3 }, {  4,  5,  6 } },
@@ -140,7 +141,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor5D()
         {
-            var x = GenTensor<int>.CreateTensor(
+            var x = GenTensor<int, IntWrapper>.CreateTensor(
                 new[, , , ,]
                 { {
                     { { {  1,  2,  3 }, {  4,  5,  6 } },
@@ -162,7 +163,7 @@ namespace UnitTests
         [TestMethod]
         public void CreateTensor6D()
         {
-            var x = GenTensor<int>.CreateTensor(new int[0, 0, 0, 0, 0, 0]);
+            var x = GenTensor<int, IntWrapper>.CreateTensor(new int[0, 0, 0, 0, 0, 0]);
             Assert.IsFalse(x.IsVector);
             Assert.IsFalse(x.IsMatrix);
             Assert.IsFalse(x.IsSquareMatrix);
@@ -180,7 +181,7 @@ namespace UnitTests
             array.SetValue(8.2, -8, -2);
             array.SetValue(8.1, -8, -1);
             array.SetValue(8.0, -8,  0);
-            var x = GenTensor<double>.CreateTensor(array);
+            var x = GenTensor<double, DoubleWrapper>.CreateTensor(array);
             Assert.IsFalse(x.IsVector);
             Assert.IsTrue(x.IsMatrix);
             Assert.IsFalse(x.IsSquareMatrix);
@@ -188,88 +189,18 @@ namespace UnitTests
             Assert.AreEqual(6, x.Volume);
             AssertTensor(new[] { 9.2, 9.1, 9.0, 8.2, 8.1, 8.0 }, x);
         }
-        [TestMethod]
-        public void CreateTensor_NonStandardArray_SquareMatrix()
-        {
-            var array = System.Array.CreateInstance(typeof(byte), new[] { 3, 3 }, new[] { int.MinValue, int.MinValue });
-            array.SetValue((byte)255, int.MinValue, int.MinValue);
-            array.SetValue((byte)254, int.MinValue, int.MinValue + 1);
-            array.SetValue((byte)253, int.MinValue, int.MinValue + 2);
-            array.SetValue((byte)252, int.MinValue + 1, int.MinValue);
-            array.SetValue((byte)251, int.MinValue + 1, int.MinValue + 1);
-            array.SetValue((byte)250, int.MinValue + 1, int.MinValue + 2);
-            array.SetValue((byte)249, int.MinValue + 2, int.MinValue);
-            array.SetValue((byte)248, int.MinValue + 2, int.MinValue + 1);
-            array.SetValue((byte)247, int.MinValue + 2, int.MinValue + 2);
-            var x = GenTensor<byte>.CreateTensor(array);
-            Assert.IsFalse(x.IsVector);
-            Assert.IsTrue(x.IsMatrix);
-            Assert.IsTrue(x.IsSquareMatrix);
-            CollectionAssert.AreEqual(new[] { 3, 3 }, x.Shape.ToArray());
-            Assert.AreEqual(9, x.Volume);
-            AssertTensor(Enumerable.Range(247, 9).Reverse().Select(x => (byte)x), x);
-        }
-        [TestMethod]
-        public void CreateSquareMatrix()
-        {
-            var x = GenTensor<sbyte>.CreateSquareMatrix(9);
-            Assert.IsFalse(x.IsVector);
-            Assert.IsTrue(x.IsMatrix);
-            Assert.IsTrue(x.IsSquareMatrix);
-            CollectionAssert.AreEqual(new[] { 9, 9 }, x.Shape.ToArray());
-            Assert.AreEqual(81, x.Volume);
-            AssertTensor(Enumerable.Repeat((sbyte)0, 81), x);
-        }
-        [TestMethod]
-        public void CreateIdentityMatrix()
-        {
-            ConstantsAndFunctions<bool?>.CreateOne = () => true;
-            ConstantsAndFunctions<bool?>.CreateZero = () => false;
-            var x = GenTensor<bool?>.CreateIdentityMatrix(5);
-            Assert.IsFalse(x.IsVector);
-            Assert.IsTrue(x.IsMatrix);
-            Assert.IsTrue(x.IsSquareMatrix);
-            CollectionAssert.AreEqual(new[] { 5, 5 }, x.Shape.ToArray());
-            Assert.AreEqual(25, x.Volume);
-            var false5times = Enumerable.Repeat<bool?>(false, 5);
-            AssertTensor(false5times.Prepend(true).Append(true)
-                .Concat(false5times).Append(true)
-                .Concat(false5times).Append(true)
-                .Concat(false5times).Append(true), x);
-        }
-        [TestMethod]
-        public void CreateIdentityTensor()
-        {
-            ConstantsAndFunctions<char>.CreateOne = () => 'x';
-            ConstantsAndFunctions<char>.CreateZero = () => 'y';
-            ConstantsAndFunctions<char>.Forward = x => x;
-            var x = GenTensor<char>.CreateIdentityTensor(new[] { 2, 3 }, 4);
-            Assert.IsFalse(x.IsVector);
-            Assert.IsFalse(x.IsMatrix);
-            Assert.IsFalse(x.IsSquareMatrix);
-            CollectionAssert.AreEqual(new[] { 2, 3, 4, 4 }, x.Shape.ToArray());
-            Assert.AreEqual(96, x.Volume);
-            AssertTensor(Enumerable.Repeat("xyyyyxyyyyxyyyyx", 6).SelectMany(x => x), x);
-        }
-
-        static Constructors()
-        {
-            // Needed for test method display
-            ConstantsAndFunctions<BigInteger>.ToString = x => x.ToString();
-            ConstantsAndFunctions<Complex>.ToString = x => x.ToString();
-        }
 
         static IEnumerable<object[]> CreateUninitializedMatrixData =>
             new[]
             {
-                new GenTensor<BigInteger>(4, 4),
-                GenTensor<BigInteger>.CreateMatrix(4, 4),
-                GenTensor<BigInteger>.CreateMatrix(new BigInteger[4, 4]),
-                GenTensor<BigInteger>.CreateTensor(new BigInteger[4, 4])
+                new GenTensor<BigInteger, BigIntWrapper>(4, 4),
+                GenTensor<BigInteger, BigIntWrapper>.CreateMatrix(4, 4),
+                GenTensor<BigInteger, BigIntWrapper>.CreateMatrix(new BigInteger[4, 4]),
+                GenTensor<BigInteger, BigIntWrapper>.CreateTensor(new BigInteger[4, 4])
             }.Select(tensor => new[] { tensor }).ToArray();
         [DataTestMethod]
         [DynamicData(nameof(CreateUninitializedMatrixData))]
-        public void CreateUninitializedMatrix(GenTensor<BigInteger> x)
+        public void CreateUninitializedMatrix(GenTensor<BigInteger, BigIntWrapper> x)
         {
             Assert.IsFalse(x.IsVector);
             Assert.IsTrue(x.IsMatrix);
@@ -282,14 +213,14 @@ namespace UnitTests
         static IEnumerable<object[]> CreateUninitializedVectorData =>
             new[]
             {
-                new GenTensor<Complex>(5),
-                GenTensor<Complex>.CreateVector(5),
-                GenTensor<Complex>.CreateVector(new Complex[5]),
-                GenTensor<Complex>.CreateTensor(new Complex[5])
+                new GenTensor<Complex, ComplexWrapper>(5),
+                GenTensor<Complex, ComplexWrapper>.CreateVector(5),
+                GenTensor<Complex, ComplexWrapper>.CreateVector(new Complex[5]),
+                GenTensor<Complex, ComplexWrapper>.CreateTensor(new Complex[5])
             }.Select(tensor => new[] { tensor }).ToArray();
         [DataTestMethod]
         [DynamicData(nameof(CreateUninitializedVectorData))]
-        public void CreateUninitializedVector(GenTensor<Complex> x)
+        public void CreateUninitializedVector(GenTensor<Complex, ComplexWrapper> x)
         {
             Assert.IsTrue(x.IsVector);
             Assert.IsFalse(x.IsMatrix);
@@ -298,5 +229,6 @@ namespace UnitTests
             Assert.AreEqual(5, x.Volume);
             AssertTensor(Enumerable.Repeat(Complex.Zero, 5), x);
         }
+        
     }
 }

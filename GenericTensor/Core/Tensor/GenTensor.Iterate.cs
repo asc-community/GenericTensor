@@ -32,7 +32,7 @@ using System.Runtime.CompilerServices;
 
 namespace GenericTensor.Core
 {
-    public partial class GenTensor<T>
+    public partial class GenTensor<T, TWrapper>
     {
         private void NextIndex(int[] indices, int id)
         {
