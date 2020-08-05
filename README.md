@@ -1,10 +1,10 @@
 ![Test](https://github.com/WhiteBlackGoose/GenericTensor/workflows/Test/badge.svg)
 ![GitHub](https://img.shields.io/github/license/WhiteBlackGoose/GenericTensor?color=blue)
+[![Discord](https://img.shields.io/discord/642350046213439489?color=orange&label=Discord)](https://discord.gg/YWJEX7a)
 
 # GenericTensor
 
 It is the only fully-implemented generic-tensor library for C#. Allows to work with tensors of custom types.
-Is still under development, as well as documentation.
 
 Tensor - is an extentension of matrices, a N-dimensional array. Soon you will find all common functions that are
 defined for matrices and vectors here. In order to make it custom, Tensor class is generic, which means that
@@ -445,3 +445,7 @@ operation.
 </details>
 
 </details>
+
+## Contribution
+
+We appreciate your willing to contribute to GenericTensor. Fork the repository, commit your changes and create a pull request. We also appreciate <a href="https://medium.com/@carlosperez/pull-request-first-f6bb667a9b6">early pull requests</a>. To make sure your improvement is relevant, we recommend you first to contact us in our <a href="https://discord.gg/YWJEX7a">discord server</a>.
