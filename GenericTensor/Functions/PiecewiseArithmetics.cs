@@ -52,25 +52,35 @@ namespace GenericTensor.Functions
 
             var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 850);
 
+            var tw = default(TWrapper);
+            var top = default(TOperator);
+
             if (!parallel)
             {
                 switch (res.Shape.shape.Length)
                 {
 
                     case 1:
-                        for (int x = 0; x < res.Shape.shape[0]; x++)
-                            res.data[x] = default(TWrapper).Forward(
-                                default(TOperator).Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
+                    {
+                        var shape0 = res.Shape.shape[0];
+                        for (int x = 0; x < shape0; x++)
+                            res.data[x] = tw.Forward(
+                                top.Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
+                        
+                    }
                         break;
                     case 2:
                     {
-                        for (int x = 0; x < res.Shape.shape[0]; x++)
+                        var shape0 = res.Shape.shape[0];
+                        var shape1 = res.Shape.shape[1];
+                        var blocks0 = res.blocks[0];
+                        for (int x = 0; x < shape0; x++)
                         {
-                            var currId = x * res.blocks[0];
-                            for (int y = 0; y < res.Shape.shape[1]; y++)
+                            var currId = x * blocks0;
+                            for (int y = 0; y < shape1; y++)
                             {
-                                res.data[currId] = default(TWrapper).Forward(
-                                    default(TOperator).Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
+                                res.data[currId] = tw.Forward(
+                                    top.Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
                                 currId += 1;
                             }
                         }
@@ -78,14 +88,19 @@ namespace GenericTensor.Functions
                         break;
                     case 3:
                     {
-                        for (int x = 0; x < res.Shape.shape[0]; x++)
-                        for (int y = 0; y < res.Shape.shape[1]; y++)
+                        var shape0 = res.Shape.shape[0];
+                        var shape1 = res.Shape.shape[1];
+                        var shape2 = res.Shape.shape[2];
+                        var blocks0 = res.blocks[0];
+                        var blocks1 = res.blocks[1];
+                        for (int x = 0; x < shape0; x++)
+                        for (int y = 0; y < shape1; y++)
                         {
-                            var currId = x * res.blocks[0] + y * res.blocks[1];
-                            for (int z = 0; z < res.Shape.shape[2]; z++)
+                            var currId = x * blocks0 + y * blocks1;
+                            for (int z = 0; z < shape2; z++)
                             {
-                                res.data[currId] = default(TWrapper).Forward(
-                                    default(TOperator).Operation(a.GetValueNoCheck(x, y, z),
+                                res.data[currId] = tw.Forward(
+                                    top.Operation(a.GetValueNoCheck(x, y, z),
                                         b.GetValueNoCheck(x, y, z)));
                                 currId++;
                             }
@@ -94,8 +109,8 @@ namespace GenericTensor.Functions
                         break;
                     default:
                         foreach (var index in res.IterateOverElements())
-                            res.SetValueNoCheck(default(TWrapper).Forward(
-                                    default(TOperator).Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))),
+                            res.SetValueNoCheck(tw.Forward(
+                                    top.Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))),
                                 index);
                         break;
                 }
@@ -103,39 +118,51 @@ namespace GenericTensor.Functions
             else
             {
                 if (res.Shape.shape.Length == 1)
-                    for (int x = 0; x < res.Shape.shape[0]; x++)
-                        res.data[x] = default(TWrapper).Forward(
-                            default(TOperator).Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
+                {
+                    var shape0 = res.Shape.shape[0];
+                    for (int x = 0; x < shape0; x++)
+                        res.data[x] = tw.Forward(top.Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
+                }
                 else if (res.Shape.shape.Length == 2)
+                {
+                    var blocks0 = res.blocks[0];
+                    var shape1 = res.Shape.shape[1];
                     Parallel.For(0, res.Shape.shape[0], x =>
                     {
-                        var currId = x * res.blocks[0];
-                        for (int y = 0; y < res.Shape.shape[1]; y++)
+                        var currId = x * blocks0;
+                        for (int y = 0; y < shape1; y++)
                         {
-                            res.data[currId] = default(TWrapper).Forward(
-                                default(TOperator).Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
+                            res.data[currId] = tw.Forward(
+                                top.Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
                             currId++;
                         }
                     });
+                }
                 else if (res.Shape.shape.Length == 3)
+                {
+                    var shape1 = res.Shape.shape[1];
+                    var shape2 = res.Shape.shape[2];
+                    var blocks0 = res.blocks[0];
+                    var blocks1 = res.blocks[1];
                     Parallel.For(0, res.Shape.shape[0], x =>
                     {
-                        for (int y = 0; y < res.Shape.shape[1]; y++)
+                        for (int y = 0; y < shape1; y++)
                         {
-                            var currId = x * res.blocks[0] + y * res.blocks[1];
-                            for (int z = 0; z < res.Shape.shape[2]; z++)
+                            var currId = x * blocks0 + y * blocks1;
+                            for (int z = 0; z < shape2; z++)
                             {
-                                res.data[currId] = default(TWrapper).Forward(
-                                    default(TOperator).Operation(a.GetValueNoCheck(x, y, z),
+                                res.data[currId] = tw.Forward(
+                                    top.Operation(a.GetValueNoCheck(x, y, z),
                                         b.GetValueNoCheck(x, y, z)));
                                 currId++;
                             }
                         }
                     });
+                }
                 else
                     foreach (var index in res.IterateOverElements())
-                        res.SetValueNoCheck(default(TWrapper).Forward(
-                            default(TOperator).Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))), index);
+                        res.SetValueNoCheck(tw.Forward(
+                            top.Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))), index);
             }
             return res;
         }

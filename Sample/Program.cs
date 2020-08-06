@@ -76,17 +76,8 @@ class Program
 
     static void Main(string[] args)
     {
-        Console.WriteLine(Samples.LazyWrapperMultiply(
-            new[,]
-            {
-                {1, 2},
-                {3, 4}
-            },
-            new[,]
-            {
-                {5, 6},
-                {7, 8}
-            }
-            ));
+        var m = GenTensor<int, IntWrapper>.CreateVector(3, 4, 5, 6);
+        var m2 = GenTensor<int, IntWrapper>.CreateVector(3, 4, 5, 6);
+        var c = GenTensor<int, IntWrapper>.PiecewiseAdd(m, m2);
     }
 }

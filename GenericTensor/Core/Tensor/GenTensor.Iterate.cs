@@ -115,15 +115,30 @@ namespace GenericTensor.Core
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x)
-         => data[GetFlattenedIndexSilent(x)];
+        {
+            unchecked
+            {
+                return data[GetFlattenedIndexSilent(x)];
+            }
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x, int y)
-            => data[GetFlattenedIndexSilent(x, y)];
+        {
+            unchecked
+            {
+                return data[GetFlattenedIndexSilent(x, y)];
+            }
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x, int y, int z)
-            => data[GetFlattenedIndexSilent(x, y, z)];
+        {
+            unchecked
+            {
+                return data[GetFlattenedIndexSilent(x, y, z)];
+            }
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x, int y, int z, int[] indices)
