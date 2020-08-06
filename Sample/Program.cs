@@ -32,7 +32,7 @@ public static class Samples
 {
     public static void CreatingMatrix()
     {
-        var myMatrix = FloatTensor.CreateMatrix(
+        var myMatrix = GenTensor<float, FloatWrapper>.CreateMatrix(
             new float[,]
             {
                 {1, 2, 3},
@@ -45,7 +45,7 @@ public static class Samples
 
     public static void CreatingMatrixAndMultiply()
     {
-        var myMatrix = FloatTensor.CreateMatrix(
+        var myMatrix = GenTensor<float, FloatWrapper>.CreateMatrix(
             new float[,]
             {
                 {1, 2, 3},
@@ -53,19 +53,40 @@ public static class Samples
                 {7, 8, 9}
             }
         );
-        var multipled = FloatTensor.MatrixMultiply(myMatrix, myMatrix);
-        Console.WriteLine(FloatTensor.MatrixMultiply(myMatrix, multipled));
-        var t = FloatTensor.Stack(myMatrix, myMatrix);
+        var multipled = GenTensor<float, FloatWrapper>.MatrixMultiply(myMatrix, myMatrix);
+        Console.WriteLine(GenTensor<float, FloatWrapper>.MatrixMultiply(myMatrix, multipled));
+        var t = GenTensor<float, FloatWrapper>.Stack(myMatrix, myMatrix);
         t.Transpose(0, 2);
         Console.WriteLine(t);
+    }
+
+    public static GenTensor<T, GenericWrapper<T>> LazyWrapperMultiply<T>(T[,] a, T[,] b)
+    {
+        return GenTensor<T, GenericWrapper<T>>.MatrixMultiply(
+            GenTensor<T, GenericWrapper<T>>.CreateMatrix(a),
+            GenTensor<T, GenericWrapper<T>>.CreateMatrix(b)
+        );
     }
 }
 
 
 class Program
 {
+    
+
     static void Main(string[] args)
     {
-        
+        Console.WriteLine(Samples.LazyWrapperMultiply(
+            new[,]
+            {
+                {1, 2},
+                {3, 4}
+            },
+            new[,]
+            {
+                {5, 6},
+                {7, 8}
+            }
+            ));
     }
 }

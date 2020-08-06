@@ -1,6 +1,7 @@
 ![Test](https://github.com/WhiteBlackGoose/GenericTensor/workflows/Test/badge.svg)
-![GitHub](https://img.shields.io/github/license/WhiteBlackGoose/GenericTensor?color=blue)
+[![GitHub](https://img.shields.io/github/license/WhiteBlackGoose/GenericTensor?color=blue)](https://github.com/asc-community/AngouriMath/blob/master/LICENSE.md)
 [![Discord](https://img.shields.io/discord/642350046213439489?color=orange&label=Discord)](https://discord.gg/YWJEX7a)
+[![NuGet](https://img.shields.io/nuget/vpre/GenericTensor?label=NuGet)](https://www.nuget.org/packages/GenericTensor/)
 
 # GenericTensor
 
@@ -24,7 +25,7 @@ for built-in types.
 Let's create a float matrix `3 x 3` and multiply by itself.
 
 ```cs
-var myMatrix = FloatTensor.CreateMatrix(
+var myMatrix = GenTensor<float, FloatWrapper>.CreateMatrix(
     new float[,]
     {
         {1, 2, 3},
@@ -33,7 +34,7 @@ var myMatrix = FloatTensor.CreateMatrix(
     }
 );
 
-var multiplied = FloatTensor.MatrixMultiply(myMatrix, myMatrix);
+var multiplied = GenTensor<float, FloatWrapper>.MatrixMultiply(myMatrix, myMatrix);
 
 Console.WriteLine(multiplied);
 ```
@@ -41,7 +42,7 @@ Console.WriteLine(multiplied);
 Now we are going to unite a few such matrices into tensor:
 
 ```cs
-var t = FloatTensor.Stack(myMatrix, myMatrix);
+var t = GenTensor<float, FloatWrapper>.Stack(myMatrix, myMatrix);
 ```
 
 And swap the first and the last axis and output it
@@ -51,16 +52,7 @@ t.Transpose(0, 2);
 Console.WriteLine(t);
 ```
 
-Full list of implemented built-in types:
-
-```cs
-public sealed class IntTensor : GenTensor<int, IntWrapper> { }
-public sealed class LongTensor : GenTensor<long, LongWrapper> { }
-public sealed class FloatTensor : GenTensor<float, FloatWrapper> { }
-public sealed class DoubleTensor : GenTensor<double, DoubleWrapper> { }
-public sealed class ComplexTensor : GenTensor<Complex, ComplexWrapper> { }
-public sealed class BigIntTensor : GenTensor<BigInteger, BigIntWrapper> { }
-```
+Check already defined wrappers <a href="https://github.com/asc-community/GenericTensor/blob/master/GenericTensor/Functions/DefaultWrappers.cs">here</a>.
 
 #### Custom type
 

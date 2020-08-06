@@ -26,6 +26,7 @@
 
 
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace GenericTensor.Core
 {
@@ -102,6 +103,17 @@ namespace GenericTensor.Core
         {
             if (!(obj is TensorShape sh))
                 return false;
+            if (sh.Length != Length)
+                return false;
+            for (int i = 0; i < sh.Length; i++)
+                if (sh[i] != this[i])
+                    return false;
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(TensorShape sh)
+        {
             if (sh.Length != Length)
                 return false;
             for (int i = 0; i < sh.Length; i++)
