@@ -1,5 +1,5 @@
 ![Test](https://github.com/WhiteBlackGoose/GenericTensor/workflows/Test/badge.svg)
-[![GitHub](https://img.shields.io/github/license/WhiteBlackGoose/GenericTensor?color=blue)](https://github.com/asc-community/AngouriMath/blob/master/LICENSE.md)
+[![GitHub](https://img.shields.io/github/license/WhiteBlackGoose/GenericTensor?color=blue)](https://github.com/asc-community/GenericTensor/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/642350046213439489?color=orange&label=Discord)](https://discord.gg/YWJEX7a)
 [![NuGet](https://img.shields.io/nuget/vpre/GenericTensor?label=NuGet)](https://www.nuget.org/packages/GenericTensor/)
 
