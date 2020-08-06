@@ -37,7 +37,7 @@ namespace GenericTensor.Functions
             if (!copyElements)
             {
                 foreach (var index in res.IterateOverElements())
-                    res.SetValueNoCheck(default(TWrapper).Forward(t.GetValueNoCheck(index)), index);
+                    res.SetValueNoCheck(t.GetValueNoCheck(index), index);
             }
             else
                 foreach (var index in res.IterateOverElements())
@@ -49,7 +49,7 @@ namespace GenericTensor.Functions
         {
             var res = new GenTensor<T, TWrapper>(t.Shape);
             foreach (var index in res.IterateOverElements())
-                res.SetValueNoCheck(default(TWrapper).Forward(t.GetValueNoCheck(index)), index);
+                res.SetValueNoCheck(t.GetValueNoCheck(index), index);
             return res;
         }
     }

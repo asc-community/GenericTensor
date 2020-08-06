@@ -26,6 +26,7 @@ namespace Benchmark
         private static readonly TS createdTensorMatrix15 = CreateTensor(40, 15);
         private static readonly TS createdMatrix100 = CreateMatrix(100);
         
+        
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();
         [Benchmark] public void MatrixAndLaplace6()

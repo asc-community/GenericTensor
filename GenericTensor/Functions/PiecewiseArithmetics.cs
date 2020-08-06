@@ -64,8 +64,7 @@ namespace GenericTensor.Functions
                     {
                         var shape0 = res.Shape.shape[0];
                         for (int x = 0; x < shape0; x++)
-                            res.data[x] = tw.Forward(
-                                top.Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
+                            res.data[x] = top.Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x));
                         
                     }
                         break;
@@ -79,8 +78,9 @@ namespace GenericTensor.Functions
                             var currId = x * blocks0;
                             for (int y = 0; y < shape1; y++)
                             {
-                                res.data[currId] = tw.Forward(
-                                    top.Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
+                                res.data[currId] =
+                                    top.Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)
+                                    );
                                 currId += 1;
                             }
                         }
@@ -99,9 +99,7 @@ namespace GenericTensor.Functions
                             var currId = x * blocks0 + y * blocks1;
                             for (int z = 0; z < shape2; z++)
                             {
-                                res.data[currId] = tw.Forward(
-                                    top.Operation(a.GetValueNoCheck(x, y, z),
-                                        b.GetValueNoCheck(x, y, z)));
+                                res.data[currId] = top.Operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z));
                                 currId++;
                             }
                         }
@@ -109,8 +107,7 @@ namespace GenericTensor.Functions
                         break;
                     default:
                         foreach (var index in res.IterateOverElements())
-                            res.SetValueNoCheck(tw.Forward(
-                                    top.Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))),
+                            res.SetValueNoCheck(top.Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index)),
                                 index);
                         break;
                 }
@@ -121,7 +118,7 @@ namespace GenericTensor.Functions
                 {
                     var shape0 = res.Shape.shape[0];
                     for (int x = 0; x < shape0; x++)
-                        res.data[x] = tw.Forward(top.Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x)));
+                        res.data[x] = top.Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x));
                 }
                 else if (res.Shape.shape.Length == 2)
                 {
@@ -132,8 +129,7 @@ namespace GenericTensor.Functions
                         var currId = x * blocks0;
                         for (int y = 0; y < shape1; y++)
                         {
-                            res.data[currId] = tw.Forward(
-                                top.Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)));
+                            res.data[currId] = top.Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y));
                             currId++;
                         }
                     });
@@ -151,9 +147,8 @@ namespace GenericTensor.Functions
                             var currId = x * blocks0 + y * blocks1;
                             for (int z = 0; z < shape2; z++)
                             {
-                                res.data[currId] = tw.Forward(
-                                    top.Operation(a.GetValueNoCheck(x, y, z),
-                                        b.GetValueNoCheck(x, y, z)));
+                                res.data[currId] = top.Operation(a.GetValueNoCheck(x, y, z),
+                                        b.GetValueNoCheck(x, y, z));
                                 currId++;
                             }
                         }
@@ -161,8 +156,7 @@ namespace GenericTensor.Functions
                 }
                 else
                     foreach (var index in res.IterateOverElements())
-                        res.SetValueNoCheck(tw.Forward(
-                            top.Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index))), index);
+                        res.SetValueNoCheck(top.Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index)), index);
             }
             return res;
         }

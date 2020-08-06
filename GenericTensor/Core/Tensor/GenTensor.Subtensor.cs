@@ -124,7 +124,7 @@ namespace GenericTensor.Core
         internal void Assign(GenTensor<T, TWrapper> genTensor)
         {
             foreach (var (index, value) in genTensor.Iterate())
-                this.SetValueNoCheck(default(TWrapper).Forward(value), index);
+                this.SetValueNoCheck(value, index);
         }
     }
 
