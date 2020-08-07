@@ -30,7 +30,7 @@ namespace GenericTensor.Core
 {
     public partial class GenTensor<T, TWrapper> : ICloneable where TWrapper : struct, IOperations<T>
     {
-        internal readonly T[] data;
+        public readonly T[] data;
         internal readonly int[] blocks; // 3 x 4 x 5
         private int volume = -1;
         /// <summary>

@@ -37,10 +37,32 @@ namespace GenericTensor.Functions
         T Operation(T a, T b);
     }
 
+    internal static class WrapperStorage<T, TWrapper> where TWrapper : struct, IOperations<T>
+    {
+        internal struct AddWrapper : IZipOperator<T>
+        {
+            public T Operation(T a, T b) => default(TWrapper).Add(a, b);
+        }
+
+        internal struct SubtractWrapper : IZipOperator<T>
+        {
+            public T Operation(T a, T b) => default(TWrapper).Subtract(a, b);
+        }
+
+        internal struct MultiplyWrapper : IZipOperator<T>
+        {
+            public T Operation(T a, T b) => default(TWrapper).Multiply(a, b);
+        }
+
+        internal struct DivideWrapper : IZipOperator<T>
+        {
+            public T Operation(T a, T b) => default(TWrapper).Divide(a, b);
+        }
+    }
+
     internal static class PiecewiseArithmetics<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
         
-
         public static GenTensor<T, TWrapper> Zip<TOperator>(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading = Threading.Single) where TOperator : struct, IZipOperator<T>
         {
@@ -161,41 +183,21 @@ namespace GenericTensor.Functions
             return res;
         }
 
-        internal struct AddWrapper : IZipOperator<T>
-        {
-            public T Operation(T a, T b) => default(TWrapper).Add(a, b);
-        }
-
-        internal struct SubtractWrapper : IZipOperator<T>
-        {
-            public T Operation(T a, T b) => default(TWrapper).Subtract(a, b);
-        }
-
-        internal struct MultiplyWrapper : IZipOperator<T>
-        {
-            public T Operation(T a, T b) => default(TWrapper).Multiply(a, b);
-        }
-
-        internal struct DivideWrapper : IZipOperator<T>
-        {
-            public T Operation(T a, T b) => default(TWrapper).Divide(a, b);
-        }
-
         public static GenTensor<T, TWrapper> PiecewiseAdd(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip<AddWrapper>(a, b, threading);
+            => Zip<WrapperStorage<T, TWrapper>.AddWrapper>(a, b, threading);
 
         public static GenTensor<T, TWrapper> PiecewiseSubtract(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip<SubtractWrapper>(a, b, threading);
+            => Zip<WrapperStorage<T, TWrapper>.SubtractWrapper>(a, b, threading);
 
         public static GenTensor<T, TWrapper> PiecewiseMultiply(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip<MultiplyWrapper>(a, b, threading);
+            => Zip<WrapperStorage<T, TWrapper>.MultiplyWrapper>(a, b, threading);
 
         public static GenTensor<T, TWrapper> PiecewiseDivide(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip<DivideWrapper>(a, b, threading);
+            => Zip<WrapperStorage<T, TWrapper>.DivideWrapper>(a, b, threading);
 
         public static GenTensor<T, TWrapper> PiecewiseAdd(GenTensor<T, TWrapper> a,
             T b, Threading threading)

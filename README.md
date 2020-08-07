@@ -441,3 +441,10 @@ operation.
 ## Contribution
 
 We appreciate your willing to contribute to GenericTensor. Fork the repository, commit your changes and create a pull request. We also appreciate <a href="https://medium.com/@carlosperez/pull-request-first-f6bb667a9b6">early pull requests</a>. To make sure your improvement is relevant, we recommend you first to contact us in our <a href="https://discord.gg/YWJEX7a">discord server</a>.
+
+Author: <a href="https://github.com/WhiteBlackGoose">WhiteBlackGoose</a>
+
+Contributors: <a href="https://github.com/Happypig375">Happypig375</a>, 
+<a href="https://github.com/ZacharyPatten">ZacharyPattern</a>,
+<a href="https://github.com/Nucs">Nucs</a>,
+<a href="https://github.com/MomoDeve">MomoDeve</a>

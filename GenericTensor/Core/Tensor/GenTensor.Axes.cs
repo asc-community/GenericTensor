@@ -137,25 +137,25 @@ namespace GenericTensor.Core
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int GetFlattenedIndexSilent(int x) 
+        internal int GetFlattenedIndexSilent(int x) 
             => blocks[0] * x + 
                LinOffset;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int GetFlattenedIndexSilent(int x, int y) 
+        internal int GetFlattenedIndexSilent(int x, int y) 
             => blocks[0] * x +
                blocks[1] * y +
                LinOffset;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int GetFlattenedIndexSilent(int x, int y, int z) 
+        internal int GetFlattenedIndexSilent(int x, int y, int z) 
             => blocks[0] * x +
                blocks[1] * y +
                blocks[2] * z +
                LinOffset;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int GetFlattenedIndexSilent(int x, int y, int z, int[] other)
+        internal int GetFlattenedIndexSilent(int x, int y, int z, int[] other)
         {
             var res = GetFlattenedIndexSilent(x, y, z);
             for (int i = 0; i < other.Length; i++)

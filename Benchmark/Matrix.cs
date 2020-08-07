@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Attributes;
 using GenericTensor.Functions;
 using GenericTensor.Core;
@@ -26,7 +27,23 @@ namespace Benchmark
         private static readonly TS createdTensorMatrix15 = CreateTensor(40, 15);
         private static readonly TS createdMatrix100 = CreateMatrix(100);
         
-        
+
+        [Benchmark] public void MatrixAndAdd20()
+            => TS.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl);
+
+
+        [Benchmark] public unsafe void CompiledAdd20()
+        {
+            var res = GenTensor<float, FloatWrapper>.CreateMatrix(20, 20);
+            fixed (float* resData = res.data, aData = createdMatrix20.data, bData = createdMatrix20_dupl.data)
+            {
+                for (int x = 0; x < 20; x++)
+                for (int y = 0; y < 20; y++)
+                    resData[20 * x + y] = aData[20 * x + y + 0] + bData[20 * x + y + 0];
+            }
+        }
+
+        /*
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();
         [Benchmark] public void MatrixAndLaplace6()
@@ -69,13 +86,13 @@ namespace Benchmark
 
         [Benchmark] public void TensorAndMultiply15Parallel()
             => TS.TensorMatrixMultiply(createdTensorMatrix15, createdTensorMatrix15, Threading.Multi);
-            
+
         [Benchmark] public void MatrixAndAdd20()
             => TS.PiecewiseAdd(createdMatrix20, createdMatrix20);
         
         [Benchmark] public void MatrixAndAdd100()
             => TS.PiecewiseAdd(createdMatrix100, createdMatrix100);
-
+        
         [Benchmark] public void MatrixAndAdd20Parallel()
             => TS.PiecewiseAdd(createdMatrix20, createdMatrix20, Threading.Multi);
 
@@ -98,6 +115,6 @@ namespace Benchmark
             {
                 var c = createdMatrix9.GetValueNoCheck(i, j);
             }
-        }
+        }*/
     }
 }
