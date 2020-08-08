@@ -50,6 +50,14 @@ namespace GenericTensor.Functions
 
             var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 125);
 
+            
+            var aBlocks0 = a.blocks[0];
+            var aBlocks1 = a.blocks[1];
+            var bBlocks0 = b.blocks[0];
+            var bBlocks1 = b.blocks[1];
+            var aLinoffset = a.LinOffset;
+            var bLinoffset = b.LinOffset;
+            
             if (!parallel)
             {
                 for (int x = 0; x < width; x++)
@@ -59,11 +67,11 @@ namespace GenericTensor.Functions
                         var s = default(TWrapper).CreateZero();
                         for (int i = 0; i < row; i++)
                         {
-                            var v1 = a.GetValueNoCheck(x, i);
-                            var v2 = b.GetValueNoCheck(i, y);
+                            var v1 = a.data[x * aBlocks0 + i * aBlocks1 + aLinoffset];
+                            var v2 = b.data[i * bBlocks0 + y * bBlocks1 + bLinoffset];
                             s = default(TWrapper).Add(s, default(TWrapper).Multiply(v1, v2));
                         }
-                        res.SetValueNoCheck(s, x, y);
+                        res.data[x * height + y] = s;
                     }
                 }
             }

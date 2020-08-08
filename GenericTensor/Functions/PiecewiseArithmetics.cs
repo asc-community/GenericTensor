@@ -29,6 +29,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using GenericTensor.Core;
+using GenericTensor.Core.Expressions;
 
 namespace GenericTensor.Functions
 {
@@ -63,141 +64,32 @@ namespace GenericTensor.Functions
     internal static class PiecewiseArithmetics<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
         
-        public static GenTensor<T, TWrapper> Zip<TOperator>(GenTensor<T, TWrapper> a,
-            GenTensor<T, TWrapper> b, Threading threading = Threading.Single) where TOperator : struct, IZipOperator<T>
+        private static bool DetermineThreading(GenTensor<T, TWrapper> a,
+            GenTensor<T, TWrapper> b, Threading threading)
         {
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException("Arguments should be of the same shape");
             #endif
-            var res = new GenTensor<T, TWrapper>(a.Shape);
-
             var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 850);
-
-            var tw = default(TWrapper);
-            var top = default(TOperator);
-
-            if (!parallel)
-            {
-                switch (res.Shape.shape.Length)
-                {
-
-                    case 1:
-                    {
-                        var shape0 = res.Shape.shape[0];
-                        for (int x = 0; x < shape0; x++)
-                            res.data[x] = top.Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x));
-                        
-                    }
-                        break;
-                    case 2:
-                    {
-                        var shape0 = res.Shape.shape[0];
-                        var shape1 = res.Shape.shape[1];
-                        var blocks0 = res.blocks[0];
-                        for (int x = 0; x < shape0; x++)
-                        {
-                            var currId = x * blocks0;
-                            for (int y = 0; y < shape1; y++)
-                            {
-                                res.data[currId] =
-                                    top.Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y)
-                                    );
-                                currId += 1;
-                            }
-                        }
-                    }
-                        break;
-                    case 3:
-                    {
-                        var shape0 = res.Shape.shape[0];
-                        var shape1 = res.Shape.shape[1];
-                        var shape2 = res.Shape.shape[2];
-                        var blocks0 = res.blocks[0];
-                        var blocks1 = res.blocks[1];
-                        for (int x = 0; x < shape0; x++)
-                        for (int y = 0; y < shape1; y++)
-                        {
-                            var currId = x * blocks0 + y * blocks1;
-                            for (int z = 0; z < shape2; z++)
-                            {
-                                res.data[currId] = top.Operation(a.GetValueNoCheck(x, y, z), b.GetValueNoCheck(x, y, z));
-                                currId++;
-                            }
-                        }
-                    }
-                        break;
-                    default:
-                        foreach (var index in res.IterateOverElements())
-                            res.SetValueNoCheck(top.Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index)),
-                                index);
-                        break;
-                }
-            }
-            else
-            {
-                if (res.Shape.shape.Length == 1)
-                {
-                    var shape0 = res.Shape.shape[0];
-                    for (int x = 0; x < shape0; x++)
-                        res.data[x] = top.Operation(a.GetValueNoCheck(x), b.GetValueNoCheck(x));
-                }
-                else if (res.Shape.shape.Length == 2)
-                {
-                    var blocks0 = res.blocks[0];
-                    var shape1 = res.Shape.shape[1];
-                    Parallel.For(0, res.Shape.shape[0], x =>
-                    {
-                        var currId = x * blocks0;
-                        for (int y = 0; y < shape1; y++)
-                        {
-                            res.data[currId] = top.Operation(a.GetValueNoCheck(x, y), b.GetValueNoCheck(x, y));
-                            currId++;
-                        }
-                    });
-                }
-                else if (res.Shape.shape.Length == 3)
-                {
-                    var shape1 = res.Shape.shape[1];
-                    var shape2 = res.Shape.shape[2];
-                    var blocks0 = res.blocks[0];
-                    var blocks1 = res.blocks[1];
-                    Parallel.For(0, res.Shape.shape[0], x =>
-                    {
-                        for (int y = 0; y < shape1; y++)
-                        {
-                            var currId = x * blocks0 + y * blocks1;
-                            for (int z = 0; z < shape2; z++)
-                            {
-                                res.data[currId] = top.Operation(a.GetValueNoCheck(x, y, z),
-                                        b.GetValueNoCheck(x, y, z));
-                                currId++;
-                            }
-                        }
-                    });
-                }
-                else
-                    foreach (var index in res.IterateOverElements())
-                        res.SetValueNoCheck(top.Operation(a.GetValueNoCheck(index), b.GetValueNoCheck(index)), index);
-            }
-            return res;
+            return parallel;
         }
 
         public static GenTensor<T, TWrapper> PiecewiseAdd(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip<WrapperStorage<T, TWrapper>.AddWrapper>(a, b, threading);
+            => ExpressionCompiler<T, TWrapper>.PiecewiseAdd(a, b, DetermineThreading(a, b, threading));
 
         public static GenTensor<T, TWrapper> PiecewiseSubtract(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip<WrapperStorage<T, TWrapper>.SubtractWrapper>(a, b, threading);
+            => ExpressionCompiler<T, TWrapper>.PiecewiseSubtract(a, b, DetermineThreading(a, b, threading));
 
         public static GenTensor<T, TWrapper> PiecewiseMultiply(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip<WrapperStorage<T, TWrapper>.MultiplyWrapper>(a, b, threading);
+            => ExpressionCompiler<T, TWrapper>.PiecewiseMultiply(a, b, DetermineThreading(a, b, threading));
 
         public static GenTensor<T, TWrapper> PiecewiseDivide(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
-            => Zip<WrapperStorage<T, TWrapper>.DivideWrapper>(a, b, threading);
+            => ExpressionCompiler<T, TWrapper>.PiecewiseDivision(a, b, DetermineThreading(a, b, threading));
 
         public static GenTensor<T, TWrapper> PiecewiseAdd(GenTensor<T, TWrapper> a,
             T b, Threading threading)

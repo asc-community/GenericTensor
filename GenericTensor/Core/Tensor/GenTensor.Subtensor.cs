@@ -33,7 +33,7 @@ namespace GenericTensor.Core
 {
     public partial class GenTensor<T, TWrapper>
     {
-        private int LinOffset;
+        public int LinOffset;
 
         /// <summary>
         /// Slice with data sharing like in python

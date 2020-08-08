@@ -35,7 +35,7 @@ namespace GenericTensor.Core
     /// </summary>
     public struct TensorShape
     {
-        internal readonly int[] shape;
+        public readonly int[] shape;
         /// <summary>
         /// Length of a shape is basically number of dimensions
         /// </summary>

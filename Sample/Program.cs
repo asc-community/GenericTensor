@@ -25,9 +25,14 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using GenericTensor.Core;
+using GenericTensor.Core.Expressions;
 using GenericTensor.Functions;
 
+using FuncFrom3 = System.Action<GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>>;
 public static class Samples
 {
     public static void CreatingMatrix()
@@ -73,11 +78,27 @@ public static class Samples
 class Program
 {
     
-
     static void Main(string[] args)
     {
-        var m = GenTensor<int, IntWrapper>.CreateVector(3, 4, 5, 6);
-        var m2 = GenTensor<int, IntWrapper>.CreateVector(3, 4, 5, 6);
-        var c = GenTensor<int, IntWrapper>.PiecewiseAdd(m, m2);
+        
+        var a = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(
+            3, 4, 5
+        ), inds => inds[0] + inds[1] + inds[2]);
+        var b = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(
+            3, 4, 5
+        ), inds => 6 + inds[0]);
+        /*
+        Console.WriteLine(a);
+        Console.WriteLine();
+        Console.WriteLine();
+
+        Console.WriteLine(b);
+        Console.WriteLine();
+        Console.WriteLine();
+
+        Console.WriteLine(ExpressionCompiler<int, IntWrapper>.PiecewiseAdd(a, b, false));
+        */
+        //GenTensor<int, IntWrapper>.PiecewiseAdd(a, b, Threading.Multi);
+        Console.WriteLine(ExpressionCompiler<int, IntWrapper>.PiecewiseAdd(a, b, true));
     }
 }
