@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
-using GenericTensor.Functions;
 
 namespace GenericTensor.Core.Expressions
 {
@@ -182,7 +180,6 @@ namespace GenericTensor.Core.Expressions
             // resblocks_1 = res.blocks[1]
             // ...
             actions.AddRange(actResBlocks);
-
 
             var local_ALinOffset = Expression.Parameter(typeof(int), "aLin");
 

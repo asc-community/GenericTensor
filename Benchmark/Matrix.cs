@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Linq.Expressions;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Attributes;
@@ -16,6 +17,7 @@ namespace Benchmark
         public void Setup()
         {
             ExpressionCompiler<int, IntWrapper>.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl, false);
+            ExpressionCompiler<int, IntWrapper>.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl, true);
         }
 
         static TS CreateMatrix(int size)
@@ -34,24 +36,18 @@ namespace Benchmark
         private static readonly TS createdTensorMatrix15 = CreateTensor(40, 15);
         private static readonly TS createdMatrix100 = CreateMatrix(100);
         private static readonly TS createdMatrix100_dupl = CreateMatrix(100);
-        /*
+        
         [Benchmark] public void MatrixAndAdd100()
+            => TS.PiecewiseAdd(createdMatrix100, createdMatrix100_dupl, Threading.Single);
+        
+        [Benchmark] public void MatrixAndAdd100Par()
             => TS.PiecewiseAdd(createdMatrix100, createdMatrix100_dupl, Threading.Multi);
-        
-        [Benchmark] public void MatrixAndAdd100Expr()
-            => ExpressionCompiler<int, IntWrapper>.PiecewiseAdd(createdMatrix100, createdMatrix100_dupl, true);
 
-        
-        [Benchmark] public unsafe void CompiledAdd20()
-        {
-            var res = GenTensor<float, FloatWrapper>.CreateMatrix(20, 20);
-            fixed (float* resData = res.data, aData = createdMatrix20.data, bData = createdMatrix20_dupl.data)
-            {
-                for (int x = 0; x < 20; x++)
-                for (int y = 0; y < 20; y++)
-                    resData[20 * x + y] = aData[20 * x + y + 0] + bData[20 * x + y + 0];
-            }
-        }*/
+        [Benchmark] public void MatrixAndAdd20()
+            => TS.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl, Threading.Single);
+
+        [Benchmark] public void MatrixAndAdd20Par()
+            => TS.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl, Threading.Multi);
 
         /*
         [Benchmark] public void MatrixAndLaplace3()
@@ -78,13 +74,13 @@ namespace Benchmark
             
         [Benchmark] public void Transpose20()
             => createdMatrix20.TransposeMatrix();
-            */
+            
         [Benchmark] public void MatrixAndMultiply6()
             => TS.MatrixMultiply(createdMatrix6, createdMatrix6);
 
         [Benchmark] public void MatrixAndMultiply20()
             => TS.MatrixMultiply(createdMatrix20, createdMatrix20);
-        /*
+        
         [Benchmark] public void TensorAndMultiply15()
             => TS.TensorMatrixMultiply(createdTensorMatrix15, createdTensorMatrix15);
 

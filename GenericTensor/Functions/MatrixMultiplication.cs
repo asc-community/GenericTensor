@@ -84,11 +84,11 @@ namespace GenericTensor.Functions
                         var s = default(TWrapper).CreateZero();
                         for (int i = 0; i < row; i++)
                         {
-                            var v1 = a.GetValueNoCheck(x, i);
-                            var v2 = b.GetValueNoCheck(i, y);
+                            var v1 = a.data[x * aBlocks0 + i * aBlocks1 + aLinoffset];
+                            var v2 = b.data[i * bBlocks0 + y * bBlocks1 + bLinoffset];
                             s = default(TWrapper).Add(s, default(TWrapper).Multiply(v1, v2));
                         }
-                        res.SetValueNoCheck(s, x, y);
+                        res.data[x * height + y] = s;
                     }
                 });
             }
@@ -133,7 +133,6 @@ namespace GenericTensor.Functions
                     var product = Multiply(a.GetSubtensor(subDimensions), b.GetSubtensor(subDimensions), Threading.Single);
                     resTensor.SetSubtensor(product, subDimensions);
                 });
-
             }
             return resTensor;
         }
