@@ -67,10 +67,6 @@ namespace GenericTensor.Functions
         private static bool DetermineThreading(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
         {
-            #if ALLOW_EXCEPTIONS
-            if (a.Shape != b.Shape)
-                throw new InvalidShapeException("Arguments should be of the same shape");
-            #endif
             var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 850);
             return parallel;
         }

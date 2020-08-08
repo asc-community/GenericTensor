@@ -70,7 +70,6 @@ public struct IntWrapper : IOperations<int>
     public int CreateOne() => 1;
     public int CreateZero() => 0;
     public int Copy(int a) => a;
-    public int Forward(int a) => a;
     public bool AreEqual(int a, int b) => a == b;
     public bool IsZero(int a) => a == 0;
     public string ToString(int a) => a.ToString();
@@ -336,22 +335,7 @@ We know how important it is to use fast tools. That is why we prepared a report 
 
 Conditions: i7-7700HQ (4 cores, 8 threads) with minimum background activity.
 
-Short version:
-
-|                      Method |              Mean |                          Explanation |
-|---------------------------- |------------------:|-------------------------------------:|
-|          MatrixAndGaussian6 |          4,166 ns | Det via Gaussian elim on M 6x6       |
-|            CreatingMatrix20 |          1,446 ns | Init matrix 20x20                    |
-|            CreatingMatrix50 |          8,124 ns | Init matrix 50x50                    |
-|                 Transpose20 |              3 ns | Transpose matrix 20x20               |
-|          MatrixAndMultiply6 |          1,239 ns | Multiply two matrices 6x6            |
-|         MatrixAndMultiply20 |         40,317 ns | Multiply two matrices 20x20          |
-|              MatrixAndAdd20 |          2,912 ns | Piecewise addition on M 20x20        |
-|             MatrixAndAdd100 |         70,325 ns | Piecewise addition on M 100x100      |
-|                SafeIndexing |            409 ns | Addressing to [i, j] with checks     |
-|                FastIndexing |            163 ns | Addressing to [i, j] w/0 checks      |
-
-<details><summary><strong>Full report</strong></summary>
+### Full report
 
 
 |                      Method |              Last |                          Explanation |
@@ -378,12 +362,11 @@ Short version:
 |                SafeIndexing |            422 ns | Addressing to [i, j] with checks     |
 |                FastIndexing |            154 ns | Addressing to [i, j] w/0 checks      |
 
-</details>
 
 <details><summary><strong>Versus Towel</strong></summary>
 
 Towel is not a competitor to GT, those are completely different libraries. But since it is the only library that provides matrices for
-arbitrary type (not only numeric), we have to compare GT to it.
+arbitrary type (not only numeric), we have to compare GT to it. We take Towel as of 08.08.2020 from its official repository.
 
 |                      Method |     GenericTensor |           Towel |                          Explanation | GT wins?   |
 |---------------------------- |------------------:|----------------:|-------------------------------------:|:----------:|
@@ -470,7 +453,8 @@ We appreciate your willing to contribute to GenericTensor. Fork the repository, 
 
 Author: <a href="https://github.com/WhiteBlackGoose">WhiteBlackGoose</a>
 
-Contributors: <a href="https://github.com/Happypig375">Happypig375</a>, 
-<a href="https://github.com/ZacharyPatten">ZacharyPattern</a>,
+Contributors: <a href="https://github.com/WhiteBlackGoose">WhiteBlackGoose</a>,
 <a href="https://github.com/Nucs">Nucs</a>,
+<a href="https://github.com/ZacharyPatten">ZacharyPattern</a>,
+<a href="https://github.com/Happypig375">Happypig375</a>, 
 <a href="https://github.com/MomoDeve">MomoDeve</a>

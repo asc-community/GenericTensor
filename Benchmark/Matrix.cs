@@ -37,6 +37,7 @@ namespace Benchmark
         private static readonly TS createdMatrix100 = CreateMatrix(100);
         private static readonly TS createdMatrix100_dupl = CreateMatrix(100);
         
+        /*
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();
         [Benchmark] public void MatrixAndLaplace6()
@@ -79,7 +80,7 @@ namespace Benchmark
 
         [Benchmark] public void TensorAndMultiply15Parallel()
             => TS.TensorMatrixMultiply(createdTensorMatrix15, createdTensorMatrix15, Threading.Multi);
-
+            */
         [Benchmark] public void MatrixAndAdd20()
             => TS.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl);
         
@@ -91,7 +92,7 @@ namespace Benchmark
 
         [Benchmark] public void MatrixAndAdd100Parallel()
             => TS.PiecewiseAdd(createdMatrix100, createdMatrix100_dupl, Threading.Multi);
-        
+        /*
         [Benchmark] public void SafeIndexing()
         {
             for (int i = 0; i < createdMatrix9.Shape[0]; i++)
@@ -108,6 +109,6 @@ namespace Benchmark
             {
                 var c = createdMatrix9.GetValueNoCheck(i, j);
             }
-        }
+        }*/
     }
 }

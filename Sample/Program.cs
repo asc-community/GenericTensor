@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using GenericTensor.Core;
@@ -99,7 +100,8 @@ class Program
         
         //GenTensor<int, IntWrapper>.PiecewiseAdd(a, b, Threading.Multi);
         */
-        var res = ExpressionCompiler<int, IntWrapper>.PiecewiseAdd(a, b, true);
+        
+        var res = GenTensor<int, IntWrapper>.PiecewiseAdd(a, b, Threading.Multi);
         Console.WriteLine(res);
         
     }

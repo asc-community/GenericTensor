@@ -94,7 +94,7 @@ namespace GenericTensor.Core.Expressions
         }
 
         public static Expression CompileNestedLoops(Expression[] shapes, Func<ParameterExpression[], Expression> onIter,
-            bool parallel)
+            bool parallel, ParameterExpression[] localsToPass)
         {
             if (!parallel)
                 return CompileNestedLoops(shapes, onIter);
@@ -114,9 +114,19 @@ namespace GenericTensor.Core.Expressions
                 var others = new ArraySegment<Expression>(shapes, 1, shapes.Length - 1).ToArray();
                 var compiledLoops = CompileNestedLoops(others, newOnIter);
 
-                var del = Expression.Lambda<Action<int>>(compiledLoops, x);
+                var newArgs = localsToPass.ToList().Append(x).ToArray();
 
-                
+                var del = Expression.Lambda(compiledLoops, newArgs);
+
+                var actions = new List<Expression>();
+
+                var localDelCall = Expression.Invoke(del, newArgs);
+
+                var finalLambda = Expression.Lambda(
+                    localDelCall,
+                    x
+                );
+
                 var enu = typeof(Parallel)
                     .GetMethods()
                     .Where(mi => mi.Name == nameof(Parallel.For))
@@ -127,7 +137,7 @@ namespace GenericTensor.Core.Expressions
 
                 var mi = enu.FirstOrDefault();
                 
-                var call = Expression.Call(null, mi, Expression.Constant(0), shape0, del);
+                var call = Expression.Call(null, mi, Expression.Constant(0), shape0, finalLambda);
                 return call;
             }
         }
@@ -247,6 +257,13 @@ namespace GenericTensor.Core.Expressions
                 return assign;
             };
 
+            var locals = new List<ParameterExpression>();
+            locals.AddRange(local_aBlocks);
+            locals.AddRange(local_bBlocks);
+            locals.AddRange(local_resBlocks);
+            locals.Add(local_ALinOffset);
+            locals.Add(local_BLinOffset);
+
             var shapeInfo = typeof(GenTensor<T, TWrapper>).GetProperty(nameof(GenTensor<T, TWrapper>.Shape));
             var shapeFieldInfo = typeof(TensorShape).GetField(nameof(TensorShape.shape));
             var shapeProperty = Expression.Property(res, shapeInfo);
@@ -259,17 +276,10 @@ namespace GenericTensor.Core.Expressions
                             shapeField,
                             Expression.Constant(id))
                 ).ToArray(),
-                onIter, parallel
+                onIter, parallel, locals.ToArray()
             );
 
             actions.Add(loops);
-
-            var locals = new List<ParameterExpression>();
-            locals.AddRange(local_aBlocks);
-            locals.AddRange(local_bBlocks);
-            locals.AddRange(local_resBlocks);
-            locals.Add(local_ALinOffset);
-            locals.Add(local_BLinOffset);
 
             Expression bl = Expression.Block(
                 locals, actions.ToArray()
