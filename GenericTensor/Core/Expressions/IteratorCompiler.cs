@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -115,10 +116,17 @@ namespace GenericTensor.Core.Expressions
 
                 var del = Expression.Lambda<Action<int>>(compiledLoops, x);
 
-                var mi = typeof(Parallel)
+                
+                var enu = typeof(Parallel)
                     .GetMethods()
                     .Where(mi => mi.Name == nameof(Parallel.For))
-                    .Where(mi => mi.GetParameters().Length == 3).FirstOrDefault();
+                    .Where(mi => mi.GetParameters().Length == 3)
+                    .Where(mi => mi.GetParameters()[2].ParameterType == typeof(Action<int>)).ToArray();
+                if (enu.Count() != 1)
+                    throw new InvalidEnumArgumentException();
+
+                var mi = enu.FirstOrDefault();
+                
                 var call = Expression.Call(null, mi, Expression.Constant(0), shape0, del);
                 return call;
             }

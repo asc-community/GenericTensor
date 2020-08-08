@@ -99,7 +99,8 @@ class Program
         
         //GenTensor<int, IntWrapper>.PiecewiseAdd(a, b, Threading.Multi);
         */
-        Console.WriteLine(ExpressionCompiler<int, IntWrapper>.PiecewiseAdd(a, b, true));
+        var res = ExpressionCompiler<int, IntWrapper>.PiecewiseAdd(a, b, true);
+        Console.WriteLine(res);
         
     }
 }
