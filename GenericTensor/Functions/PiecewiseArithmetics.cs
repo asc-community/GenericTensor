@@ -67,7 +67,7 @@ namespace GenericTensor.Functions
         private static bool DetermineThreading(GenTensor<T, TWrapper> a,
             GenTensor<T, TWrapper> b, Threading threading)
         {
-            var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 850);
+            var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 3000);
             return parallel && !a.IsVector;
         }
 

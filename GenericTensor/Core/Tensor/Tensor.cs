@@ -25,6 +25,7 @@
 #endregion
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace GenericTensor.Core
 {
@@ -53,13 +54,14 @@ namespace GenericTensor.Core
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void UpdateBlockCache()
         {
             if (blocks.Length >= 3)
                 goto More3;
-            else if (blocks.Length >= 2)
+            if (blocks.Length >= 2)
                 goto More2;
-            else if (blocks.Length >= 1)
+            if (blocks.Length >= 1)
                 goto More1;
             More3:
             cached_blocks2 = blocks[2];
