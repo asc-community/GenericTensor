@@ -1,4 +1,4 @@
-![Test](https://github.com/WhiteBlackGoose/GenericTensor/workflows/Test/badge.svg)
+﻿![Test](https://github.com/WhiteBlackGoose/GenericTensor/workflows/Test/badge.svg)
 [![GitHub](https://img.shields.io/github/license/WhiteBlackGoose/GenericTensor?color=blue)](https://github.com/asc-community/GenericTensor/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/642350046213439489?color=orange&label=Discord)](https://discord.gg/YWJEX7a)
 [![NuGet](https://img.shields.io/nuget/vpre/GenericTensor?label=NuGet)](https://www.nuget.org/packages/GenericTensor/)
@@ -385,23 +385,23 @@ Short version:
 Towel is not a competitor to GT, those are completely different libraries. But since it is the only library that provides matrices for
 arbitrary type (not only numeric), we have to compare GT to it.
 
-|                      Method |     GenericTensor |           Towel |                          Explanation | Who is better                              |
-|---------------------------- |------------------:|----------------:|-------------------------------------:|-------------------------------------------:|
-|           MatrixAndLaplace3 |            175 ns |          330 ns | Det via Laplace on M 3x3             | <p style="color: green">GenericTensor</p>  |
-|           MatrixAndLaplace6 |         28,739 ns |       45,338 ns | Det via Laplace on M 6x6             | <p style="color: green">GenericTensor</p>  |
-|           MatrixAndLaplace9 |     14,560,626 ns |   22,770,639 ns | Det via Laplace on M 9x9             | <p style="color: green">GenericTensor</p>  |
-|          MatrixAndGaussian3 |            594 ns |          721 ns | Det via Gaussian elim on M 3x3       | <p style="color: green">GenericTensor</p>  |
-|          MatrixAndGaussian6 |          4,054 ns |        4,547 ns | Det via Gaussian elim on M 6x6       | <p style="color: green">GenericTensor</p>  |
-|          MatrixAndGaussian9 |         13,102 ns |       14,574 ns | Det via Gaussian elim on M 9x9       | <p style="color: green">GenericTensor</p>  |
-|            CreatingMatrix20 |          1,395 ns |        1,460 ns | Init matrix 20x20                    | <p style="color: yellow">Even</p>          |
-|            CreatingMatrix50 |          7,826 ns |        8,490 ns | Init matrix 50x50                    | <p style="color: yellow">Even</p>          |
-|                 Transpose20 |              3 ns |          766 ns | Transpose matrix 20x20               | <p style="color: green">GenericTensor</p>  |
-|          MatrixAndMultiply6 |            709 ns |          930 ns | Multiply two matrices 6x6            | <p style="color: green">GenericTensor</p>  |
-|         MatrixAndMultiply20 |         23,216 ns |       29,092 ns | Multiply two matrices 20x20          | <p style="color: green">GenericTensor</p>  |
-|              MatrixAndAdd20 |          1,612 ns |        1,386 ns | Piecewise addition on M 20x20        | <p style="color: red">Towel</p>            |
-|             MatrixAndAdd100 |         37,740 ns |       33,529 ns | Piecewise addition on M 100x100      | <p style="color: red">Towel</p>            |
-|                SafeIndexing |            422 ns |          342 ns | Addressing to [i, j] with checks     | <p style="color: red">Towel</p>            |
-|                FastIndexing |            154 ns | (no fast)342 ns | Addressing to [i, j] w/0 checks      | <p style="color: green">GenericTensor</p>  |
+|                      Method |     GenericTensor |           Towel |                          Explanation | GT wins?   |
+|---------------------------- |------------------:|----------------:|-------------------------------------:|:----------:|
+|           MatrixAndLaplace3 |            175 ns |          330 ns | Det via Laplace on M 3x3             | +          |
+|           MatrixAndLaplace6 |         28,739 ns |       45,338 ns | Det via Laplace on M 6x6             | +          |
+|           MatrixAndLaplace9 |     14,560,626 ns |   22,770,639 ns | Det via Laplace on M 9x9             | +          |
+|          MatrixAndGaussian3 |            594 ns |          721 ns | Det via Gaussian elim on M 3x3       | +          |
+|          MatrixAndGaussian6 |          4,054 ns |        4,547 ns | Det via Gaussian elim on M 6x6       | +          |
+|          MatrixAndGaussian9 |         13,102 ns |       14,574 ns | Det via Gaussian elim on M 9x9       | +          |
+|            CreatingMatrix20 |          1,395 ns |        1,460 ns | Init matrix 20x20                    | =          |
+|            CreatingMatrix50 |          7,826 ns |        8,490 ns | Init matrix 50x50                    | =          |
+|                 Transpose20 |              3 ns |          766 ns | Transpose matrix 20x20               | +          |
+|          MatrixAndMultiply6 |            709 ns |          930 ns | Multiply two matrices 6x6            | +          |
+|         MatrixAndMultiply20 |         23,216 ns |       29,092 ns | Multiply two matrices 20x20          | +          |
+|              MatrixAndAdd20 |          1,612 ns |        1,386 ns | Piecewise addition on M 20x20        | -          |
+|             MatrixAndAdd100 |         37,740 ns |       33,529 ns | Piecewise addition on M 100x100      | -          |
+|                SafeIndexing |            422 ns |          342 ns | Addressing to [i, j] with checks     | -          |
+|                FastIndexing |            154 ns | (no fast)342 ns | Addressing to [i, j] w/0 checks      | +          |
 
 
 </details>
