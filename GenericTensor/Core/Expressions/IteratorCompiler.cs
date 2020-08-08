@@ -276,7 +276,7 @@ namespace GenericTensor.Core.Expressions
                             shapeField,
                             Expression.Constant(id))
                 ).ToArray(),
-                onIter, parallel, locals.ToArray()
+                onIter, parallel, locals.ToList().Append(a).Append(b).Append(res).ToArray()
             );
 
             actions.Add(loops);

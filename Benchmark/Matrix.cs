@@ -16,8 +16,7 @@ namespace Benchmark
         [GlobalSetup]
         public void Setup()
         {
-            ExpressionCompiler<int, IntWrapper>.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl, false);
-            ExpressionCompiler<int, IntWrapper>.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl, true);
+            
         }
 
         static TS CreateMatrix(int size)
@@ -36,7 +35,17 @@ namespace Benchmark
         private static readonly TS createdTensorMatrix15 = CreateTensor(40, 15);
         private static readonly TS createdMatrix100 = CreateMatrix(100);
         private static readonly TS createdMatrix100_dupl = CreateMatrix(100);
+        /*
+        private static readonly TS createdMatrix250 = CreateMatrix(250);
+        private static readonly TS createdMatrix250_dupl = CreateMatrix(250);
         
+        [Benchmark] public void MatrixAndAdd250()
+            => TS.PiecewiseAdd(createdMatrix250, createdMatrix250_dupl);
+
+        [Benchmark] public void MatrixAndAdd250Par()
+            => TS.PiecewiseAdd(createdMatrix250, createdMatrix250_dupl, Threading.Multi);
+            */
+
         /*
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();
@@ -86,6 +95,7 @@ namespace Benchmark
         
         [Benchmark] public void MatrixAndAdd100()
             => TS.PiecewiseAdd(createdMatrix100, createdMatrix100_dupl);
+
         
         [Benchmark] public void MatrixAndAdd20Parallel()
             => TS.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl, Threading.Multi);
