@@ -177,6 +177,10 @@ namespace GenericTensor.Core.Expressions
             var b = Expression.Parameter(typeof(GenTensor<T, TWrapper>), "b");
             var res = Expression.Parameter(typeof(GenTensor<T, TWrapper>), "res");
 
+            var aData = Expression.Parameter(typeof(T[]), "aData");
+            var bData = Expression.Parameter(typeof(T[]), "bData");
+            var resData = Expression.Parameter(typeof(T[]), "resData");
+
             var actions = new List<Expression>();
 
             var (local_aBlocks, actABlocks) = CompileLocalBlocks(a, N, "a");
@@ -198,6 +202,17 @@ namespace GenericTensor.Core.Expressions
             // resblocks_1 = res.blocks[1]
             // ...
             actions.AddRange(actResBlocks);
+
+            var fieldInfo = typeof(GenTensor<T, TWrapper>).GetField(nameof(GenTensor<T, TWrapper>.data));
+
+            // aData = a.data
+            actions.Add(Expression.Assign(aData, Expression.Field(a, fieldInfo)));
+
+            // bData = b.data
+            actions.Add(Expression.Assign(bData, Expression.Field(b, fieldInfo)));
+
+            // resData = res.data
+            actions.Add(Expression.Assign(resData, Expression.Field(res, fieldInfo)));
 
             var local_ALinOffset = Expression.Parameter(typeof(int), "aLin");
 
@@ -226,12 +241,10 @@ namespace GenericTensor.Core.Expressions
                 bIndex = Expression.Add(bIndex, local_BLinOffset);
 
                 // a.data
-                var aDataField = Expression.Field(a,
-                    typeof(GenTensor<T, TWrapper>).GetField(nameof(GenTensor<T, TWrapper>.data)));
+                var aDataField = aData;
 
                 // d.data
-                var bDataField = Expression.Field(b,
-                    typeof(GenTensor<T, TWrapper>).GetField(nameof(GenTensor<T, TWrapper>.data)));
+                var bDataField = bData;
 
                 // a.data[aIndex]
                 var aDataIndex = Expression.ArrayIndex(aDataField, aIndex);
@@ -246,8 +259,7 @@ namespace GenericTensor.Core.Expressions
                 var resIndex = ExpressionCompiler<T, TWrapper>.BuildIndexToData(vars, local_resBlocks);
 
                 // res.data
-                var resField = Expression.Field(res,
-                    typeof(GenTensor<T, TWrapper>).GetField(nameof(GenTensor<T, TWrapper>.data)));
+                var resField = resData;
 
                 // res.data[resIndex] = 
                 var accessRes = Expression.ArrayAccess(resField, resIndex);
@@ -263,6 +275,9 @@ namespace GenericTensor.Core.Expressions
             locals.AddRange(local_resBlocks);
             locals.Add(local_ALinOffset);
             locals.Add(local_BLinOffset);
+            locals.Add(aData);
+            locals.Add(bData);
+            locals.Add(resData);
 
             var shapeInfo = typeof(GenTensor<T, TWrapper>).GetProperty(nameof(GenTensor<T, TWrapper>.Shape));
             var shapeFieldInfo = typeof(TensorShape).GetField(nameof(TensorShape.shape));
@@ -276,7 +291,7 @@ namespace GenericTensor.Core.Expressions
                             shapeField,
                             Expression.Constant(id))
                 ).ToArray(),
-                onIter, parallel, locals.ToList().Append(a).Append(b).Append(res).ToArray()
+                onIter, parallel, locals.ToArray()
             );
 
             actions.Add(loops);

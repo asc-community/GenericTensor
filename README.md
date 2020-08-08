@@ -338,29 +338,29 @@ Conditions: i7-7700HQ (4 cores, 8 threads) with minimum background activity.
 ### Full report
 
 
-|                      Method |              Last |                          Explanation |
-|---------------------------- |------------------:|-------------------------------------:|
-|           MatrixAndLaplace3 |            175 ns | Det via Laplace on M 3x3             |
-|           MatrixAndLaplace6 |         28,739 ns | Det via Laplace on M 6x6             |
-|           MatrixAndLaplace9 |     14,560,626 ns | Det via Laplace on M 9x9             |
-|          MatrixAndGaussian3 |            594 ns | Det via Gaussian elim on M 3x3       |
-|          MatrixAndGaussian6 |          4,054 ns | Det via Gaussian elim on M 6x6       |
-|          MatrixAndGaussian9 |         13,102 ns | Det via Gaussian elim on M 9x9       |
-|            CreatingMatrix20 |          1,395 ns | Init matrix 20x20                    |
-|            CreatingMatrix50 |          7,826 ns | Init matrix 50x50                    |
-|                 Transpose20 |              3 ns | Transpose matrix 20x20               |
-|          MatrixAndMultiply6 |            709 ns | Multiply two matrices 6x6            |
-|         MatrixAndMultiply20 |         23,216 ns | Multiply two matrices 20x20          |
-|         TensorAndMultiply15 |        636,207 ns | M-ply 2 T 40x15x15                   |
-|  MatrixAndMultiply6Parallel |         14,157 ns | M-ply 2 M 6x6 in multithread         |
-| MatrixAndMultiply20Parallel |         14,085 ns | M-ply 2 M 20x20 in multithread       |
-| TensorAndMultiply15Parallel |        239,980 ns | M-ply 2 T 40x15x15 in multithread    |
-|              MatrixAndAdd20 |          1,612 ns | Piecewise addition on M 20x20        |
-|             MatrixAndAdd100 |         37,740 ns | Piecewise addition on M 100x100      |
-|      MatrixAndAdd20Parallel |          9,698 ns | P-se add in multithread on M 20x20   |
-|     MatrixAndAdd100Parallel |         58,560 ns | P-se add in multithread on M 100x100 |
-|                SafeIndexing |            422 ns | Addressing to [i, j] with checks     |
-|                FastIndexing |            154 ns | Addressing to [i, j] w/0 checks      |
+|                      Method |              Last |              Mean |              Mean |                          Explanation |
+|---------------------------- |------------------:|------------------:|------------------:|-------------------------------------:|
+|           MatrixAndLaplace3 |            175 ns |            181 ns |        145.237 ns | Det via Laplace on M 3x3             |
+|           MatrixAndLaplace6 |         28,739 ns |         29,646 ns |     23,318.300 ns | Det via Laplace on M 6x6             |
+|           MatrixAndLaplace9 |     14,560,626 ns |     13,922,168 ns | 11,765,150.104 ns | Det via Laplace on M 9x9             |
+|          MatrixAndGaussian3 |            594 ns |            578 ns |        586.231 ns | Det via Gaussian elim on M 3x3       |
+|          MatrixAndGaussian6 |          4,054 ns |          3,904 ns |      3,881.411 ns | Det via Gaussian elim on M 6x6       |
+|          MatrixAndGaussian9 |         13,102 ns |         12,706 ns |     12,808.860 ns | Det via Gaussian elim on M 9x9       |
+|            CreatingMatrix20 |          1,395 ns |          1,491 ns |      1,431.916 ns | Init matrix 20x20                    |
+|            CreatingMatrix50 |          7,826 ns |          8,406 ns |      8,115.488 ns | Init matrix 50x50                    |
+|                 Transpose20 |              3 ns |              3 ns |          7.068 ns | Transpose matrix 20x20               |
+|          MatrixAndMultiply6 |            709 ns |            702 ns |        738.214 ns | Multiply two matrices 6x6            |
+|         MatrixAndMultiply20 |         23,216 ns |         22,252 ns |     22,405.136 ns | Multiply two matrices 20x20          |
+|         TensorAndMultiply15 |        636,207 ns |        646,419 ns |    658,382.938 ns | M-ply 2 T 40x15x15                   |
+|  MatrixAndMultiply6Parallel |         14,157 ns |         13,708 ns |     14,147.813 ns | M-ply 2 M 6x6 in multithread         |
+| MatrixAndMultiply20Parallel |         14,085 ns |         13,970 ns |     14,549.677 ns | M-ply 2 M 20x20 in multithread       |
+| TensorAndMultiply15Parallel |        239,980 ns |        241,347 ns |    280,310.205 ns | M-ply 2 T 40x15x15 in multithread    |
+|              MatrixAndAdd20 |          1,612 ns |          1,336 ns |      1,528.755 ns | Piecewise addition on M 20x20        |
+|             MatrixAndAdd100 |         37,740 ns |         30,766 ns |     33,562.409 ns | Piecewise addition on M 100x100      |
+|      MatrixAndAdd20Parallel |          9,698 ns |          7,385 ns |      7,265.791 ns | P-se add in multithread on M 20x20   |
+|     MatrixAndAdd100Parallel |         58,560 ns |         24,295 ns |     24,833.520 ns | P-se add in multithread on M 100x100 |
+|                SafeIndexing |            422 ns |            409 ns |        392.733 ns | Addressing to [i, j] with checks     |
+|                FastIndexing |            154 ns |            165 ns |        142.942 ns | Addressing to [i, j] w/0 checks      |
 
 
 <details><summary><strong>Versus Towel</strong></summary>

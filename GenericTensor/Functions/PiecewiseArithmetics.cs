@@ -68,7 +68,7 @@ namespace GenericTensor.Functions
             GenTensor<T, TWrapper> b, Threading threading)
         {
             var parallel = threading == Threading.Multi || (threading == Threading.Auto && a.Volume > 850);
-            return parallel;
+            return parallel && !a.IsVector;
         }
 
         public static GenTensor<T, TWrapper> PiecewiseAdd(GenTensor<T, TWrapper> a,

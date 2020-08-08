@@ -32,6 +32,9 @@ namespace GenericTensor.Core
     {
         public readonly T[] data;
         public readonly int[] blocks; // 3 x 4 x 5
+        internal int cached_blocks0;
+        internal int cached_blocks1;
+        internal int cached_blocks2;
         private int volume = -1;
         /// <summary>
         /// Number of elements in tensor overall
@@ -50,6 +53,22 @@ namespace GenericTensor.Core
             }
         }
 
+        private void UpdateBlockCache()
+        {
+            if (blocks.Length >= 3)
+                goto More3;
+            else if (blocks.Length >= 2)
+                goto More2;
+            else if (blocks.Length >= 1)
+                goto More1;
+            More3:
+            cached_blocks2 = blocks[2];
+            More2:
+            cached_blocks1 = blocks[1];
+            More1:
+            cached_blocks0 = blocks[0];
+        }
+
         private void BlockRecompute()
         {
             int len = 1;
@@ -58,6 +77,7 @@ namespace GenericTensor.Core
                 blocks[i] = len;
                 len *= Shape[i];
             }
+            UpdateBlockCache();
         }
 
         protected GenTensor(TensorShape dimensions, int[] blocks, T[] data)
@@ -65,6 +85,7 @@ namespace GenericTensor.Core
             Shape = dimensions;
             this.blocks = blocks;
             this.data = data;
+            UpdateBlockCache();
         }
 
         public object Clone()
