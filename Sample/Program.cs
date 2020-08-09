@@ -85,8 +85,8 @@ class Program
     static void Main(string[] args)
     {
 
-        var a = CreateMatrix(30);
-        var b = CreateMatrix(30);
+        var a = TS.Stack(CreateMatrix(30), CreateMatrix(30), CreateMatrix(30), CreateMatrix(30));
+        var b = TS.Stack(CreateMatrix(30), CreateMatrix(30), CreateMatrix(30), CreateMatrix(30));
         /*
         Console.WriteLine(a);
         Console.WriteLine();

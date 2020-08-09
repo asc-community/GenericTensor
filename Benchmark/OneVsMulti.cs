@@ -82,6 +82,7 @@ namespace Benchmark
 
         #region piecewise single
 
+        
         [Benchmark]
         public void Piecewise10x10x10()
             => TS.PiecewiseAdd(GetT(10, 10), GetT(10, 10));
@@ -92,16 +93,18 @@ namespace Benchmark
 
         [Benchmark]
         public void Piecewise10x30x30()
-            => TS.PiecewiseAdd(GetT(10, 10), GetT(10, 10));
-
+            => TS.PiecewiseAdd(GetT(10, 30), GetT(10, 30));
+            
         [Benchmark]
         public void Piecewise30x30x30()
-            => TS.PiecewiseAdd(GetT(30, 10), GetT(30, 10));
+            => TS.PiecewiseAdd(GetT(30, 30), GetT(30, 30));
+            
 
         #endregion
 
         #region piecewise multi
 
+        
         [Benchmark]
         public void Piecewise10x10x10Par()
             => TS.PiecewiseAdd(GetT(10, 10), GetT(10, 10), Threading.Multi);
@@ -112,11 +115,11 @@ namespace Benchmark
 
         [Benchmark]
         public void Piecewise10x30x30Par()
-            => TS.PiecewiseAdd(GetT(10, 10), GetT(10, 10), Threading.Multi);
-
+            => TS.PiecewiseAdd(GetT(10, 30), GetT(10, 30), Threading.Multi);
+            
         [Benchmark]
         public void Piecewise30x30x30Par()
-            => TS.PiecewiseAdd(GetT(30, 10), GetT(30, 10), Threading.Multi);
+            => TS.PiecewiseAdd(GetT(30, 30), GetT(30, 30), Threading.Multi);
 
         #endregion
     }

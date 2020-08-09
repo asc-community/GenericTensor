@@ -407,16 +407,16 @@ operation.
 <details><summary>Raw data</summary>
 
 
-|               Method | Width | Height |       Mean |     Error |    StdDev |
-|--------------------- |------ |------- |-----------:|----------:|----------:|
-|             Multiply |     5 |      5 |  11.749 us | 0.2301 us | 0.3780 us |
-|          MultiplyPar |     5 |      5 |  12.251 us | 0.1831 us | 0.1799 us |
-|             Multiply |    15 |      5 |  33.234 us | 0.6564 us | 0.9622 us |
-|          MultiplyPar |    15 |      5 |  21.839 us | 0.2790 us | 0.2609 us |
-|             Multiply |     5 |     15 | 126.892 us | 2.3327 us | 2.0678 us |
-|          MultiplyPar |     5 |     15 |  60.077 us | 1.0170 us | 0.9015 us |
-|             Multiply |    15 |     15 | 383.536 us | 7.6478 us | 9.6720 us |
-|          MultiplyPar |    15 |     15 | 133.525 us | 2.1654 us | 2.0256 us |
+|               Method | Width | Height |     Mean |
+|--------------------- |------ |------- |---------:|
+|             Multiply |     5 |      5 |  10.2 us |
+|          MultiplyPar |     5 |      5 |  11.0 us |
+|             Multiply |    15 |      5 |  30.0 us |
+|          MultiplyPar |    15 |      5 |  21.8 us |
+|             Multiply |     5 |     15 |  84.9 us |
+|          MultiplyPar |     5 |     15 |  49.1 us |
+|             Multiply |    15 |     15 | 264.5 us |
+|          MultiplyPar |    15 |     15 | 111.0 us |
 
 `Par` at the end of the name means one is ran in parallel mode (multithreading). The tensor is of size `Width` x `Height` x `Height`
 
@@ -430,16 +430,16 @@ operation.
 <details><summary>Raw data</summary>
 
 
-|               Method | Width | Height |       Mean |     Error |    StdDev |
-|--------------------- |------ |------- |-----------:|----------:|----------:|
-|    PiecewiseMultiply |     5 |      5 |   1.274 us | 0.0177 us | 0.0148 us |
-| PiecewiseMultiplyPar |     5 |      5 |   4.215 us | 0.0243 us | 0.0215 us |
-|    PiecewiseMultiply |    15 |      5 |   3.391 us | 0.0647 us | 0.0719 us |
-| PiecewiseMultiplyPar |    15 |      5 |   7.046 us | 0.0217 us | 0.0203 us |
-|    PiecewiseMultiply |     5 |     15 |   9.622 us | 0.1835 us | 0.1884 us |
-| PiecewiseMultiplyPar |     5 |     15 |   8.811 us | 0.0290 us | 0.0242 us |
-|    PiecewiseMultiply |    15 |     15 |  28.553 us | 0.5403 us | 0.5054 us |
-| PiecewiseMultiplyPar |    15 |     15 |  15.267 us | 0.1027 us | 0.0910 us |
+|               Method | Width | Height |     Mean |
+|--------------------- |------ |------- |---------:|
+|    PiecewiseMultiply |    10 |     10 |   4.2 us |
+| PiecewiseMultiplyPar |    10 |     10 |   9.5 us |
+|    PiecewiseMultiply |    30 |     10 |  12.0 us |
+| PiecewiseMultiplyPar |    30 |     10 |  14.0 us |
+|    PiecewiseMultiply |    10 |     30 |  35.0 us |
+| PiecewiseMultiplyPar |    10 |     30 |  25.0 us |
+|    PiecewiseMultiply |    30 |     30 | 144.0 us |
+| PiecewiseMultiplyPar |    30 |     30 |  83.0 us |
 
 `Par` at the end of the name means one is ran in parallel mode (multithreading). The tensor is of size `Width` x `Height` x `Height`
 

@@ -42,17 +42,19 @@ namespace GenericTensor.Core.Expressions
             var label = Expression.Label();
 
             var loop = Expression.Loop(
-                Expression.IfThenElse(
+                Expression.Block(
+                    Expression.IfThenElse(
 
                     Expression.LessThan(var, until),
 
                     Expression.Block(
-                        onIter,
-                        Expression.PostIncrementAssign(var)
+                        onIter
                     ),
 
                     Expression.Break(label)
                 ),
+                Expression.PostIncrementAssign(var)
+                    ),
                 label);
 
             
