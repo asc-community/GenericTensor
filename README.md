@@ -1,4 +1,4 @@
-![Test](https://github.com/WhiteBlackGoose/GenericTensor/workflows/Test/badge.svg)
+﻿![Test](https://github.com/WhiteBlackGoose/GenericTensor/workflows/Test/badge.svg)
 [![GitHub](https://img.shields.io/github/license/WhiteBlackGoose/GenericTensor?color=blue)](https://github.com/asc-community/GenericTensor/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/642350046213439489?color=orange&label=Discord)](https://discord.gg/YWJEX7a)
 [![NuGet](https://img.shields.io/nuget/vpre/GenericTensor?label=NuGet)](https://www.nuget.org/packages/GenericTensor/)
@@ -70,7 +70,6 @@ public struct IntWrapper : IOperations<int>
     public int CreateOne() => 1;
     public int CreateZero() => 0;
     public int Copy(int a) => a;
-    public int Forward(int a) => a;
     public bool AreEqual(int a, int b) => a == b;
     public bool IsZero(int a) => a == 0;
     public string ToString(int a) => a.ToString();
@@ -336,47 +335,57 @@ We know how important it is to use fast tools. That is why we prepared a report 
 
 Conditions: i7-7700HQ (4 cores, 8 threads) with minimum background activity.
 
-Short version:
+### Full report
+
 
 |                      Method |              Mean |                          Explanation |
 |---------------------------- |------------------:|-------------------------------------:|
-|          MatrixAndGaussian6 |          4,166 ns | Det via Gaussian elim on M 6x6       |
-|            CreatingMatrix20 |          1,446 ns | Init matrix 20x20                    |
-|            CreatingMatrix50 |          8,124 ns | Init matrix 50x50                    |
-|                 Transpose20 |              3 ns | Transpose matrix 20x20               |
-|          MatrixAndMultiply6 |          1,239 ns | Multiply two matrices 6x6            |
-|         MatrixAndMultiply20 |         40,317 ns | Multiply two matrices 20x20          |
-|              MatrixAndAdd20 |          2,912 ns | Piecewise addition on M 20x20        |
-|             MatrixAndAdd100 |         70,325 ns | Piecewise addition on M 100x100      |
-|                SafeIndexing |            409 ns | Addressing to [i, j] with checks     |
-|                FastIndexing |            163 ns | Addressing to [i, j] w/0 checks      |
+|           MatrixAndLaplace3 |            145 ns | Det via Laplace on M 3x3             |
+|           MatrixAndLaplace6 |         23,318 ns | Det via Laplace on M 6x6             |
+|           MatrixAndLaplace9 |     11,765,150 ns | Det via Laplace on M 9x9             |
+|          MatrixAndGaussian3 |            586 ns | Det via Gaussian elim on M 3x3       |
+|          MatrixAndGaussian6 |          3,881 ns | Det via Gaussian elim on M 6x6       |
+|          MatrixAndGaussian9 |         12,808 ns | Det via Gaussian elim on M 9x9       |
+|            CreatingMatrix20 |          1,431 ns | Init matrix 20x20                    |
+|            CreatingMatrix50 |          8,115 ns | Init matrix 50x50                    |
+|                 Transpose20 |              7 ns | Transpose matrix 20x20               |
+|          MatrixAndMultiply6 |            738 ns | Multiply two matrices 6x6            |
+|         MatrixAndMultiply20 |         22,405 ns | Multiply two matrices 20x20          |
+|         TensorAndMultiply15 |        658,382 ns | M-ply 2 T 40x15x15                   |
+|  MatrixAndMultiply6Parallel |         14,147 ns | M-ply 2 M 6x6 in multithread         |
+| MatrixAndMultiply20Parallel |         14,549 ns | M-ply 2 M 20x20 in multithread       |
+| TensorAndMultiply15Parallel |        280,310 ns | M-ply 2 T 40x15x15 in multithread    |
+|              MatrixAndAdd20 |          1,528 ns | Piecewise addition on M 20x20        |
+|             MatrixAndAdd100 |         33,562 ns | Piecewise addition on M 100x100      |
+|      MatrixAndAdd20Parallel |          7,265 ns | P-se add in multithread on M 20x20   |
+|     MatrixAndAdd100Parallel |         24,833 ns | P-se add in multithread on M 100x100 |
+|                SafeIndexing |            392 ns | Addressing to [i, j] with checks     |
+|                FastIndexing |            142 ns | Addressing to [i, j] w/0 checks      |
 
-<details><summary><strong>Full report</strong></summary>
+<details><summary><strong>Versus Towel</strong></summary>
 
+Towel is not a competitor to GT, those are completely different libraries. But since it is the only library that provides matrices for
+arbitrary type (not only numeric), we have to compare GT to it. We take Towel as of 08.08.2020 from its official repository.
+Yet some features are not presented in Towel, such as multi-threading.
 
-|                      Method |       Old version |       New version |                          Explanation |
-|---------------------------- |------------------:|------------------:|-------------------------------------:|
-|           MatrixAndLaplace3 |            285 ns |            169 ns | Det via Laplace on M 3x3             |
-|           MatrixAndLaplace6 |         47,222 ns |         27,791 ns | Det via Laplace on M 6x6             |
-|           MatrixAndLaplace9 |     22,960,529 ns |     14,000,696 ns | Det via Laplace on M 9x9             |
-|          MatrixAndGaussian3 |            700 ns |            614 ns | Det via Gaussian elim on M 3x3       |
-|          MatrixAndGaussian6 |          4,418 ns |          4,166 ns | Det via Gaussian elim on M 6x6       |
-|          MatrixAndGaussian9 |         14,143 ns |         13,702 ns | Det via Gaussian elim on M 9x9       |
-|            CreatingMatrix20 |          1,580 ns |          1,446 ns | Init matrix 20x20                    |
-|            CreatingMatrix50 |          9,066 ns |          8,124 ns | Init matrix 50x50                    |
-|                 Transpose20 |              3 ns |              3 ns | Transpose matrix 20x20               |
-|          MatrixAndMultiply6 |          2,156 ns |          1,239 ns | Multiply two matrices 6x6            |
-|         MatrixAndMultiply20 |         74,956 ns |         40,317 ns | Multiply two matrices 20x20          |
-|         TensorAndMultiply15 |      1,684,234 ns |        972,820 ns | M-ply 2 T 40x15x15                   |
-|  MatrixAndMultiply6Parallel |         30,021 ns |         18,132 ns | M-ply 2 M 6x6 in multithread         |
-| MatrixAndMultiply20Parallel |         29,776 ns |         18,014 ns | M-ply 2 M 20x20 in multithread       |
-| TensorAndMultiply15Parallel |        515,976 ns |        321,425 ns | M-ply 2 T 40x15x15 in multithread    |
-|              MatrixAndAdd20 |          4,854 ns |          2,912 ns | Piecewise addition on M 20x20        |
-|             MatrixAndAdd100 |        111,424 ns |         70,325 ns | Piecewise addition on M 100x100      |
-|      MatrixAndAdd20Parallel |          7,541 ns |          5,968 ns | P-se add in multithread on M 20x20   |
-|     MatrixAndAdd100Parallel |         43,541 ns |         33,822 ns | P-se add in multithread on M 100x100 |
-|                SafeIndexing |            481 ns |            409 ns | Addressing to [i, j] with checks     |
-|                FastIndexing |            247 ns |            163 ns | Addressing to [i, j] w/0 checks      |
+|                      Method |     GenericTensor |           Towel |                          Explanation | GT wins?   |
+|---------------------------- |------------------:|----------------:|-------------------------------------:|:----------:|
+|           MatrixAndLaplace3 |            145 ns |          330 ns | Det via Laplace on M 3x3             | +          |
+|           MatrixAndLaplace6 |         23,318 ns |       45,338 ns | Det via Laplace on M 6x6             | +          |
+|           MatrixAndLaplace9 |     11,765,150 ns |   22,770,639 ns | Det via Laplace on M 9x9             | +          |
+|          MatrixAndGaussian3 |            586 ns |          721 ns | Det via Gaussian elim on M 3x3       | +          |
+|          MatrixAndGaussian6 |          3,881 ns |        4,547 ns | Det via Gaussian elim on M 6x6       | +          |
+|          MatrixAndGaussian9 |         12,808 ns |       14,574 ns | Det via Gaussian elim on M 9x9       | +          |
+|            CreatingMatrix20 |          1,431 ns |        1,460 ns | Init matrix 20x20                    | =          |
+|            CreatingMatrix50 |          8,115 ns |        8,490 ns | Init matrix 50x50                    | =          |
+|                 Transpose20 |              7 ns |          766 ns | Transpose matrix 20x20               | +          |
+|          MatrixAndMultiply6 |            738 ns |          930 ns | Multiply two matrices 6x6            | +          |
+|         MatrixAndMultiply20 |         22,405 ns |       29,092 ns | Multiply two matrices 20x20          | +          |
+|              MatrixAndAdd20 |          1,528 ns |        1,386 ns | Piecewise addition on M 20x20        | -          |
+|             MatrixAndAdd100 |         33,562 ns |       33,529 ns | Piecewise addition on M 100x100      | =          |
+|                SafeIndexing |            392 ns |          342 ns | Addressing to [i, j] with checks     | -          |
+|                FastIndexing |            142 ns | (no fast)342 ns | Addressing to [i, j] w/0 checks      | +          |
+
 
 </details>
 
@@ -398,16 +407,16 @@ operation.
 <details><summary>Raw data</summary>
 
 
-|               Method | Width | Height |       Mean |     Error |    StdDev |
-|--------------------- |------ |------- |-----------:|----------:|----------:|
-|             Multiply |     5 |      5 |  11.749 us | 0.2301 us | 0.3780 us |
-|          MultiplyPar |     5 |      5 |  12.251 us | 0.1831 us | 0.1799 us |
-|             Multiply |    15 |      5 |  33.234 us | 0.6564 us | 0.9622 us |
-|          MultiplyPar |    15 |      5 |  21.839 us | 0.2790 us | 0.2609 us |
-|             Multiply |     5 |     15 | 126.892 us | 2.3327 us | 2.0678 us |
-|          MultiplyPar |     5 |     15 |  60.077 us | 1.0170 us | 0.9015 us |
-|             Multiply |    15 |     15 | 383.536 us | 7.6478 us | 9.6720 us |
-|          MultiplyPar |    15 |     15 | 133.525 us | 2.1654 us | 2.0256 us |
+|               Method | Width | Height |     Mean |
+|--------------------- |------ |------- |---------:|
+|             Multiply |     5 |      5 |  10.2 us |
+|          MultiplyPar |     5 |      5 |  11.0 us |
+|             Multiply |    15 |      5 |  30.0 us |
+|          MultiplyPar |    15 |      5 |  21.8 us |
+|             Multiply |     5 |     15 |  84.9 us |
+|          MultiplyPar |     5 |     15 |  49.1 us |
+|             Multiply |    15 |     15 | 264.5 us |
+|          MultiplyPar |    15 |     15 | 111.0 us |
 
 `Par` at the end of the name means one is ran in parallel mode (multithreading). The tensor is of size `Width` x `Height` x `Height`
 
@@ -421,16 +430,16 @@ operation.
 <details><summary>Raw data</summary>
 
 
-|               Method | Width | Height |       Mean |     Error |    StdDev |
-|--------------------- |------ |------- |-----------:|----------:|----------:|
-|    PiecewiseMultiply |     5 |      5 |   1.274 us | 0.0177 us | 0.0148 us |
-| PiecewiseMultiplyPar |     5 |      5 |   4.215 us | 0.0243 us | 0.0215 us |
-|    PiecewiseMultiply |    15 |      5 |   3.391 us | 0.0647 us | 0.0719 us |
-| PiecewiseMultiplyPar |    15 |      5 |   7.046 us | 0.0217 us | 0.0203 us |
-|    PiecewiseMultiply |     5 |     15 |   9.622 us | 0.1835 us | 0.1884 us |
-| PiecewiseMultiplyPar |     5 |     15 |   8.811 us | 0.0290 us | 0.0242 us |
-|    PiecewiseMultiply |    15 |     15 |  28.553 us | 0.5403 us | 0.5054 us |
-| PiecewiseMultiplyPar |    15 |     15 |  15.267 us | 0.1027 us | 0.0910 us |
+|               Method | Width | Height |     Mean |
+|--------------------- |------ |------- |---------:|
+|    PiecewiseMultiply |    10 |     10 |   4.2 us |
+| PiecewiseMultiplyPar |    10 |     10 |   9.5 us |
+|    PiecewiseMultiply |    30 |     10 |  12.0 us |
+| PiecewiseMultiplyPar |    30 |     10 |  14.0 us |
+|    PiecewiseMultiply |    10 |     30 |  35.0 us |
+| PiecewiseMultiplyPar |    10 |     30 |  25.0 us |
+|    PiecewiseMultiply |    30 |     30 | 144.0 us |
+| PiecewiseMultiplyPar |    30 |     30 |  83.0 us |
 
 `Par` at the end of the name means one is ran in parallel mode (multithreading). The tensor is of size `Width` x `Height` x `Height`
 
@@ -441,3 +450,11 @@ operation.
 ## Contribution
 
 We appreciate your willing to contribute to GenericTensor. Fork the repository, commit your changes and create a pull request. We also appreciate <a href="https://medium.com/@carlosperez/pull-request-first-f6bb667a9b6">early pull requests</a>. To make sure your improvement is relevant, we recommend you first to contact us in our <a href="https://discord.gg/YWJEX7a">discord server</a>.
+
+Author: <a href="https://github.com/WhiteBlackGoose">WhiteBlackGoose</a>
+
+Contributors: <a href="https://github.com/WhiteBlackGoose">WhiteBlackGoose</a>,
+<a href="https://github.com/Nucs">Nucs</a>,
+<a href="https://github.com/ZacharyPatten">ZacharyPattern</a>,
+<a href="https://github.com/Happypig375">Happypig375</a>, 
+<a href="https://github.com/MomoDeve">MomoDeve</a>

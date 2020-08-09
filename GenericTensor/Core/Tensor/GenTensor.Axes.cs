@@ -44,6 +44,7 @@ namespace GenericTensor.Core
         public void Transpose(int axis1, int axis2)
         {
             (blocks[axis1], blocks[axis2]) = (blocks[axis2], blocks[axis1]);
+            UpdateBlockCache();
             Shape.Swap(axis1, axis2);
         }
 
@@ -111,7 +112,7 @@ namespace GenericTensor.Core
             ReactIfBadIndexCount(1);
             ReactIfBadBound(x, 0);
             #endif
-            return LinOffset + blocks[0] * x;
+            return LinOffset + cached_blocks0 * x;
         }
 
         private int GetFlattenedIndexWithCheck(int x, int y)
@@ -121,7 +122,7 @@ namespace GenericTensor.Core
             ReactIfBadBound(x, 0);
             ReactIfBadBound(y, 1);
             #endif
-            return LinOffset + blocks[0] * x + blocks[1] * y;
+            return LinOffset + cached_blocks0 * x + cached_blocks1 * y;
         }
 
         private int GetFlattenedIndexWithCheck(int x, int y, int z)
@@ -132,30 +133,30 @@ namespace GenericTensor.Core
             ReactIfBadBound(y, 1);
             ReactIfBadBound(z, 2);
             #endif
-            return LinOffset + blocks[0] * x + blocks[1] * y + blocks[2] * z;
+            return LinOffset + cached_blocks0 * x + cached_blocks1 * y + cached_blocks2 * z;
         }
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int GetFlattenedIndexSilent(int x) 
-            => blocks[0] * x + 
+        internal int GetFlattenedIndexSilent(int x) 
+            => cached_blocks0 * x + 
                LinOffset;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int GetFlattenedIndexSilent(int x, int y) 
-            => blocks[0] * x +
-               blocks[1] * y +
+        internal int GetFlattenedIndexSilent(int x, int y) 
+            => cached_blocks0 * x +
+               cached_blocks1 * y +
                LinOffset;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int GetFlattenedIndexSilent(int x, int y, int z) 
-            => blocks[0] * x +
-               blocks[1] * y +
-               blocks[2] * z +
+        internal int GetFlattenedIndexSilent(int x, int y, int z) 
+            => cached_blocks0 * x +
+               cached_blocks1 * y +
+               cached_blocks2 * z +
                LinOffset;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int GetFlattenedIndexSilent(int x, int y, int z, int[] other)
+        internal int GetFlattenedIndexSilent(int x, int y, int z, int[] other)
         {
             var res = GetFlattenedIndexSilent(x, y, z);
             for (int i = 0; i < other.Length; i++)

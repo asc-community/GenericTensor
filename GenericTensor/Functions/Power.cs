@@ -21,7 +21,7 @@ namespace GenericTensor.Functions
             if (power == 1)
                 return m;
             if (power == 2)
-                return MatrixMultiplication<T, TWrapper>.Multiply(m, m);
+                return MatrixMultiplication<T, TWrapper>.Multiply(m, m, threading);
             var half = power / 2;
             var m1 = MatrixPower(m, half, threading);
             var dotted = MatrixMultiplication<T, TWrapper>.Multiply(m1, m1, threading);

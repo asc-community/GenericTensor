@@ -37,7 +37,7 @@ namespace GenericTensor.Functions
         internal static T DeterminantLaplace(GenTensor<T, TWrapper> t, int diagLength)
         {
             if (diagLength == 1)
-                return default(TWrapper).Forward(t.GetValueNoCheck(0, 0));
+                return t.GetValueNoCheck(0, 0);
             var det = default(TWrapper).CreateZero();
             var sign = default(TWrapper).CreateOne();
             var temp = SquareMatrixFactory<T, TWrapper>.GetMatrix(diagLength);
@@ -173,7 +173,7 @@ namespace GenericTensor.Functions
             #endif
 
             if (t.Shape[0] == 1)
-                return default(TWrapper).Forward(t.GetValueNoCheck(0, 0));
+                return t.GetValueNoCheck(0, 0);
 
             var n = diagLength;
             var elemMatrix = InnerGaussianEliminationSafeDivision(t, n);
@@ -193,7 +193,7 @@ namespace GenericTensor.Functions
         {
             var elemMatrix = GenTensor<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>
                 .CreateMatrix(n, n,
-                    (x, y) => new SafeDivisionWrapper<T, TWrapper>(default(TWrapper).Forward(t.GetValueNoCheck(x, y)))
+                    (x, y) => new SafeDivisionWrapper<T, TWrapper>(t.GetValueNoCheck(x, y))
                 );
             for (int k = 1; k < n; k++)
             for (int j = k; j < n; j++)
@@ -239,7 +239,7 @@ namespace GenericTensor.Functions
                 throw new InvalidShapeException("this should be square matrix");
             #endif
             if (t.Shape[0] == 1)
-                return default(TWrapper).Forward(t.GetValueNoCheck(0, 0));
+                return t.GetValueNoCheck(0, 0);
 
             var n = t.Shape[0];
 
@@ -248,12 +248,12 @@ namespace GenericTensor.Functions
             for (int j = k; j < n; j++)
             {
                 var m = default(TWrapper).Divide(
-                    default(TWrapper).Forward(elemMatrix.GetValueNoCheck(j, k - 1)),
-                    default(TWrapper).Forward(elemMatrix.GetValueNoCheck(k - 1, k - 1))
+                    elemMatrix.GetValueNoCheck(j, k - 1),
+                    elemMatrix.GetValueNoCheck(k - 1, k - 1)
                 );
                 for (int i = 0; i < n; i++)
                 {
-                    var curr = default(TWrapper).Forward(elemMatrix.GetValueNoCheck(j, i));
+                    var curr = elemMatrix.GetValueNoCheck(j, i);
                     elemMatrix.SetValueNoCheck(default(TWrapper).Subtract(
                         curr,
                         default(TWrapper).Multiply(

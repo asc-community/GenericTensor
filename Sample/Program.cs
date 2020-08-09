@@ -25,9 +25,16 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using GenericTensor.Core;
+using GenericTensor.Core.Expressions;
 using GenericTensor.Functions;
 
+using FuncFrom3 = System.Action<GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>>;
+using TS = GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>;
 public static class Samples
 {
     public static void CreatingMatrix()
@@ -72,21 +79,11 @@ public static class Samples
 
 class Program
 {
-    
+    static TS CreateMatrix(int size)
+        => TS.CreateMatrix(size, size, (x, y) => x + y);
 
     static void Main(string[] args)
     {
-        Console.WriteLine(Samples.LazyWrapperMultiply(
-            new[,]
-            {
-                {1, 2},
-                {3, 4}
-            },
-            new[,]
-            {
-                {5, 6},
-                {7, 8}
-            }
-            ));
+
     }
 }

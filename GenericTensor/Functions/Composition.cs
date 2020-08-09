@@ -64,10 +64,10 @@ namespace GenericTensor.Functions
             {
                 var resultingVector = GenTensor<T, TWrapper>.CreateVector(a.Shape.shape[0] + b.Shape.shape[0]);
                 for (int i = 0; i < a.Shape.shape[0]; i++)
-                    resultingVector.SetValueNoCheck(default(TWrapper).Forward(a.GetValueNoCheck(i)), i);
+                    resultingVector.SetValueNoCheck(a.GetValueNoCheck(i), i);
 
                 for (int i = 0; i < b.Shape.shape[0]; i++)
-                    resultingVector.SetValueNoCheck(default(TWrapper).Forward(b.GetValueNoCheck(i)), i + a.Shape.shape[0]);
+                    resultingVector.SetValueNoCheck(b.GetValueNoCheck(i), i + a.Shape.shape[0]);
 
                 return resultingVector;
             }

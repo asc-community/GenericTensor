@@ -27,10 +27,6 @@ namespace Benchmark
             return storage[key];
         }
 
-
-        [Params(5, 15)] public int Width { set; get; }
-        [Params(5, 15)] public int Height { set; get; }
-
         /*
         [Benchmark]
         public void CreatingTensor()
@@ -40,21 +36,88 @@ namespace Benchmark
         public void CreatingTensorPar()
             => CreateTensorPar(Width, Height);
             */
+
+        #region matrix multiplication single
         [Benchmark]
-        public void Multiply()
-            => TS.TensorMatrixMultiply(GetT(Width, Height), GetT(Width, Height));
+        public void Multiply5x5x5()
+            => TS.TensorMatrixMultiply(GetT(5, 5), GetT(5, 5));
 
         [Benchmark]
-        public void MultiplyPar()
-            => TS.TensorMatrixMultiply(GetT(Width, Height), GetT(Width, Height), Threading.Multi);
+        public void Multiply15x5x5()
+            => TS.TensorMatrixMultiply(GetT(15, 5), GetT(15, 5));
 
         [Benchmark]
-        public void PiecewiseMultiply()
-            => TS.PiecewiseMultiply(GetT(Width, Height), GetT(Width, Height));
+        public void Multiply5x15x15()
+            => TS.TensorMatrixMultiply(GetT(5, 15), GetT(5, 15));
 
         [Benchmark]
-        public void PiecewiseMultiplyPar()
-            => TS.PiecewiseMultiply(GetT(Width, Height), GetT(Width, Height), Threading.Multi);
+        public void Multiply15x15x15()
+            => TS.TensorMatrixMultiply(GetT(15, 15), GetT(15, 15));
 
+        #endregion
+
+        #region matrix multiplication multi
+
+        [Benchmark]
+        public void Multiply5x5x5Par()
+            => TS.TensorMatrixMultiply(GetT(5, 5), GetT(5, 5), Threading.Multi);
+
+        [Benchmark]
+        public void Multiply15x5x5Par()
+            => TS.TensorMatrixMultiply(GetT(15, 5), GetT(15, 5), Threading.Multi);
+
+        [Benchmark]
+        public void Multiply5x15x15Par()
+            => TS.TensorMatrixMultiply(GetT(5, 15), GetT(5, 15), Threading.Multi);
+
+        [Benchmark]
+        public void Multiply15x15x15Par()
+            => TS.TensorMatrixMultiply(GetT(15, 15), GetT(15, 15), Threading.Multi);
+
+        #endregion
+
+
+        #region piecewise single
+
+        
+        [Benchmark]
+        public void Piecewise10x10x10()
+            => TS.PiecewiseAdd(GetT(10, 10), GetT(10, 10));
+
+        [Benchmark]
+        public void Piecewise30x10x10()
+            => TS.PiecewiseAdd(GetT(30, 10), GetT(30, 10));
+
+        [Benchmark]
+        public void Piecewise10x30x30()
+            => TS.PiecewiseAdd(GetT(10, 30), GetT(10, 30));
+            
+        [Benchmark]
+        public void Piecewise30x30x30()
+            => TS.PiecewiseAdd(GetT(30, 30), GetT(30, 30));
+            
+
+        #endregion
+
+        #region piecewise multi
+
+        
+        [Benchmark]
+        public void Piecewise10x10x10Par()
+            => TS.PiecewiseAdd(GetT(10, 10), GetT(10, 10), Threading.Multi);
+
+        [Benchmark]
+        public void Piecewise30x10x10Par()
+            => TS.PiecewiseAdd(GetT(30, 10), GetT(30, 10), Threading.Multi);
+
+        [Benchmark]
+        public void Piecewise10x30x30Par()
+            => TS.PiecewiseAdd(GetT(10, 30), GetT(10, 30), Threading.Multi);
+            
+        [Benchmark]
+        public void Piecewise30x30x30Par()
+            => TS.PiecewiseAdd(GetT(30, 30), GetT(30, 30), Threading.Multi);
+
+        #endregion
     }
 }

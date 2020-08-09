@@ -301,13 +301,6 @@ namespace GenericTensor.Core
         #region Piecewise arithmetics
 
         /// <summary>
-        /// [i, j, k...]th element of the resulting tensor is
-        /// operation(a[i, j, k...], b[i, j, k...])
-        /// </summary>
-        public static GenTensor<T, TWrapper> Zip<TOperator>(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b) where TOperator : struct, IZipOperator<T>
-            => PiecewiseArithmetics<T, TWrapper>.Zip<TOperator>(a, b);
-
-        /// <summary>
         /// T1 + T2
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

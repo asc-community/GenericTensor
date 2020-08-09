@@ -14,7 +14,6 @@ namespace GenericTensor.Core
         T CreateOne();
         T CreateZero();
         T Copy(T a);
-        T Forward(T a);
         bool AreEqual(T a, T b);
         bool IsZero(T a);
         string ToString(T a);

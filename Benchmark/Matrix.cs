@@ -1,15 +1,24 @@
 ﻿using System.Linq;
+using System.Linq.Expressions;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Attributes;
 using GenericTensor.Functions;
 using GenericTensor.Core;
+using GenericTensor.Core.Expressions;
 
 namespace Benchmark
 {
-    using TS = GenTensor<float, FloatWrapper>;
-
+    using TS = GenTensor<int, IntWrapper>;
+    using FuncFrom3 = System.Action<GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>>;
     public class MatrixBenchmark
     {
+        [GlobalSetup]
+        public void Setup()
+        {
+            
+        }
+
         static TS CreateMatrix(int size)
             => TS.CreateMatrix(size, size, (x, y) => x + y);
 
@@ -25,7 +34,17 @@ namespace Benchmark
         private static readonly TS createdMatrix20_dupl = CreateMatrix(20);
         private static readonly TS createdTensorMatrix15 = CreateTensor(40, 15);
         private static readonly TS createdMatrix100 = CreateMatrix(100);
+        private static readonly TS createdMatrix100_dupl = CreateMatrix(100);
         
+        private static readonly TS createdMatrix250 = CreateMatrix(250);
+        private static readonly TS createdMatrix250_dupl = CreateMatrix(250);
+        
+        [Benchmark] public void MatrixAndAdd250()
+            => TS.PiecewiseAdd(createdMatrix250, createdMatrix250_dupl);
+
+        [Benchmark] public void MatrixAndAdd250Par()
+            => TS.PiecewiseAdd(createdMatrix250, createdMatrix250_dupl, Threading.Multi);
+
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();
         [Benchmark] public void MatrixAndLaplace6()
@@ -47,39 +66,40 @@ namespace Benchmark
 
         [Benchmark] public void CreatingMatrix50()
             => CreateMatrix(50);
-            
+        
         [Benchmark] public void Transpose20()
             => createdMatrix20.TransposeMatrix();
-
+          
         [Benchmark] public void MatrixAndMultiply6()
             => TS.MatrixMultiply(createdMatrix6, createdMatrix6);
 
         [Benchmark] public void MatrixAndMultiply20()
-            => TS.MatrixMultiply(createdMatrix20, createdMatrix20);
-
+            => TS.MatrixMultiply(createdMatrix20, createdMatrix20_dupl);
+        
         [Benchmark] public void TensorAndMultiply15()
             => TS.TensorMatrixMultiply(createdTensorMatrix15, createdTensorMatrix15);
 
         [Benchmark] public void MatrixAndMultiply6Parallel()
-            => TS.MatrixMultiply(createdMatrix20, createdMatrix20, Threading.Multi);
+            => TS.MatrixMultiply(createdMatrix20, createdMatrix20_dupl, Threading.Multi);
 
         [Benchmark] public void MatrixAndMultiply20Parallel()
-            => TS.MatrixMultiply(createdMatrix20, createdMatrix20, Threading.Multi);
+            => TS.MatrixMultiply(createdMatrix20, createdMatrix20_dupl, Threading.Multi);
 
         [Benchmark] public void TensorAndMultiply15Parallel()
             => TS.TensorMatrixMultiply(createdTensorMatrix15, createdTensorMatrix15, Threading.Multi);
             
         [Benchmark] public void MatrixAndAdd20()
-            => TS.PiecewiseAdd(createdMatrix20, createdMatrix20);
-        
+            => TS.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl);
+        /*
         [Benchmark] public void MatrixAndAdd100()
-            => TS.PiecewiseAdd(createdMatrix100, createdMatrix100);
-
+            => TS.PiecewiseAdd(createdMatrix100, createdMatrix100_dupl);
+        
         [Benchmark] public void MatrixAndAdd20Parallel()
-            => TS.PiecewiseAdd(createdMatrix20, createdMatrix20, Threading.Multi);
+            => TS.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl, Threading.Multi);
 
         [Benchmark] public void MatrixAndAdd100Parallel()
-            => TS.PiecewiseAdd(createdMatrix100, createdMatrix100, Threading.Multi);
+            => TS.PiecewiseAdd(createdMatrix100, createdMatrix100_dupl, Threading.Multi);
+            
         
         [Benchmark] public void SafeIndexing()
         {
