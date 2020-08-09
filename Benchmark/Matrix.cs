@@ -35,7 +35,7 @@ namespace Benchmark
         private static readonly TS createdTensorMatrix15 = CreateTensor(40, 15);
         private static readonly TS createdMatrix100 = CreateMatrix(100);
         private static readonly TS createdMatrix100_dupl = CreateMatrix(100);
-        /*
+        
         private static readonly TS createdMatrix250 = CreateMatrix(250);
         private static readonly TS createdMatrix250_dupl = CreateMatrix(250);
         
@@ -44,9 +44,7 @@ namespace Benchmark
 
         [Benchmark] public void MatrixAndAdd250Par()
             => TS.PiecewiseAdd(createdMatrix250, createdMatrix250_dupl, Threading.Multi);
-          */
 
-        /*
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();
         [Benchmark] public void MatrixAndLaplace6()
@@ -89,7 +87,7 @@ namespace Benchmark
 
         [Benchmark] public void TensorAndMultiply15Parallel()
             => TS.TensorMatrixMultiply(createdTensorMatrix15, createdTensorMatrix15, Threading.Multi);
-            */
+            
         [Benchmark] public void MatrixAndAdd20()
             => TS.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl);
         /*
@@ -101,28 +99,8 @@ namespace Benchmark
 
         [Benchmark] public void MatrixAndAdd100Parallel()
             => TS.PiecewiseAdd(createdMatrix100, createdMatrix100_dupl, Threading.Multi);
-            */
-        [Benchmark] public void MatrixAndAdd20Manually()
-        {
-            var res = GenTensor<int, IntWrapper>.CreateMatrix(20, 20);
-            var a = createdMatrix20;
-            var b = createdMatrix20_dupl;
-            var resBlocks0 = res.blocks[0];
-
-            var aBlocks0 = a.blocks[0];
-            var aBlocks1 = a.blocks[1];
-            var bBlocks0 = b.blocks[0];
-            var bBlocks1 = b.blocks[1];
-
-            var aLinoffset = a.LinOffset;
-            var bLinoffset = b.LinOffset;
-
-            for(int x = 0; x < 20; x++)
-            for (int y = 0; y < 20; y++)
-                res.data[x * 20 + y] = a.data[x * aBlocks0 + y * aBlocks1 + aLinoffset]
-                                       + b.data[x * bBlocks0 + y * bBlocks1 + bLinoffset];
-        }
-        /*
+            
+        
         [Benchmark] public void SafeIndexing()
         {
             for (int i = 0; i < createdMatrix9.Shape[0]; i++)
@@ -139,6 +117,6 @@ namespace Benchmark
             {
                 var c = createdMatrix9.GetValueNoCheck(i, j);
             }
-        }*/
+        }
     }
 }

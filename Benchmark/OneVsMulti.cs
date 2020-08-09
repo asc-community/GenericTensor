@@ -37,8 +37,6 @@ namespace Benchmark
             => CreateTensorPar(Width, Height);
             */
 
-            /*
-
         #region matrix multiplication single
         [Benchmark]
         public void Multiply5x5x5()
@@ -78,7 +76,6 @@ namespace Benchmark
 
         #endregion
 
-        */
 
         #region piecewise single
 
