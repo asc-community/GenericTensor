@@ -329,8 +329,11 @@ namespace GenericTensor.Core.Expressions
 
         public static GenTensor<T, TWrapper> PiecewiseAdd(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b, bool parallel)
         {
+            
+            #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
+            #endif
             var res = new GenTensor<T, TWrapper>(a.Shape);
             GetFunc(a.Shape.Length, Addition, parallel, OperationType.Addition)(a, b, res);
             return res;
@@ -338,8 +341,10 @@ namespace GenericTensor.Core.Expressions
 
         public static GenTensor<T, TWrapper> PiecewiseSubtract(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b, bool parallel)
         {
+            #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
+            #endif
             var res = new GenTensor<T, TWrapper>(a.Shape);
             GetFunc(a.Shape.Length, Subtraction, parallel, OperationType.Subtraction)(a, b, res);
             return res;
@@ -347,8 +352,10 @@ namespace GenericTensor.Core.Expressions
 
         public static GenTensor<T, TWrapper> PiecewiseMultiply(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b, bool parallel)
         {
+            #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
+            #endif
             var res = new GenTensor<T, TWrapper>(a.Shape);
             GetFunc(a.Shape.Length, Multiplication, parallel, OperationType.Multiplication)(a, b, res);
             return res;
@@ -356,8 +363,10 @@ namespace GenericTensor.Core.Expressions
 
         public static GenTensor<T, TWrapper> PiecewiseDivision(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b, bool parallel)
         {
+            #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
+            #endif
             var res = new GenTensor<T, TWrapper>(a.Shape);
             GetFunc(a.Shape.Length, Division, parallel, OperationType.Division)(a, b, res);
             return res;

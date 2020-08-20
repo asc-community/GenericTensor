@@ -30,7 +30,8 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
-    public partial class GenTensor<T, TWrapper>
+    public sealed partial class GenTensor<T, TWrapper>
+        : ICloneable where TWrapper : struct, IOperations<T>
     {
         #region Composition
         /// <summary>

@@ -29,7 +29,7 @@ using System.Runtime.CompilerServices;
 
 namespace GenericTensor.Core
 {
-    public partial class GenTensor<T, TWrapper> : ICloneable where TWrapper : struct, IOperations<T>
+    public partial class GenTensor<T, TWrapper>
     {
         public readonly T[] data;
         public readonly int[] blocks; // 3 x 4 x 5

@@ -117,7 +117,7 @@ namespace GenericTensor.Core
             if (sh.Length != Length)
                 return false;
             for (int i = 0; i < sh.Length; i++)
-                if (sh[i] != this[i])
+                if (sh.shape[i] != this.shape[i])
                     return false;
             return true;
         }

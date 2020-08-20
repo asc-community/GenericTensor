@@ -9,8 +9,7 @@ using GenericTensor.Core.Expressions;
 
 namespace Benchmark
 {
-    using TS = GenTensor<int, IntWrapper>;
-    using FuncFrom3 = System.Action<GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>>;
+    using TS = GenTensor<Vector<double>, VectorDoubleWrapper>;
     public class MatrixBenchmark
     {
         [GlobalSetup]
@@ -20,7 +19,7 @@ namespace Benchmark
         }
 
         static TS CreateMatrix(int size)
-            => TS.CreateMatrix(size, size, (x, y) => x + y);
+            => TS.CreateMatrix(size, size, (x, y) => new Vector<double>(x + y));
 
         static TS CreateTensor(int W, int size)
             => TS.Stack(Enumerable.Range(0, W).Select(c => CreateMatrix(size)).ToArray());
@@ -39,12 +38,15 @@ namespace Benchmark
         private static readonly TS createdMatrix250 = CreateMatrix(250);
         private static readonly TS createdMatrix250_dupl = CreateMatrix(250);
         
+        /*
         [Benchmark] public void MatrixAndAdd250()
             => TS.PiecewiseAdd(createdMatrix250, createdMatrix250_dupl);
 
         [Benchmark] public void MatrixAndAdd250Par()
             => TS.PiecewiseAdd(createdMatrix250, createdMatrix250_dupl, Threading.Multi);
+            */
 
+        
         [Benchmark] public void MatrixAndLaplace3()
             => createdMatrix3.DeterminantLaplace();
         [Benchmark] public void MatrixAndLaplace6()
@@ -90,7 +92,7 @@ namespace Benchmark
             
         [Benchmark] public void MatrixAndAdd20()
             => TS.PiecewiseAdd(createdMatrix20, createdMatrix20_dupl);
-        /*
+        
         [Benchmark] public void MatrixAndAdd100()
             => TS.PiecewiseAdd(createdMatrix100, createdMatrix100_dupl);
         
@@ -117,6 +119,6 @@ namespace Benchmark
             {
                 var c = createdMatrix9.GetValueNoCheck(i, j);
             }
-        }*/
+        }
     }
 }
