@@ -34,11 +34,6 @@ namespace UnitTests
     [TestClass]
     public class Concat
     {
-        public Concat()
-        {
-            
-        }
-
         [TestMethod]
         public void Matrices()
         {

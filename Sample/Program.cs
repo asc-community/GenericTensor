@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Numerics;
 using GenericTensor.Core;
 using GenericTensor.Core.Expressions;
 using GenericTensor.Functions;
@@ -82,8 +83,17 @@ class Program
     static TS CreateMatrix(int size)
         => TS.CreateMatrix(size, size, (x, y) => x + y);
 
+    public struct MyIntWrapper : IOperations<int>
+    {
+        public int Add(int afd, int b)
+            => afd + b;
+
+        public string ToString(int a)
+            => a.ToString();
+    }
+
     static void Main(string[] args)
     {
-
+        
     }
 }

@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.1-beta</Version>
+    <Version>0.1.2-beta</Version>
     <Authors>WhiteBlackGoose</Authors>
     <Company>AngouriSoft</Company>
     <Description>The only .NET tensor &amp; matrix library for generic types. It is also faster than other generic-typed matrix libraries.</Description>
@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/WhiteBlackGoose/GenericTensor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/WhiteBlackGoose/GenericTensor</RepositoryUrl>
     <RepositoryType>public</RepositoryType>
-    <PackageReleaseNotes>Boosted by a lot, no Forward anymore</PackageReleaseNotes>
+    <PackageReleaseNotes>Migrated to netstandard2.1 (some platforms might not be supported anymore). Serialization added, minor performance changes. No need to implement all methods of interfaces anymore.</PackageReleaseNotes>
     <PackageIcon>ico1.png</PackageIcon>
     <PackageTags>tensor, generic, matrix, vector, performance</PackageTags>
   </PropertyGroup>
@@ -45,6 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="2.0.49" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.3.0" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.3.0" />
   </ItemGroup>

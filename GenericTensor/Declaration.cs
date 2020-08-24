@@ -25,7 +25,11 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Text;
 using GenericTensor.Functions;
 
 namespace GenericTensor.Core
@@ -465,5 +469,41 @@ namespace GenericTensor.Core
             => CopyAndForward<T, TWrapper>.Forward(this);
 
         #endregion
+
+
+
+        /*
+         * Serialization protocol:
+         *
+         * First int n: number of dimensions
+         * Next n ints Shapes: dimensions' lengths
+         * Next Shapes[0] * Shapes[1] * ...:
+         *     First int n: size
+         *     Next n bytes: data
+         *
+         */
+
+        /// <summary>
+        /// Serializes this to a byte array so it can be easily
+        /// transmitted or stored
+        /// </summary>
+        /// <returns>
+        /// Byte array with the serialized object in the serialization protocol
+        /// </returns>
+        public byte[] Serialize()
+            => Serializer<T, TWrapper>.Serialize(this);
+
+        /// <summary>
+        /// Deserializes data into a tensor
+        /// </summary>
+        /// <param name="data">
+        /// Byte array which must follow the serialization protocol
+        /// </param>
+        /// <returns>
+        /// A tensor with the same data as stored before serialization
+        /// (if serialization & deserialization in TWrapper work correctly)
+        /// </returns>
+        public static GenTensor<T, TWrapper> Deserialize(byte[] data)
+            => Serializer<T, TWrapper>.Deserialize(data);
     }
 }
