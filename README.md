@@ -73,8 +73,14 @@ public struct IntWrapper : IOperations<int>
     public bool AreEqual(int a, int b) => a == b;
     public bool IsZero(int a) => a == 0;
     public string ToString(int a) => a.ToString();
+    public byte[] Serialize(int a) => BitConverter.GetBytes(a);
+    public int Deserialize(byte[] data) => BitConverter.ToInt32(data);
+
 }
 ```
+
+You do not have to implement all the methods though. Once unimplemented method is called, it will
+ask you to define the appropriate method.
 
 ## Functionality
 
@@ -462,6 +468,17 @@ operation.
 </details>
 
 </details>
+
+## Design guidelines
+
+For this library there was no goal to make it as user-friendly as possible. For example, there is no implicit
+operators, arithmetic operators, `GenTensor` is not inherited from `IEnumerable`. That is why you are more
+likely to write your own wrappers for your own use and then define all the necessary operators.
+
+Inheriting from `GenTensor` is disallowed. The way you should write your own wrapper (if needed) is to have
+an instance of `GenTensor` as a private field inside your class. Then, you expose (forward) all the necessary
+methods to the final user.
+Check <a href="https://github.com/asc-community/GenericTensor/tree/master/Sample/MatrixWrapper.cs">example for matrix</a>.
 
 ## Contribution
 

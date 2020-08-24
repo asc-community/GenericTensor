@@ -27,9 +27,8 @@
 using System;
 using GenericTensor.Core;
 using GenericTensor.Functions;
+using Sample;
 
-using FuncFrom3 = System.Action<GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>>;
-using TS = GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>;
 public static class Samples
 {
     public static void CreatingMatrix()
@@ -76,6 +75,19 @@ class Program
 {
     static void Main(string[] _)
     {
-        
+        var A = new MyMatrix(3, 2);
+        A[0, 0] = 5; A[0, 1] = 6;
+        A[1, 0] = 3; A[1, 1] = 8;
+        A[2, 0] = 2; A[2, 1] = 9;
+
+        var B = new MyMatrix(2, 2);
+        B[0, 0] = 5; B[1, 0] = 6;
+        B[0, 1] = 3; B[1, 1] = 8;
+
+        Console.WriteLine(A);
+        Console.WriteLine("\nmultiplied by \n");
+        Console.WriteLine(B);
+        Console.WriteLine("\nis \n");
+        Console.WriteLine(A * B);
     }
 }
