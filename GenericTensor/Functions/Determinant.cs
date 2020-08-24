@@ -25,7 +25,6 @@
 #endregion
 
 
-using System.Runtime.Serialization;
 using GenericTensor.Core;
 
 namespace GenericTensor.Functions

@@ -25,8 +25,6 @@
 #endregion
 
 
-using GenericTensor.Functions;
-
 namespace GenericTensor.Core
 {
     public partial class GenTensor<T, TWrapper> : System.IEquatable<GenTensor<T, TWrapper>>

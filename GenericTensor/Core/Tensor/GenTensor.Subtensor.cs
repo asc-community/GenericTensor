@@ -27,7 +27,6 @@
 
 using System;
 using System.Linq;
-using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {

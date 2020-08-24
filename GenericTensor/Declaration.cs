@@ -25,11 +25,7 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Text;
 using GenericTensor.Functions;
 
 namespace GenericTensor.Core

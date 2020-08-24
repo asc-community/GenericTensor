@@ -25,13 +25,7 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Numerics;
 using GenericTensor.Core;
-using GenericTensor.Core.Expressions;
 using GenericTensor.Functions;
 
 using FuncFrom3 = System.Action<GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>, GenericTensor.Core.GenTensor<int, GenericTensor.Functions.IntWrapper>>;
@@ -80,7 +74,7 @@ public static class Samples
 
 class Program
 {
-    static void Main(string[] args)
+    static void Main(string[] _)
     {
         
     }

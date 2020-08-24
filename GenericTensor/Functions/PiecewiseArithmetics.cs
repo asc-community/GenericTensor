@@ -25,9 +25,6 @@
 #endregion
 
 
-using System;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using GenericTensor.Core;
 using GenericTensor.Core.Expressions;
 

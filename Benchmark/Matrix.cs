@@ -1,11 +1,8 @@
 ﻿using System.Linq;
-using System.Linq.Expressions;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Attributes;
 using GenericTensor.Functions;
 using GenericTensor.Core;
-using GenericTensor.Core.Expressions;
 
 namespace Benchmark
 {

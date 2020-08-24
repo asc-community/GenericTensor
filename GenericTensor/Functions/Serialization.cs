@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Numerics;
-using System.Text;
 using GenericTensor.Core;
 
 namespace GenericTensor.Functions
@@ -49,7 +47,7 @@ namespace GenericTensor.Functions
         // TODO: replace with an existing solution
         internal class ByteBuilder
         {
-            private List<byte> bytes = new List<byte>();
+            private readonly List<byte> bytes = new List<byte>();
 
             public void AddInt(int val)
                 => bytes.AddRange(BitConverter.GetBytes(val));

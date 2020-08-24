@@ -38,7 +38,8 @@ namespace GenericTensor.Functions
 
     public struct GenericWrapper<T> : IOperations<T>
     {
-
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8605 // Unboxing a possibly null value.
         public T Add(T a, T b)
         {
             if (typeof(T) == typeof(int))
@@ -136,7 +137,8 @@ namespace GenericTensor.Functions
             else
                 throw new NotSupportedException();
         }
-
+#pragma warning restore CS8605 // Unboxing a possibly null value.
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
         public T Copy(T a)
         {
             return a;
@@ -150,14 +152,15 @@ namespace GenericTensor.Functions
         public bool IsZero(T a)
         {
             // is it a correct way?
-            return a.Equals(0);
+            return a is {} && a.Equals(0);
         }
 
         public string ToString(T a)
         {
-            return a.ToString();
+            return a?.ToString() ?? "";
         }
-
+#pragma warning disable CS8605 // Unboxing a possibly null value.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
         public byte[] Serialize(T a)
         {
             if (typeof(T) == typeof(int))
@@ -186,7 +189,8 @@ namespace GenericTensor.Functions
                 throw new NotSupportedException();
         }
     }
-
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning restore CS8605 // Unboxing a possibly null value.
     #endregion
 
     // Classic types you more likely to deal with
