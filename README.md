@@ -172,6 +172,22 @@ var v = myTensor.Slice(2, 3);
 Works for O(N)
 </p></details>
 
+<details><summary><strong>Serialization</strong></summary><p>
+
+```cs
+public byte[] Serialize();
+public static GenTensor<T, TWrapper> Deserialize(byte[] data);
+```
+
+Non-static Serialize() serializes given tensor into a byte array. It will call `TWrapper.Serialize(T a)`. 
+Use this to store your tensor somewhere in file or database.
+
+Static Deserialize() provides the opposite to Serialize operation. It takes a byte array as an argument
+and returns the same tensor as it was before serialization. As it calls `TWrapper.Deserialize(byte[] data)`,
+it should be of the exact same type as it was before serialization.
+
+</p></details>
+
 ### Math operations
 
 That is how you perform mathematical operations on some shapes.
