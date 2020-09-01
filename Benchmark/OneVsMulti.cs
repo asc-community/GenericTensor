@@ -12,12 +12,17 @@ namespace Benchmark
         static TS CreateTensor(int width, int size)
             => TS.CreateTensor(new TensorShape(width, size, size), (ind) => ind[0] + ind[1] + ind[2]);
 
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0051 // Remove unused private members
+
         static TS CreateTensorPar(int width, int size)
             => TS.CreateTensor(new TensorShape(width, size, size), (ind) => ind[0] + ind[1] + ind[2], Threading.Multi);
 
         private TS created;
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0044 // Add readonly modifier
 
-        private Dictionary<(int width, int height), TS> storage = new Dictionary<(int width, int height), TS>();
+        private readonly Dictionary<(int width, int height), TS> storage = new Dictionary<(int width, int height), TS>();
 
         private TS GetT(int width, int height)
         {

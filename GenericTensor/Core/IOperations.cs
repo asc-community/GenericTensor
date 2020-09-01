@@ -23,6 +23,8 @@ namespace GenericTensor.Core
         {
             var st = new StackTrace(1, false);
             var curr = st.GetFrame(0);
+            if (curr is null)
+                throw new NullReferenceException();
             return new NotImplementedException(curr.GetMethod().Name + " should be implemented");
         }
     }

@@ -9,6 +9,7 @@ namespace GenericTensor.Core.Expressions
 {
     public static class ExpressionCompiler<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
+#pragma warning disable CA2211 // Non-constant fields should not be visible
         public static Func<Expression, Expression, Expression> Addition
             = (a, b) =>  Expression.Call(
                 Expression.Default(typeof(TWrapper)),
@@ -36,7 +37,7 @@ namespace GenericTensor.Core.Expressions
                 typeof(IOperations<T>).GetMethod(nameof(IOperations<T>.Divide)),
                 a, b
             );
-
+#pragma warning restore CA2211 // Non-constant fields should not be visible
         public static Expression CreateLoop(ParameterExpression var, Expression until, Expression onIter)
         {
             var label = Expression.Label();
@@ -103,14 +104,15 @@ namespace GenericTensor.Core.Expressions
             else
             {
                 var x = Expression.Parameter(typeof(int), "outerLoopVar");
-                Func<ParameterExpression[], Expression> newOnIter = exprs =>
+
+                Expression newOnIter(ParameterExpression[] exprs)
                 {
                     var arr = new ParameterExpression[exprs.Length + 1];
                     arr[0] = x;
                     for (int i = 0; i < exprs.Length; i++)
                         arr[i + 1] = exprs[i];
                     return onIter(arr);
-                };
+                }
 
                 var shape0 = shapes[0];
                 var others = new ArraySegment<Expression>(shapes, 1, shapes.Length - 1).ToArray();
@@ -134,7 +136,7 @@ namespace GenericTensor.Core.Expressions
                     .Where(mi => mi.Name == nameof(Parallel.For))
                     .Where(mi => mi.GetParameters().Length == 3)
                     .Where(mi => mi.GetParameters()[2].ParameterType == typeof(Action<int>)).ToArray();
-                if (enu.Count() != 1)
+                if (enu.Length != 1)
                     throw new InvalidEnumArgumentException();
 
                 var mi = enu.FirstOrDefault();
@@ -227,8 +229,8 @@ namespace GenericTensor.Core.Expressions
             // bLin = b.LinOffset
             actions.Add(Expression.Assign(local_BLinOffset, 
                 Expression.Field(b, typeof(GenTensor<T, TWrapper>).GetField(nameof(GenTensor<T, TWrapper>.LinOffset)))));
-            
-            Func<ParameterExpression[], Expression> onIter = vars =>
+
+            Expression onIter(ParameterExpression[] vars)
             {
                 // ablocks_0 * x_0 + ablocks_1 * x_1 + ...
                 var aIndex = ExpressionCompiler<T, TWrapper>.BuildIndexToData(vars, local_aBlocks);
@@ -269,7 +271,7 @@ namespace GenericTensor.Core.Expressions
                 var assign = Expression.Assign(accessRes, added);
 
                 return assign;
-            };
+            }
 
             var locals = new List<ParameterExpression>();
             locals.AddRange(local_aBlocks);
@@ -316,7 +318,7 @@ namespace GenericTensor.Core.Expressions
             Division
         }
 
-        private static Dictionary<(OperationType opId, int N, bool parallel), Action<GenTensor<T, TWrapper>, GenTensor<T, TWrapper>, GenTensor<T, TWrapper>>> storage 
+        private static readonly Dictionary<(OperationType opId, int N, bool parallel), Action<GenTensor<T, TWrapper>, GenTensor<T, TWrapper>, GenTensor<T, TWrapper>>> storage 
                  = new Dictionary<(OperationType opId, int N, bool parallel), Action<GenTensor<T, TWrapper>, GenTensor<T, TWrapper>, GenTensor<T, TWrapper>>>();
 
         private static Action<GenTensor<T, TWrapper>, GenTensor<T, TWrapper>, GenTensor<T, TWrapper>> GetFunc(int N, Func<Expression, Expression, Expression> operation, bool parallel, OperationType ot)

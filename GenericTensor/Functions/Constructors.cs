@@ -45,7 +45,7 @@ namespace GenericTensor.Functions
             var newDims = new int[dimensions.Length + 2];
             for (int i = 0; i < dimensions.Length; i++)
                 newDims[i] = dimensions[i];
-            newDims[newDims.Length - 2] = newDims[newDims.Length - 1] = finalMatrixDiag;
+            newDims[^2] = newDims[^1] = finalMatrixDiag;
             var res = new GenTensor<T, TWrapper>(newDims);
             foreach (var index in res.IterateOverMatrices())
             {

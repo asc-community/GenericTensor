@@ -81,7 +81,7 @@ namespace GenericTensor.Core
             UpdateBlockCache();
         }
 
-        protected GenTensor(TensorShape dimensions, int[] blocks, T[] data)
+        private GenTensor(TensorShape dimensions, int[] blocks, T[] data)
         {
             Shape = dimensions;
             this.blocks = blocks;

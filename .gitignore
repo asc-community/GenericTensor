@@ -24,3 +24,6 @@
 /GenericTensor/bin/Debug
 /UnitTests/bin/Release/netcoreapp3.1
 /GenericTensor/_ReSharper.Caches/ReSharperPlatformVs16201_c6ddc177.00
+/Benchmark/bin/Release/net5.0
+/Sample/bin/Release/net5.0
+/UnitTests/bin/Release/net5.0
