@@ -155,6 +155,16 @@ namespace GenericTensor.Functions
             {
                 return default(TW).ToString(a.num) + " / " + default(TW).ToString(a.den);
             }
+
+            public byte[] Serialize(SafeDivisionWrapper<W, TW> a)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public SafeDivisionWrapper<W, TW> Deserialize(byte[] data)
+            {
+                throw new System.NotImplementedException();
+            }
         }
 
         #endregion

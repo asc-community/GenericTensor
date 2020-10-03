@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.2-beta</Version>
+    <Version>0.1.2</Version>
     <Authors>WhiteBlackGoose</Authors>
     <Company>AngouriSoft</Company>
     <Description>The only .NET tensor &amp; matrix library for generic types. It is also faster than other generic-typed matrix libraries.</Description>
@@ -12,9 +12,12 @@
     <PackageProjectUrl>https://github.com/WhiteBlackGoose/GenericTensor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/WhiteBlackGoose/GenericTensor</RepositoryUrl>
     <RepositoryType>public</RepositoryType>
-    <PackageReleaseNotes>Migrated to netstandard2.1 (some platforms might not be supported anymore). Serialization added, minor performance changes. No need to implement all methods of interfaces anymore.</PackageReleaseNotes>
+    <PackageReleaseNotes>Rolled back to standard 2.0. Strongly-named now.</PackageReleaseNotes>
     <PackageIcon>ico1.png</PackageIcon>
     <PackageTags>tensor, generic, matrix, vector, performance</PackageTags>
+    <LangVersion>8.0</LangVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>gtsign.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -43,9 +46,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="2.0.49" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.3.0" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="5.0.0-rc.1.20451.14" />
   </ItemGroup>
 
 </Project>

@@ -38,8 +38,6 @@ namespace GenericTensor.Functions
 
     public struct GenericWrapper<T> : IOperations<T>
     {
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning disable CS8605 // Unboxing a possibly null value.
         public T Add(T a, T b)
         {
             if (typeof(T) == typeof(int))
@@ -127,18 +125,17 @@ namespace GenericTensor.Functions
         public T CreateZero()
         {
             if (typeof(T) == typeof(int))
-                return (T) (object) (int) 1;
+                return (T)(object)(int)1;
             else if (typeof(T) == typeof(float))
-                return (T) (object) (float) 1;
+                return (T)(object)(float)1;
             if (typeof(T) == typeof(double))
-                return (T) (object) (double) 1;
+                return (T)(object)(double)1;
             if (typeof(T) == typeof(Complex))
-                return (T) (object) (Complex) 1;
+                return (T)(object)(Complex)1;
             else
                 throw new NotSupportedException();
         }
-#pragma warning restore CS8605 // Unboxing a possibly null value.
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+
         public T Copy(T a)
         {
             return a;
@@ -159,8 +156,7 @@ namespace GenericTensor.Functions
         {
             return a?.ToString() ?? "";
         }
-#pragma warning disable CS8605 // Unboxing a possibly null value.
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+
         public byte[] Serialize(T a)
         {
             if (typeof(T) == typeof(int))
@@ -178,19 +174,17 @@ namespace GenericTensor.Functions
         public T Deserialize(byte[] data)
         {
             if (typeof(T) == typeof(int))
-                return (T)(object)BitConverter.ToInt32(data);
+                return (T)(object)BitConverter.ToInt32(data, 0);
             else if (typeof(T) == typeof(float))
-                return (T)(object)BitConverter.ToSingle(data);
+                return (T)(object)BitConverter.ToSingle(data, 0);
             if (typeof(T) == typeof(double))
-                return (T)(object)BitConverter.ToDouble(data);
+                return (T)(object)BitConverter.ToDouble(data, 0);
             if (typeof(T) == typeof(Complex))
                 return (T) (object) SerializationUtils.DeserializeComplex(data);
             else
                 throw new NotSupportedException();
         }
     }
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning restore CS8605 // Unboxing a possibly null value.
     #endregion
 
     // Classic types you more likely to deal with
@@ -210,7 +204,7 @@ namespace GenericTensor.Functions
         public bool IsZero(int a) => a == 0;
         public string ToString(int a) => a.ToString();
         public byte[] Serialize(int a) => BitConverter.GetBytes(a);
-        public int Deserialize(byte[] data) => BitConverter.ToInt32(data);
+        public int Deserialize(byte[] data) => BitConverter.ToInt32(data, 0);
     }
 
     public struct LongWrapper : IOperations<long>
@@ -227,7 +221,7 @@ namespace GenericTensor.Functions
         public bool IsZero(long a) => a == 0;
         public string ToString(long a) => a.ToString();
         public byte[] Serialize(long a) => BitConverter.GetBytes(a);
-        public long Deserialize(byte[] data) => BitConverter.ToInt64(data);
+        public long Deserialize(byte[] data) => BitConverter.ToInt64(data, 0);
     }
 
 
@@ -246,7 +240,7 @@ namespace GenericTensor.Functions
         public bool IsZero(float a) => Math.Abs(a) < 1e-5;
         public string ToString(float a) => a.ToString();
         public byte[] Serialize(float a) => BitConverter.GetBytes(a);
-        public float Deserialize(byte[] data) => BitConverter.ToSingle(data);
+        public float Deserialize(byte[] data) => BitConverter.ToSingle(data, 0);
     }
 
 
@@ -265,7 +259,7 @@ namespace GenericTensor.Functions
         public bool IsZero(double a) => Math.Abs(a) < 1e-7;
         public string ToString(double a) => a.ToString();
         public byte[] Serialize(double a) => BitConverter.GetBytes(a);
-        public double Deserialize(byte[] data) => BitConverter.ToDouble(data);
+        public double Deserialize(byte[] data) => BitConverter.ToDouble(data, 0);
     }
 
     #endregion
@@ -305,8 +299,8 @@ namespace GenericTensor.Functions
         public bool AreEqual(BigInteger a, BigInteger b) => a == b;
         public bool IsZero(BigInteger a) => a == 0;
         public string ToString(BigInteger a) => a.ToString();
-
-        // TODO: implement serialization for BigInteger
+        public byte[] Serialize(BigInteger a) => a.ToByteArray();
+        public BigInteger Deserialize(byte[] data) => new BigInteger(data);
     }
     #endregion
 
@@ -331,6 +325,16 @@ namespace GenericTensor.Functions
         public bool AreEqual(Vector<int> a, Vector<int> b) => a == b;
         public bool IsZero(Vector<int> a) => a == Vector<int>.Zero;
         public string ToString(Vector<int> a) => a.ToString();
+
+        public byte[] Serialize(Vector<int> a)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Vector<int> Deserialize(byte[] data)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public struct VectorFloatWrapper : IOperations<Vector<float>>
@@ -346,6 +350,16 @@ namespace GenericTensor.Functions
         public bool AreEqual(Vector<float> a, Vector<float> b) => a == b;
         public bool IsZero(Vector<float> a) => a == Vector<float>.Zero;
         public string ToString(Vector<float> a) => a.ToString();
+
+        public byte[] Serialize(Vector<float> a)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Vector<float> Deserialize(byte[] data)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public struct VectorDoubleWrapper : IOperations<Vector<double>>
@@ -361,6 +375,16 @@ namespace GenericTensor.Functions
         public bool AreEqual(Vector<double> a, Vector<double> b) => a == b;
         public bool IsZero(Vector<double> a) => a == Vector<double>.Zero;
         public string ToString(Vector<double> a) => a.ToString();
+
+        public byte[] Serialize(Vector<double> a)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Vector<double> Deserialize(byte[] data)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     #endregion

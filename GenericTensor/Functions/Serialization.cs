@@ -74,7 +74,7 @@ namespace GenericTensor.Functions
                 try
                 {
                     var bytesInt = new Span<byte>(bytes, currId, 4);
-                    var res = BitConverter.ToInt32(bytesInt);
+                    var res = BitConverter.ToInt32(bytesInt.ToArray(), 0);
                     currId += sizeof(int);
                     return res;
                 }
@@ -114,8 +114,8 @@ namespace GenericTensor.Functions
             var realBytes = new Span<byte>(data, 0, sizeof(double));
             var imagBytes = new Span<byte>(data, sizeof(double), sizeof(double));
             return new Complex(
-                BitConverter.ToDouble(realBytes),
-                BitConverter.ToDouble(imagBytes)
+                BitConverter.ToDouble(realBytes.ToArray(), 0),
+                BitConverter.ToDouble(imagBytes.ToArray(), 0)
             );
         }
     }

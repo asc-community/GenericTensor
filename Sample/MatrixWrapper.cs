@@ -58,6 +58,51 @@ namespace Sample
             
             // It's better to somehow define it as it will make your debug-time easier :)
             public string ToString(double a) => a.ToString();
+
+            public double Subtract(double a, double b)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public double Negate(double a)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public double Divide(double a, double b)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public double CreateOne()
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public double Copy(double a)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public bool AreEqual(double a, double b)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public bool IsZero(double a)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public byte[] Serialize(double a)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public double Deserialize(byte[] data)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }
