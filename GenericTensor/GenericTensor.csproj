@@ -17,7 +17,7 @@
     <PackageTags>tensor, generic, matrix, vector, performance</PackageTags>
     <LangVersion>8.0</LangVersion>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>gtsign.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>keypair.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
