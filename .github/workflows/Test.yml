@@ -18,7 +18,7 @@ jobs:
     - name: Setup .NET 5
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.100-prdeview.8.20417.9'
+        dotnet-version: '5.0.100-preview.8.20417.9'
     - uses: codecov/codecov-action@v1
       with:
         file: .UnitTests/coverage.json
