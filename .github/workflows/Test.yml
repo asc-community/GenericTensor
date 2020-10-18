@@ -21,10 +21,10 @@ jobs:
         dotnet add "UnitTests" package GitHubActionsTestLogger
         dotnet add "UnitTests" package coverlet.msbuild
         dotnet test "UnitTests" -c Release -l GitHubActions /p:CollectCoverage=true
+    - name: Send to codecov
     - uses: actions/checkout@master
     - uses: codecov/codecov-action@v1
         with:
           file: .UnitTests/coverage.json
           flags: unittests
           name: codecov-umbrella
-          fail_ci_if_error: true
