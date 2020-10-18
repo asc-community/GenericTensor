@@ -3,7 +3,7 @@ name: Test
 on: [push, pull_request]
 jobs:
   UnitTests:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
@@ -29,4 +29,4 @@ jobs:
         name: codecov-umbrella
     - name: Send it to codecov
       run: |
-        bash <<(curl -s https://codecov.io/bash)
+        bash <(curl -s https://codecov.io/bash)
