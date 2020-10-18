@@ -14,9 +14,22 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
+        dotnet-version: '3.1.x'
+    - name: Setup .NET 5
+      uses: actions/setup-dotnet@v1
+      with:
         dotnet-version: '5.0.100-preview.8.20417.9'
     - name: Test
       run: |
         dotnet add "UnitTests" package Microsoft.NET.Test.Sdk
         dotnet add "UnitTests" package GitHubActionsTestLogger
-        dotnet test "UnitTests" -c Release -l GitHubActions
+        dotnet add "UnitTests" package coverlet.msbuild
+        dotnet test "UnitTests" -c Release -l GitHubActions /p:CollectCoverage=true
+    - uses: codecov/codecov-action@v1
+      with:
+        file: .UnitTests/coverage.json
+        flags: unittests
+        name: codecov-umbrella
+    - name: Send it to codecov
+      run: |
+        bash <(curl -s https://codecov.io/bash)
