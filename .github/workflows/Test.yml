@@ -27,6 +27,3 @@ jobs:
         file: ./UnitTests/coverage.json
         flags: unittests
         name: codecov-umbrella
-    - name: Send it to codecov
-      run: |
-        bash <(curl -s https://codecov.io/bash)
