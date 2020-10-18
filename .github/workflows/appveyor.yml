@@ -1,4 +1,15 @@
-image: Visual Studio 2019
+image: Visual Studio 2019 Preview
+
+for:
+  -
+    matrix:
+      only:
+        - image: Visual Studio 2019 Preview
+    install:
+      - ps: >-
+          Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1
+
+          ./dotnet-install.ps1 --Version 5.0.100-preview.8.20417.9 -InstallDir 'C:\Program Files\dotnet'
 
 before_build:
 - nuget restore
