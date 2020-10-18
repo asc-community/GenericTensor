@@ -20,4 +20,3 @@ jobs:
         dotnet add "UnitTests" package Microsoft.NET.Test.Sdk
         dotnet add "UnitTests" package GitHubActionsTestLogger
         dotnet test "UnitTests" -c Release -l GitHubActions
-        bash <(curl -s https://codecov.io/bash)

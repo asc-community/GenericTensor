@@ -11,4 +11,4 @@ build:
 
 test_script:
 - OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:".\UnitTests\bin\Release\net5.0\UnitTests.dll -noshadow" -filter:"+[UnitTestTargetProject*]* -[UnitTests*]*" -output:".\test_coverage.xml"
-- codecov -f "test_coverage.xml
+- codecov -f "test_coverage.xml"
