@@ -27,7 +27,7 @@ jobs:
         dotnet test "UnitTests" -c Release -l GitHubActions /p:CollectCoverage=true
     - uses: codecov/codecov-action@v1
       with:
-        file: .UnitTests/coverage.json
+        file: ./UnitTests/coverage.json
         flags: unittests
         name: codecov-umbrella
     - name: Send it to codecov
