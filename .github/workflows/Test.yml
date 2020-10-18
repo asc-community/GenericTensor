@@ -25,5 +25,3 @@ jobs:
     - uses: codecov/codecov-action@v1
       with:
         file: ./UnitTests/coverage.json
-        flags: unittests
-        name: codecov-umbrella

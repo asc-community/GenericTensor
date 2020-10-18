@@ -16,4 +16,4 @@ jobs:
       with:
         dotnet-version: '5.0.100-preview.8.20417.9'
     - name: Build
-      run: dotnet build GenericTensor
+      run: dotnet build GenericTensor.sln
