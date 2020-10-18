@@ -21,7 +21,7 @@ jobs:
         dotnet add "UnitTests" package Microsoft.NET.Test.Sdk
         dotnet add "UnitTests" package GitHubActionsTestLogger
         dotnet add "UnitTests" package coverlet.msbuild
-        dotnet test "UnitTests" -c Release -l GitHubActions /p:CollectCoverage=true
+        dotnet test "UnitTests" -c Release -l GitHubActions /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput="./coverage.xml"
     - uses: codecov/codecov-action@v1
       with:
-        file: ./UnitTests/coverage.json
+        file: ./coverage.xml
