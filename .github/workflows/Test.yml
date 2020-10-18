@@ -32,4 +32,4 @@ jobs:
         name: codecov-umbrella
     - name: Send it to codecov
       run: |
-        curl -s https://codecov.io/bash
+        bash <(curl -s https://codecov.io/bash)
