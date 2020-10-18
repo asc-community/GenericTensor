@@ -3,10 +3,7 @@ name: Test
 on: [push, pull_request]
 jobs:
   UnitTests:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
@@ -24,12 +21,7 @@ jobs:
         dotnet add "UnitTests" package Microsoft.NET.Test.Sdk
         dotnet add "UnitTests" package GitHubActionsTestLogger
         dotnet add "UnitTests" package coverlet.msbuild
-        dotnet test "UnitTests" -c Release -l GitHubActions /p:CollectCoverage=true
+        dotnet test "UnitTests" -c Release -l GitHubActions /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
     - uses: codecov/codecov-action@v1
       with:
-        file: .UnitTests/coverage.json
-        flags: unittests
-        name: codecov-umbrella
-    - name: Send it to codecov
-      run: |
-        bash <(curl -s https://codecov.io/bash)
+        file: ./UnitTests/coverage.opencover.xml
