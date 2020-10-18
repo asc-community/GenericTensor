@@ -1,0 +1,14 @@
+image: Visual Studio 2019
+
+before_build:
+- nuget restore
+- choco install opencover.portable
+- choco install codecov
+
+build:
+  project: GenericTensor.sln
+  verbosity: minimal
+
+test_script:
+- OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:".\UnitTests\bin\Release\net5.0\UnitTests.dll -noshadow" -filter:"+[UnitTestTargetProject*]* -[UnitTests*]*" -output:".\test_coverage.xml"
+- codecov -f "test_coverage.xml
