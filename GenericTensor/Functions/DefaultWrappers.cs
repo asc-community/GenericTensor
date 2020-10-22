@@ -125,13 +125,13 @@ namespace GenericTensor.Functions
         public T CreateZero()
         {
             if (typeof(T) == typeof(int))
-                return (T)(object)(int)1;
+                return (T)(object)(int)0;
             else if (typeof(T) == typeof(float))
-                return (T)(object)(float)1;
+                return (T)(object)(float)0;
             if (typeof(T) == typeof(double))
-                return (T)(object)(double)1;
+                return (T)(object)(double)0;
             if (typeof(T) == typeof(Complex))
-                return (T)(object)(Complex)1;
+                return (T)(object)(Complex)0;
             else
                 throw new NotSupportedException();
         }
@@ -148,8 +148,16 @@ namespace GenericTensor.Functions
 
         public bool IsZero(T a)
         {
-            // is it a correct way?
-            return a is {} && a.Equals(0);
+            if (typeof(T) == typeof(int))
+                return a.Equals((T)(object)(int)0);
+            else if (typeof(T) == typeof(float))
+                return a.Equals((T)(object)(float)0);
+            if (typeof(T) == typeof(double))
+                return a.Equals((T)(object)(double)0);
+            if (typeof(T) == typeof(Complex))
+                return a.Equals((T)(object)(Complex)0);
+            else
+                throw new NotSupportedException();
         }
 
         public string ToString(T a)
@@ -302,91 +310,6 @@ namespace GenericTensor.Functions
         public byte[] Serialize(BigInteger a) => a.ToByteArray();
         public BigInteger Deserialize(byte[] data) => new BigInteger(data);
     }
-    #endregion
-
-    // Those wrappers are for low-level programming, that can both boost and make your library
-    // slower, using them you must be certain.
-    // We cannot benchmark this method because it specifically depends on the machine since
-    // it uses hardware acceleration
-
-    #region Advanced primitives
-
-    public struct VectorIntWrapper : IOperations<Vector<int>>
-    {
-
-        public Vector<int> Add(Vector<int> a, Vector<int> b) => a + b;
-        public Vector<int> Subtract(Vector<int> a, Vector<int> b) => a - b;
-        public Vector<int> Multiply(Vector<int> a, Vector<int> b) => a * b;
-        public Vector<int> Negate(Vector<int> a) => -a;
-        public Vector<int> Divide(Vector<int> a, Vector<int> b) => a / b;
-        public Vector<int> CreateOne() => Vector<int>.One;
-        public Vector<int> CreateZero() => Vector<int>.Zero;
-        public Vector<int> Copy(Vector<int> a) => a;
-        public bool AreEqual(Vector<int> a, Vector<int> b) => a == b;
-        public bool IsZero(Vector<int> a) => a == Vector<int>.Zero;
-        public string ToString(Vector<int> a) => a.ToString();
-
-        public byte[] Serialize(Vector<int> a)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Vector<int> Deserialize(byte[] data)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public struct VectorFloatWrapper : IOperations<Vector<float>>
-    {
-        public Vector<float> Add(Vector<float> a, Vector<float> b) => a + b;
-        public Vector<float> Subtract(Vector<float> a, Vector<float> b) => a - b;
-        public Vector<float> Multiply(Vector<float> a, Vector<float> b) => a * b;
-        public Vector<float> Negate(Vector<float> a) => -a;
-        public Vector<float> Divide(Vector<float> a, Vector<float> b) => a / b;
-        public Vector<float> CreateOne() => Vector<float>.One;
-        public Vector<float> CreateZero() => Vector<float>.Zero;
-        public Vector<float> Copy(Vector<float> a) => a;
-        public bool AreEqual(Vector<float> a, Vector<float> b) => a == b;
-        public bool IsZero(Vector<float> a) => a == Vector<float>.Zero;
-        public string ToString(Vector<float> a) => a.ToString();
-
-        public byte[] Serialize(Vector<float> a)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Vector<float> Deserialize(byte[] data)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public struct VectorDoubleWrapper : IOperations<Vector<double>>
-    {
-        public Vector<double> Add(Vector<double> a, Vector<double> b) => a + b;
-        public Vector<double> Subtract(Vector<double> a, Vector<double> b) => a - b;
-        public Vector<double> Multiply(Vector<double> a, Vector<double> b) => a * b;
-        public Vector<double> Negate(Vector<double> a) => -a;
-        public Vector<double> Divide(Vector<double> a, Vector<double> b) => a / b;
-        public Vector<double> CreateOne() => Vector<double>.One;
-        public Vector<double> CreateZero() => Vector<double>.Zero;
-        public Vector<double> Copy(Vector<double> a) => a;
-        public bool AreEqual(Vector<double> a, Vector<double> b) => a == b;
-        public bool IsZero(Vector<double> a) => a == Vector<double>.Zero;
-        public string ToString(Vector<double> a) => a.ToString();
-
-        public byte[] Serialize(Vector<double> a)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Vector<double> Deserialize(byte[] data)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     #endregion
 }
 

@@ -137,6 +137,7 @@ namespace UnitTests
             CollectionAssert.AreEqual(new[] { 2, 4, 2, 3 }, x.Shape.ToArray());
             Assert.AreEqual(48, x.Volume);
             AssertTensor(Enumerable.Range(1, 48), x);
+            Assert.AreEqual(x.Shape.DimensionCount, 4);
         }
         [TestMethod]
         public void CreateTensor5D()
@@ -159,6 +160,7 @@ namespace UnitTests
             CollectionAssert.AreEqual(new[] { 1, 2, 4, 2, 3 }, x.Shape.ToArray());
             Assert.AreEqual(48, x.Volume);
             AssertTensor(Enumerable.Range(1, 48), x);
+            Assert.AreEqual(x.Shape.DimensionCount, 5);
         }
         [TestMethod]
         public void CreateTensor6D()
@@ -230,5 +232,32 @@ namespace UnitTests
             AssertTensor(Enumerable.Repeat(Complex.Zero, 5), x);
         }
         
+        [TestMethod]
+        public void IndexingAndAssigning2D()
+        {
+            var t2Actual = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4), ids => 0);
+            var t2Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4), ids => ids[0] + ids[1]);
+            t2Actual.IterateOver2((a, b) => { t2Actual[a, b] = a + b; });
+            Assert.AreEqual(t2Expected, t2Actual);
+        }
+
+        [TestMethod]
+        public void IndexingAndAssigning3D()
+        {
+            var t3Actual = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5), ids => 0);
+            var t3Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5), ids => ids[0] + ids[1] + ids[2]);
+            t3Actual.IterateOver3((a, b, c) => { t3Actual[a, b, c] = a + b + c; });
+            Assert.AreEqual(t3Expected, t3Actual);
+        }
+
+        [TestMethod]
+        public void IndexingAndAssigning4D()
+        {
+            var t4Actual = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5, 6), ids => 0);
+            var t4Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5, 6), ids => ids[0] + ids[1] + ids[2] + ids[3]);
+            foreach (var (ids, _) in t4Actual.Iterate())
+                t4Actual[ids[0], ids[1], ids[2], ids[3]] = ids.Sum();
+            Assert.AreEqual(t4Expected, t4Actual);
+        }
     }
 }

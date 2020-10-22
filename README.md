@@ -2,9 +2,11 @@
 [![GitHub](https://img.shields.io/github/license/WhiteBlackGoose/GenericTensor?color=blue)](https://github.com/asc-community/GenericTensor/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/642350046213439489?color=orange&label=Discord)](https://discord.gg/YWJEX7a)
 [![NuGet](https://img.shields.io/nuget/vpre/GenericTensor?label=NuGet)](https://www.nuget.org/packages/GenericTensor/)
-[![codecov](https://codecov.io/gh/asc-community/GenericTensor/branch/master/graph/badge.svg?token=IU6LAY3B9F)](https://github.com/asc-community/GenericTensor/tree/master/UnitTests)
+[![Coverage](https://codecov.io/gh/asc-community/GenericTensor/branch/master/graph/badge.svg?token=IU6LAY3B9F)](https://codecov.io/gh/asc-community/GenericTensor)
 
 # GenericTensor
+
+<img src="./ico1.png" align="right" width="25%"/>
 
 It is the only fully-implemented generic-tensor library for C#. Allows to work with tensors of custom types.
 

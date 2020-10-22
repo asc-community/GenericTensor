@@ -28,6 +28,8 @@
 using GenericTensor.Core;
 using GenericTensor.Functions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Numerics;
 
 namespace UnitTests
 {
@@ -97,6 +99,54 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void DivisionDouble()
+        {
+            var A = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+
+            var B = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
+            {
+                {6,  1, 1},
+                {4, -1, 5},
+                {2,  8, 7}
+            });
+
+            var res = GenTensor<double, DoubleWrapper>.MatrixDivide(A, B);
+            Assert.AreEqual(
+                GenTensor<double, DoubleWrapper>.MatrixMultiply(res, B),
+                A
+                );
+        }
+
+        [TestMethod]
+        public void DivisionComplex()
+        {
+            var A = GenTensor<Complex, ComplexWrapper>.CreateMatrix(new Complex[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+
+            var B = GenTensor<Complex, ComplexWrapper>.CreateMatrix(new Complex[,]
+            {
+                {6,  1, 1},
+                {4, -1, 5},
+                {2,  8, 7}
+            });
+
+            var res = GenTensor<Complex, ComplexWrapper>.MatrixDivide(A, B);
+            AreNonIntegerTensorEqual(
+                GenTensor<Complex, ComplexWrapper>.MatrixMultiply(res, B),
+                A
+                );
+        }
+
+        [TestMethod]
         public void TensorDivision()
         {
             var A = GenTensor<float, FloatWrapper>.CreateMatrix(new float[,]
@@ -150,6 +200,117 @@ namespace UnitTests
                 GenTensor<float, FloatWrapper>.CreateIdentityTensor(T.Shape.SubShape(0, 2).ToArray(), 3),
                 GenTensor<float, FloatWrapper>.TensorMatrixMultiply(T, K)
                 );
+        }
+
+        internal void AreNonIntegerTensorEqual<T, TWrapper>(GenTensor<T, TWrapper> expected, GenTensor<T, TWrapper> actual) where TWrapper : struct, IOperations<T>
+        {
+            var diff = GenTensor<T, TWrapper>.PiecewiseSubtract(expected, actual);
+            var sum = default(TWrapper).CreateZero();
+            foreach (var (_, value) in diff.Iterate())
+                sum = default(TWrapper).Add(sum, default(TWrapper).Multiply(value, value));
+            float abs;
+            if (typeof(T) == typeof(float))
+                abs = Math.Abs((float)(object)sum);
+            else if (typeof(T) == typeof(double))
+                abs = (float)Math.Abs((double)(object)sum);
+            else if (typeof(T) == typeof(Complex))
+                abs = (float)Complex.Abs((Complex)(object)sum);
+            else
+                throw new NotSupportedException();
+            Assert.IsTrue(abs < 0.01f, $"Error: {diff}\nExpected: {expected}\nActual: {actual}");
+        }
+
+        [TestMethod]
+        public void DivisionGWFloat()
+        {
+            var A = GenTensor<float, GenericWrapper<float>>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+
+            var B = GenTensor<float, GenericWrapper<float>>.CreateMatrix(new float[,]
+            {
+                {6,  1, 1},
+                {4, -1, 5},
+                {2,  8, 7}
+            });
+
+            var res = GenTensor<float, GenericWrapper<float>>.MatrixDivide(A, B);
+            AreNonIntegerTensorEqual(
+                GenTensor<float, GenericWrapper<float>>.MatrixMultiply(res, B),
+                A
+                );
+        }
+
+        [TestMethod]
+        public void DivisionGWDouble()
+        {
+            var A = GenTensor<double, GenericWrapper<double>>.CreateMatrix(new double[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+
+            var B = GenTensor<double, GenericWrapper<double>>.CreateMatrix(new double[,]
+            {
+                {6,  1, 1},
+                {4, -1, 5},
+                {2,  8, 7}
+            });
+
+            var res = GenTensor<double, GenericWrapper<double>>.MatrixDivide(A, B);
+            AreNonIntegerTensorEqual(
+                GenTensor<double, GenericWrapper<double>>.MatrixMultiply(res, B),
+                A
+                );
+        }
+
+        [TestMethod]
+        public void DivisionGWComplex()
+        {
+            var A = GenTensor<Complex, GenericWrapper<Complex>>.CreateMatrix(new Complex[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+
+            var B = GenTensor<Complex, GenericWrapper<Complex>>.CreateMatrix(new Complex[,]
+            {
+                {6,  1, 1},
+                {4, -1, 5},
+                {2,  8, 7}
+            });
+
+            var res = GenTensor<Complex, GenericWrapper<Complex>>.MatrixDivide(A, B);
+            AreNonIntegerTensorEqual(
+                GenTensor<Complex, GenericWrapper<Complex>>.MatrixMultiply(res, B),
+                A
+                );
+        }
+
+        [TestMethod]
+        public void DivisionGWString()
+        {
+            var A = GenTensor<string, GenericWrapper<string>>.CreateMatrix(new string[,]
+            {
+                {"6", " 1", "1"},
+                {"4", "-2", "5"},
+                {"2", " 8", "7"}
+            });
+
+            var B = GenTensor<string, GenericWrapper<string>>.CreateMatrix(new string[,]
+            {
+                {"6", " 1", "1"},
+                {"4", "-1", "5"},
+                {"2", " 8", "7"}
+            });
+
+            Assert.ThrowsException<NotSupportedException>(() => GenTensor<string, GenericWrapper<string>>.MatrixDivide(A, B));
+            
         }
     }
 }

@@ -55,6 +55,10 @@ namespace GenericTensor.Core
             return Equals(ten);
         }
 
+        /// <summary>
+        /// Calls your default(TWrapper).Equals
+        /// Be sure to override it when using this function or ==, != operators
+        /// </summary>
         public bool Equals(GenTensor<T, TWrapper> obj)
         {
             if (obj is null)
