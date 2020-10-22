@@ -5,8 +5,8 @@ coverage:
   precision: 2
   round: down
   range: "50...100"
-  patch: off
-  changes: off
+  patch: no
+  changes: no
 
 parsers:
   gcov:
