@@ -6,7 +6,7 @@
 
 # GenericTensor
 
-<img src="./ico1.png" align="right" width="30%"/>
+<img src="./ico1.png" align="right" width="25%"/>
 
 It is the only fully-implemented generic-tensor library for C#. Allows to work with tensors of custom types.
 
