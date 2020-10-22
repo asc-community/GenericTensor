@@ -25,6 +25,7 @@
 #endregion
 
 
+using System;
 using System.Numerics;
 using GenericTensor.Core;
 using GenericTensor.Functions;
@@ -129,6 +130,89 @@ namespace UnitTests
                     }
                 }
             ));
+
+        [TestMethod]
+        public void TestTensorGWInt()
+            => CircleTest(GenTensor<int, GenericWrapper<int>>.CreateTensor(
+                new[, ,]
+                {
+                    {
+                        {1, 3, 3},
+                        {4, 5, 6}
+                    },
+                    {
+                        {-4, 2, 3},
+                        {7, 8, 11}
+                    }
+                }
+            ));
+
+        [TestMethod]
+        public void TestTensorGWFloat()
+            => CircleTest(GenTensor<float, GenericWrapper<float>>.CreateTensor(
+                new[, ,]
+                {
+                    {
+                        {1, 3, 3},
+                        {4, 5, 6}
+                    },
+                    {
+                        {-4, 2, 3},
+                        {7, 8, 11}
+                    }
+                }
+            ));
+
+        [TestMethod]
+        public void TestTensorGWDouble()
+            => CircleTest(GenTensor<double, GenericWrapper<double>>.CreateTensor(
+                new[, ,]
+                {
+                    {
+                        {1, 3, 3},
+                        {4, 5, 6}
+                    },
+                    {
+                        {-4, 2, 3},
+                        {7, 8, 11}
+                    }
+                }
+            ));
+
+        [TestMethod]
+        public void TestTensorGWComplex()
+            => CircleTest(GenTensor<Complex, GenericWrapper<Complex>>.CreateTensor(
+                new[, ,]
+                {
+                    {
+                        {1, 3, 3},
+                        {4, 5, 6}
+                    },
+                    {
+                        {-4, 2, 3},
+                        {7, 8, 11}
+                    }
+                }
+            ));
+
+        [TestMethod]
+        public void TestTensorGWByte()
+        {
+            Assert.ThrowsException<NotSupportedException>(() =>
+            CircleTest(GenTensor<int, GenericWrapper<int>>.CreateTensor(
+                  new[, ,]
+                  {
+                    {
+                        {1, 3, 3},
+                        {4, 5, 6}
+                    },
+                    {
+                        {-4, 2, 3},
+                        {7, 8, 11}
+                    }
+                  }
+              )));
+        }
 
         [TestMethod]
         public void TestTensorComplex()
