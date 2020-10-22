@@ -6,7 +6,7 @@ using GenericTensor.Core;
 
 namespace Benchmark
 {
-    using TS = GenTensor<Vector<double>, VectorDoubleWrapper>;
+    using TS = GenTensor<double, DoubleWrapper>;
     public class MatrixBenchmark
     {
         [GlobalSetup]
@@ -16,7 +16,7 @@ namespace Benchmark
         }
 
         static TS CreateMatrix(int size)
-            => TS.CreateMatrix(size, size, (x, y) => new Vector<double>(x + y));
+            => TS.CreateMatrix(size, size, (x, y) => x + y);
 
         static TS CreateTensor(int W, int size)
             => TS.Stack(Enumerable.Range(0, W).Select(c => CreateMatrix(size)).ToArray());

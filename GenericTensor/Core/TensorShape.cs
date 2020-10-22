@@ -25,6 +25,7 @@
 #endregion
 
 
+using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -33,7 +34,7 @@ namespace GenericTensor.Core
     /// <summary>
     /// This structure represents a shape of a tensor
     /// </summary>
-    public struct TensorShape
+    public struct TensorShape : IEquatable<TensorShape>
     {
         public readonly int[] shape;
         /// <summary>
@@ -113,6 +114,9 @@ namespace GenericTensor.Core
 
         public override int GetHashCode()
             => shape.GetHashCode();
+
+        public override bool Equals(object obj)
+            => obj is TensorShape ts ? Equals(ts) : false;
 
         public static bool operator ==(TensorShape a, TensorShape b)
             => a.Equals(b);

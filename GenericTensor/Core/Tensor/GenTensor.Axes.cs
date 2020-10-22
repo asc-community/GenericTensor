@@ -95,7 +95,7 @@ namespace GenericTensor.Core
             #if ALLOW_EXCEPTIONS
             ReactIfBadIndexCount(indices.Length + 3);
             #endif
-            var res = GetFlattenedIndexWithCheck(x, y, z);
+            var res = GetFlattenedIndexWithCheck(x, y, z, checkNumberOfDims: false);
             for (int i = 0; i < indices.Length; i++)
             {
                 #if ALLOW_EXCEPTIONS
@@ -125,10 +125,11 @@ namespace GenericTensor.Core
             return LinOffset + cached_blocks0 * x + cached_blocks1 * y;
         }
 
-        private int GetFlattenedIndexWithCheck(int x, int y, int z)
+        private int GetFlattenedIndexWithCheck(int x, int y, int z, bool checkNumberOfDims = true)
         {
             #if ALLOW_EXCEPTIONS
-            ReactIfBadIndexCount(3);
+            if (checkNumberOfDims)
+                ReactIfBadIndexCount(3);
             ReactIfBadBound(x, 0);
             ReactIfBadBound(y, 1);
             ReactIfBadBound(z, 2);

@@ -153,12 +153,12 @@ namespace UnitTests
                 new[, ,]
                 {
                     {
-                        {1, 3, 3},
-                        {4, 5, 6}
+                        {1f, 3f, 3f},
+                        {4f, 5f, 6f}
                     },
                     {
-                        {-4, 2, 3},
-                        {7, 8, 11}
+                        {-4f, 2f,  3f},
+                        { 7f, 8f, 11f}
                     }
                 }
             ));
@@ -169,12 +169,12 @@ namespace UnitTests
                 new[, ,]
                 {
                     {
-                        {1, 3, 3},
-                        {4, 5, 6}
+                        {1d, 3d, 3d},
+                        {4d, 5d, 6d}
                     },
                     {
-                        {-4, 2, 3},
-                        {7, 8, 11}
+                        {-4d, 2d, 3d},
+                        { 7d, 8d, 11d}
                     }
                 }
             ));
@@ -185,12 +185,12 @@ namespace UnitTests
                 new[, ,]
                 {
                     {
-                        {1, 3, 3},
-                        {4, 5, 6}
+                        {new Complex(1, 0), new Complex(3, 0), new Complex(3, 0)},
+                        {new Complex(4, 0), new Complex(5, 0), new Complex(6, 0)}
                     },
                     {
-                        {-4, 2, 3},
-                        {7, 8, 11}
+                        {new Complex(-4, 0), new Complex(2,  0), new Complex(3,  0)},
+                        {new Complex(7,  0),  new Complex(8, 0), new Complex(11, 0)}
                     }
                 }
             ));
@@ -199,16 +199,16 @@ namespace UnitTests
         public void TestTensorGWByte()
         {
             Assert.ThrowsException<NotSupportedException>(() =>
-            CircleTest(GenTensor<int, GenericWrapper<int>>.CreateTensor(
+            CircleTest(GenTensor<byte, GenericWrapper<byte>>.CreateTensor(
                   new[, ,]
                   {
                     {
-                        {1, 3, 3},
-                        {4, 5, 6}
+                        {(byte)1, (byte)3, (byte)3},
+                        {(byte)4, (byte)5, (byte)6}
                     },
                     {
-                        {-4, 2, 3},
-                        {7, 8, 11}
+                        {(byte)4, (byte)2, (byte)3},
+                        {(byte)7,  (byte)8, (byte)11}
                     }
                   }
               )));

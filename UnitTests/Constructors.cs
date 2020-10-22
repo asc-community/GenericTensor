@@ -254,7 +254,7 @@ namespace UnitTests
         public void IndexingAndAssigning4D()
         {
             var t4Actual = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5, 6), ids => 0);
-            var t4Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5), ids => ids[0] + ids[1] + ids[2] + ids[3]);
+            var t4Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5, 6), ids => ids[0] + ids[1] + ids[2] + ids[3]);
             foreach (var (ids, _) in t4Actual.Iterate())
                 t4Actual[ids[0], ids[1], ids[2], ids[3]] = ids.Sum();
             Assert.AreEqual(t4Expected, t4Actual);

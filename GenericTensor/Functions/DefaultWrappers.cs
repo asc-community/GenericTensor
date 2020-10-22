@@ -125,13 +125,13 @@ namespace GenericTensor.Functions
         public T CreateZero()
         {
             if (typeof(T) == typeof(int))
-                return (T)(object)(int)1;
+                return (T)(object)(int)0;
             else if (typeof(T) == typeof(float))
-                return (T)(object)(float)1;
+                return (T)(object)(float)0;
             if (typeof(T) == typeof(double))
-                return (T)(object)(double)1;
+                return (T)(object)(double)0;
             if (typeof(T) == typeof(Complex))
-                return (T)(object)(Complex)1;
+                return (T)(object)(Complex)0;
             else
                 throw new NotSupportedException();
         }
@@ -148,8 +148,16 @@ namespace GenericTensor.Functions
 
         public bool IsZero(T a)
         {
-            // is it a correct way?
-            return a is {} && a.Equals(0);
+            if (typeof(T) == typeof(int))
+                return a.Equals((T)(object)(int)0);
+            else if (typeof(T) == typeof(float))
+                return a.Equals((T)(object)(float)0);
+            if (typeof(T) == typeof(double))
+                return a.Equals((T)(object)(double)0);
+            if (typeof(T) == typeof(Complex))
+                return a.Equals((T)(object)(Complex)0);
+            else
+                throw new NotSupportedException();
         }
 
         public string ToString(T a)

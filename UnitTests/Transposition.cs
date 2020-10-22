@@ -121,7 +121,7 @@ namespace UnitTests
 
         [TestMethod]
         public void InvalidShape()
-            => Assert.ThrowsException<InvalidShapeException>(() => GenTensor<int, IntWrapper>.CreateVector(1, 2, 3).Transpose(0, 1));
+            => Assert.ThrowsException<InvalidShapeException>(() => GenTensor<int, IntWrapper>.CreateVector(1, 2, 3).TransposeMatrix());
 
         [TestMethod]
         public void Transpose4D()

@@ -44,7 +44,17 @@ namespace GenericTensor.Core
         /// </summary>
         public bool IsSquareMatrix => IsMatrix && Shape.shape[0] == Shape.shape[1];
 
-        
+        /// <summary>
+        /// Calls your default(TWrapper).Equals
+        /// Be sure to override it when using this function or ==, != operators
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            if (obj is null || !(obj is GenTensor<T, TWrapper> ten))
+                return false;
+            return Equals(ten);
+        }
+
         /// <summary>
         /// Calls your default(TWrapper).Equals
         /// Be sure to override it when using this function or ==, != operators

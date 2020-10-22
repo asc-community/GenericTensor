@@ -140,7 +140,7 @@ namespace UnitTests
             });
 
             var res = GenTensor<Complex, ComplexWrapper>.MatrixDivide(A, B);
-            Assert.AreEqual(
+            AreNonIntegerTensorEqual(
                 GenTensor<Complex, ComplexWrapper>.MatrixMultiply(res, B),
                 A
                 );
@@ -202,28 +202,22 @@ namespace UnitTests
                 );
         }
 
-        [TestMethod]
-        public void DivisionGWInt()
+        internal void AreNonIntegerTensorEqual<T, TWrapper>(GenTensor<T, TWrapper> expected, GenTensor<T, TWrapper> actual) where TWrapper : struct, IOperations<T>
         {
-            var A = GenTensor<int, GenericWrapper<int>>.CreateMatrix(new int[,]
-            {
-                {6,  1, 1},
-                {4, -2, 5},
-                {2,  8, 7}
-            });
-
-            var B = GenTensor<int, GenericWrapper<int>>.CreateMatrix(new int[,]
-            {
-                {6,  1, 1},
-                {4, -1, 5},
-                {2,  8, 7}
-            });
-
-            var res = GenTensor<int, GenericWrapper<int>>.MatrixDivide(A, B);
-            Assert.AreEqual(
-                GenTensor<int, GenericWrapper<int>>.MatrixMultiply(res, B),
-                A
-                );
+            var diff = GenTensor<T, TWrapper>.PiecewiseSubtract(expected, actual);
+            var sum = default(TWrapper).CreateZero();
+            foreach (var (_, value) in diff.Iterate())
+                sum = default(TWrapper).Add(sum, default(TWrapper).Multiply(value, value));
+            float abs;
+            if (typeof(T) == typeof(float))
+                abs = Math.Abs((float)(object)sum);
+            else if (typeof(T) == typeof(double))
+                abs = (float)Math.Abs((double)(object)sum);
+            else if (typeof(T) == typeof(Complex))
+                abs = (float)Complex.Abs((Complex)(object)sum);
+            else
+                throw new NotSupportedException();
+            Assert.IsTrue(abs < 0.01f, $"Error: {diff}\nExpected: {expected}\nActual: {actual}");
         }
 
         [TestMethod]
@@ -244,7 +238,7 @@ namespace UnitTests
             });
 
             var res = GenTensor<float, GenericWrapper<float>>.MatrixDivide(A, B);
-            Assert.AreEqual(
+            AreNonIntegerTensorEqual(
                 GenTensor<float, GenericWrapper<float>>.MatrixMultiply(res, B),
                 A
                 );
@@ -268,7 +262,7 @@ namespace UnitTests
             });
 
             var res = GenTensor<double, GenericWrapper<double>>.MatrixDivide(A, B);
-            Assert.AreEqual(
+            AreNonIntegerTensorEqual(
                 GenTensor<double, GenericWrapper<double>>.MatrixMultiply(res, B),
                 A
                 );
@@ -292,7 +286,7 @@ namespace UnitTests
             });
 
             var res = GenTensor<Complex, GenericWrapper<Complex>>.MatrixDivide(A, B);
-            Assert.AreEqual(
+            AreNonIntegerTensorEqual(
                 GenTensor<Complex, GenericWrapper<Complex>>.MatrixMultiply(res, B),
                 A
                 );
