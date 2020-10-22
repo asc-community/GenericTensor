@@ -93,6 +93,18 @@ namespace UnitTests
             Assert.AreEqual(-306, M.DeterminantGaussianSafeDivision());
         }
 
+        [TestMethod]
+        public void SimpleGaussian2Long()
+        {
+            var M = GenTensor<long, LongWrapper>.CreateMatrix(new long[,]
+            {
+                {6,  1, 1},
+                {4, -2, 5},
+                {2,  8, 7}
+            });
+            Assert.AreEqual(-306, M.DeterminantGaussianSafeDivision());
+        }
+
 
         // unsafe
 

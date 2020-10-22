@@ -118,5 +118,21 @@ namespace UnitTests
             Assert.AreEqual(sm[1, 1], 4);
             Assert.AreEqual(sm[2, 1], 5);
         }
+
+        [TestMethod]
+        public void InvalidShape()
+            => Assert.ThrowsException<InvalidShapeException>(() => GenTensor<int, IntWrapper>.CreateVector(1, 2, 3).Transpose(0, 1));
+
+        [TestMethod]
+        public void Transpose4D()
+        {
+            var t4 = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(2, 2, 2, 2),
+                ids => ids[0] + ids[1] + ids[2] + ids[3]);
+            foreach (var (index, value) in t4.Iterate())
+            {
+                Assert.AreEqual(index[0] + index[1] + index[2] + index[3], value);
+            }
+
+        }
     }
 }

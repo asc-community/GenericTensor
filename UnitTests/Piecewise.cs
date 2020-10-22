@@ -234,6 +234,17 @@ namespace UnitTests
                 ));
         }
 
+        [TestMethod]
+        public void SumOf4D()
+        {
+            var t4 = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(2, 2, 2, 2),
+                ids => ids[0] + ids[1] + ids[2] + ids[3]);
+            Assert.AreEqual(
+                GenTensor<int, IntWrapper>.PiecewiseMultiply(t4, 2),
+                GenTensor<int, IntWrapper>.PiecewiseAdd(t4, t4)
+                );
+        }
+
         #endregion
 
         #region Parallel
