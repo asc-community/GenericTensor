@@ -30,7 +30,7 @@ using GenericTensor.Core.Expressions;
 
 namespace GenericTensor.Functions
 {
-    public interface IZipOperator<T>
+    internal interface IZipOperator<T>
     {
         T Operation(T a, T b);
     }

@@ -35,8 +35,8 @@ namespace GenericTensor.Core
     /// </summary>
     public class InvalidShapeException : ArgumentException
     {
-        public InvalidShapeException(string msg) : base(msg) {}
-        public InvalidShapeException() : base() {}
+        internal InvalidShapeException(string msg) : base(msg) {}
+        internal InvalidShapeException() : base() {}
 
         internal static void NeedTensorSquareMatrix<T, TWrapper>(GenTensor<T, TWrapper> m) where TWrapper : struct, IOperations<T>
         {
@@ -47,9 +47,12 @@ namespace GenericTensor.Core
         }
     }
 
+    /// <summary>
+    /// Thrown when a wrong determinant tensor was provided
+    /// </summary>
     public class InvalidDeterminantException : DataException
     {
-        public InvalidDeterminantException(string msg) : base(msg) {}
-        public InvalidDeterminantException() : base() {}
+        internal InvalidDeterminantException(string msg) : base(msg) {}
+        internal InvalidDeterminantException() : base() {}
     }
 }

@@ -36,7 +36,11 @@ namespace GenericTensor.Core
     /// </summary>
     public struct TensorShape : IEquatable<TensorShape>
     {
+        /// <summary>
+        /// Internal variable. Not recommended to change
+        /// </summary>
         public readonly int[] shape;
+
         /// <summary>
         /// Length of a shape is basically number of dimensions
         /// </summary>
@@ -70,6 +74,10 @@ namespace GenericTensor.Core
             return new TensorShape(newShape);
         }
 
+        /// <summary>
+        /// Gets a subshape as a subsequence with the given
+        /// left and right offsets
+        /// </summary>
         public TensorShape SubShape(int offsetFromLeft, int offsetFromRight)
         {
             var newShape = new int[Length - offsetFromLeft - offsetFromRight];
@@ -78,6 +86,9 @@ namespace GenericTensor.Core
             return new TensorShape(newShape);
         }
 
+        /// <summary>
+        /// Copies the shape, including the internal array
+        /// </summary>
         public TensorShape Copy()
         {
             var resI = shape.ToArray();
@@ -95,12 +106,17 @@ namespace GenericTensor.Core
         /// <returns></returns>
         public int this[int axisId] => shape[axisId];
 
-        public int[] ToArray() => shape;
+        /// <summary>
+        /// Returns the shape's internal array's copy
+        /// </summary>
+        public int[] ToArray() => shape.ToArray();
 
+        /// <inheritdoc/>
         public override string ToString()
             => string.Join(" x ", shape.Select(c => c.ToString()));
 
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(TensorShape sh)
         {
@@ -123,5 +139,6 @@ namespace GenericTensor.Core
 
         public static bool operator !=(TensorShape a, TensorShape b)
             => !a.Equals(b);
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }

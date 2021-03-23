@@ -71,12 +71,12 @@ namespace GenericTensor.Core
             return true;
         }
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public static bool operator ==(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b)
             => object.ReferenceEquals(a, b) || (a is {} && a.Equals(b));
 
         public static bool operator !=(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b)
             => !(a == b);
-
-        
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }

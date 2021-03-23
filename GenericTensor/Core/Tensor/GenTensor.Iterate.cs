@@ -107,12 +107,18 @@ namespace GenericTensor.Core
             set => data[GetFlattenedIndexWithCheck(x)] = value;
         }
 
+        /// <summary>
+        /// Gets the value by an array of indices.
+        /// </summary>
         public T this[int[] inds]
         {
             get => data[GetFlattenedIndexWithCheck(inds)];
             set => data[GetFlattenedIndexWithCheck(inds)] = value;
         }
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x)
         {
@@ -122,6 +128,9 @@ namespace GenericTensor.Core
             }
         }
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x, int y)
         {
@@ -131,6 +140,9 @@ namespace GenericTensor.Core
             }
         }
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x, int y, int z)
         {
@@ -140,50 +152,86 @@ namespace GenericTensor.Core
             }
         }
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int x, int y, int z, int[] indices)
             => data[GetFlattenedIndexSilent(x, y, z, indices)];
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T GetValueNoCheck(int[] indices)
             => data[GetFlattenedIndexSilent(indices)];
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(T value, int x)
             => data[GetFlattenedIndexSilent(x)] = value;
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(T value, int x, int y)
             => data[GetFlattenedIndexSilent(x, y)] = value;
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(T value, int x, int y, int z)
             => data[GetFlattenedIndexSilent(x, y, z)] = value;
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(T value, int x, int y, int z, int[] other)
             => data[GetFlattenedIndexSilent(x, y, z, other)] = value;
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(T value, int[] indices)
             => data[GetFlattenedIndexSilent(indices)] = value;
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(Func<T> valueCreator, int x)
             => data[GetFlattenedIndexSilent(x)] = valueCreator();
 
+        /// <summary>
+        /// Gets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(Func<T> valueCreator, int x, int y)
             => data[GetFlattenedIndexSilent(x, y)] = valueCreator();
 
+        /// <summary>
+        /// Sets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(Func<T> valueCreator, int x, int y, int z)
             => data[GetFlattenedIndexSilent(x, y, z)] = valueCreator();
 
+        /// <summary>
+        /// Sets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(Func<T> valueCreator, int x, int y, int z, int[] indices)
             => data[GetFlattenedIndexSilent(x, y, z, indices)] = valueCreator();
 
+        /// <summary>
+        /// Sets the value without checking and without throwing an exception
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetValueNoCheck(Func<T> valueCreator, int[] indices)
             => data[GetFlattenedIndexSilent(indices)] = valueCreator();
@@ -277,6 +325,7 @@ namespace GenericTensor.Core
         public IEnumerable<int[]> IterateOverElements()
             => IterateOver(0);
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public void IterateOver1(Action<int> react)
         {
             for (int x = 0; x < Shape[0]; x++)
@@ -297,5 +346,6 @@ namespace GenericTensor.Core
             for (int z = 0; z < Shape[2]; z++)
                 react(x, y, z);
         }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }

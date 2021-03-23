@@ -30,6 +30,11 @@ using GenericTensor.Functions;
 
 namespace GenericTensor.Core
 {
+    /// <summary>
+    /// The main class of tensor.
+    /// </summary>
+    /// <typeparam name="T">The primitive to be an element in the tensor</typeparam>
+    /// <typeparam name="TWrapper">The set of rules for working with primitives</typeparam>
     public sealed partial class GenTensor<T, TWrapper>
         : ICloneable where TWrapper : struct, IOperations<T>
     {
@@ -63,8 +68,8 @@ namespace GenericTensor.Core
         #region Constructors
         /// <summary>
         /// Creates a tensor whose all matrices are identity matrices
-        /// <para>1 is achieved with <see cref="ConstantsAndFunctionsForwarder{T}.CreateOne"/></para>
-        /// <para>0 is achieved with <see cref="ConstantsAndFunctionsForwarder{T}.CreateZero"/></para>
+        /// <para>1 is achieved with <see cref="IOperations{T}.CreateOne"/></para>
+        /// <para>0 is achieved with <see cref="IOperations{T}.CreateZero"/></para>
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T, TWrapper> CreateIdentityTensor(int[] dimensions, int finalMatrixDiag)
@@ -72,8 +77,8 @@ namespace GenericTensor.Core
 
         /// <summary>
         /// Creates an indentity matrix whose width and height are equal to diag
-        /// <para>1 is achieved with <see cref="ConstantsAndFunctionsForwarder{T}.CreateOne"/></para>
-        /// <para>0 is achieved with <see cref="ConstantsAndFunctionsForwarder{T}.CreateZero"/></para>
+        /// <para>1 is achieved with <see cref="IOperations{T}.CreateOne"/></para>
+        /// <para>0 is achieved with <see cref="IOperations{T}.CreateZero"/></para>
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GenTensor<T, TWrapper> CreateIdentityMatrix(int diag)
@@ -217,7 +222,7 @@ namespace GenericTensor.Core
             => Determinant<T, TWrapper>.TensorDeterminantLaplace(this);
 
         /// <summary>
-        /// Computers Determinant via Guassian elimination & safe division
+        /// Computers Determinant via Guassian elimination and safe division
         /// for all matrices in the tensor
         /// </summary>
         public GenTensor<T, TWrapper> TensorDeterminantGaussianSafeDivision()
@@ -402,9 +407,11 @@ namespace GenericTensor.Core
 
         #region ToString & GetHashCode
 
+        /// <inheritdoc/>
         public override string ToString()
             => DefaultOverridings<T, TWrapper>.InToString(this);
 
+        /// <inheritdoc/>
         public override int GetHashCode()
             => DefaultOverridings<T, TWrapper>.GetHashCode(this);
 
@@ -497,7 +504,7 @@ namespace GenericTensor.Core
         /// </param>
         /// <returns>
         /// A tensor with the same data as stored before serialization
-        /// (if serialization & deserialization in TWrapper work correctly)
+        /// (if serialization and deserialization in TWrapper work correctly)
         /// </returns>
         public static GenTensor<T, TWrapper> Deserialize(byte[] data)
             => Serializer<T, TWrapper>.Deserialize(data);

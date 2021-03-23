@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GenericTensor.Core.Expressions
 {
-    public static class ExpressionCompiler<T, TWrapper> where TWrapper : struct, IOperations<T>
+    internal static class ExpressionCompiler<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
 #pragma warning disable CA2211 // Non-constant fields should not be visible
         public static Func<Expression, Expression, Expression> Addition

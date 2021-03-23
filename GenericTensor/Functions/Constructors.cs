@@ -37,8 +37,8 @@ namespace GenericTensor.Functions
     {
         /// <summary>
         /// Creates a tensor whose all matrices are identity matrices
-        /// <para>1 is achieved with <see cref="ConstantsAndFunctionsForwarder{T}.CreateOne"/></para>
-        /// <para>0 is achieved with <see cref="ConstantsAndFunctionsForwarder{T}.CreateZero"/></para>
+        /// <para>1 is achieved with <see cref="IOperations{T}.CreateOne"/></para>
+        /// <para>0 is achieved with <see cref="IOperations{T}.CreateZero"/></para>
         /// </summary>
         public static GenTensor<T, TWrapper> CreateIdentityTensor(int[] dimensions, int finalMatrixDiag)
         {

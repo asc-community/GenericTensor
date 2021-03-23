@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/WhiteBlackGoose/GenericTensor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/WhiteBlackGoose/GenericTensor</RepositoryUrl>
     <RepositoryType>public</RepositoryType>
-    <PackageReleaseNotes>Fixed bug with Copying</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed bug with Copying. Docs added</PackageReleaseNotes>
     <PackageIcon>ico1.png</PackageIcon>
     <PackageTags>tensor, generic, matrix, vector, performance</PackageTags>
     <LangVersion>8.0</LangVersion>
@@ -25,6 +25,7 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>D:\main\vs_prj\GenericTensor\GenericTensor\GenericTensor\GenericTensor.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

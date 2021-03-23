@@ -33,6 +33,7 @@ namespace GenericTensor.Functions
 {
     // If you do not want to determine which of classical wrappers to use, use this one,
     // it will determine it for you
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
     #region Lazy wrapper
 
@@ -311,5 +312,7 @@ namespace GenericTensor.Functions
         public BigInteger Deserialize(byte[] data) => new BigInteger(data);
     }
     #endregion
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }
 

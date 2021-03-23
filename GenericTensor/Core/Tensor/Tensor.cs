@@ -30,8 +30,10 @@ namespace GenericTensor.Core
 {
     public partial class GenTensor<T, TWrapper>
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public readonly T[] data;
         public readonly int[] blocks; // 3 x 4 x 5
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         internal int cached_blocks0;
         internal int cached_blocks1;
         internal int cached_blocks2;
@@ -89,9 +91,15 @@ namespace GenericTensor.Core
             UpdateBlockCache();
         }
 
+        /// <summary>
+        /// Clones with copying the elements
+        /// </summary>
         public object Clone()
             => Copy(copyElements: true);
 
+        /// <summary>
+        /// Creates a tensor from the given shape
+        /// </summary>
         public GenTensor(TensorShape dimensions)
         {
             Shape = dimensions;
@@ -107,6 +115,9 @@ namespace GenericTensor.Core
             BlockRecompute();
         }
 
+        /// <summary>
+        /// Creates a tensor from the given dimensions
+        /// </summary>
         public GenTensor(params int[] dimensions) : this(new TensorShape(dimensions)) { }
     }
 }

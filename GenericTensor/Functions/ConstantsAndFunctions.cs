@@ -30,7 +30,9 @@ using GenericTensor.Core;
 
 namespace GenericTensor.Functions
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public static class ConstantsAndFunctionsForwarder<T, TWrapper> where TWrapper : struct, IOperations<T>
+
     {
         static Y AskForDefining<Y>([System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
             throw new NotImplementedException(
@@ -73,4 +75,5 @@ namespace GenericTensor.Functions
         // .ToString()
         public new static Func<T, string> ToString = a => AskForDefining<string>();
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

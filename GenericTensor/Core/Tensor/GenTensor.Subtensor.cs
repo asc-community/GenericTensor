@@ -32,6 +32,9 @@ namespace GenericTensor.Core
 {
     public partial class GenTensor<T, TWrapper>
     {
+        /// <summary>
+        /// Linear offset (as in offset in the initial array)
+        /// </summary>
         public int LinOffset;
 
         /// <summary>
