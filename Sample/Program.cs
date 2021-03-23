@@ -3,6 +3,22 @@ using GenericTensor.Core;
 using GenericTensor.Functions;
 using Sample;
 
+var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
+    {
+        { 1, 2, 3 },
+        { 1, 3, 3 }
+    }
+);
+
+Console.WriteLine(m);
+
+var n = m.Copy(false);
+n.TransposeMatrix();
+
+Console.WriteLine(m);
+
+return;
+
 var M = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
 {
     { -3,  0,  0,  0,   1,  -130 },

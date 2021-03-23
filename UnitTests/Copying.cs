@@ -26,31 +26,42 @@
 
 
 using GenericTensor.Core;
+using GenericTensor.Functions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GenericTensor.Functions
+namespace UnitTests
 {
-    internal static class CopyAndForward<T, TWrapper> where TWrapper : struct, IOperations<T>
+    [TestClass]
+    public class Copy
     {
-        public static GenTensor<T, TWrapper> Copy(GenTensor<T, TWrapper> t, bool copyElements)
+        [TestMethod]
+        public void NoChangeInShapeAfterTranspose1()
         {
-            var res = new GenTensor<T, TWrapper>(t.Shape.Copy());
-            if (!copyElements)
-            {
-                foreach (var index in res.IterateOverElements())
-                    res.SetValueNoCheck(t.GetValueNoCheck(index), index);
-            }
-            else
-                foreach (var index in res.IterateOverElements())
-                    res.SetValueNoCheck(default(TWrapper).Copy(t.GetValueNoCheck(index)), index);
-            return res;
+            var m = GenTensor<int, IntWrapper>.CreateMatrix(new[,] { { 1, 2 } });
+            Assert.AreEqual(m.Shape[0], 1);
+            Assert.AreEqual(m.Shape[1], 2);
+            var n = m.Copy(false);
+            n.TransposeMatrix();
+            Assert.AreEqual(m.Shape[0], 1);
+            Assert.AreEqual(m.Shape[1], 2);
         }
 
-        public static GenTensor<T, TWrapper> Forward(GenTensor<T, TWrapper> t)
+        [TestMethod]
+        public void NoChangeInShapeAfterTranspose2()
         {
-            var res = new GenTensor<T, TWrapper>(t.Shape);
-            foreach (var index in res.IterateOverElements())
-                res.SetValueNoCheck(t.GetValueNoCheck(index), index);
-            return res;
+            var m = GenTensor<int, IntWrapper>.CreateTensor(new[,,] { { { 1, 2 } } });
+            Assert.AreEqual(m.Shape[0], 1);
+            Assert.AreEqual(m.Shape[1], 1);
+            Assert.AreEqual(m.Shape[2], 2);
+            var n = m.Copy(false);
+            n.Transpose(0, 2);
+            Assert.AreEqual(m.Shape[0], 1);
+            Assert.AreEqual(m.Shape[1], 1);
+            Assert.AreEqual(m.Shape[2], 2);
+
+            Assert.AreEqual(n.Shape[0], 2);
+            Assert.AreEqual(n.Shape[1], 1);
+            Assert.AreEqual(n.Shape[2], 1);
         }
     }
 }

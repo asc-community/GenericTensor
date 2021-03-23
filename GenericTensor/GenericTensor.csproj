@@ -3,16 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.2.1</Version>
+    <Version>0.1.2.2</Version>
     <Authors>WhiteBlackGoose</Authors>
-    <Company>AngouriSoft</Company>
+    <Company>Angouri</Company>
     <Description>The only .NET tensor &amp; matrix library for generic types. It is also faster than other generic-typed matrix libraries.</Description>
     <Copyright>WhiteBlackGoose</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/WhiteBlackGoose/GenericTensor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/WhiteBlackGoose/GenericTensor</RepositoryUrl>
     <RepositoryType>public</RepositoryType>
-    <PackageReleaseNotes>Rolled back to standard 2.0. Strongly-named now.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed bug with Copying</PackageReleaseNotes>
     <PackageIcon>ico1.png</PackageIcon>
     <PackageTags>tensor, generic, matrix, vector, performance</PackageTags>
     <LangVersion>8.0</LangVersion>
