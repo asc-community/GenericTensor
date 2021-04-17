@@ -157,21 +157,11 @@ namespace GenericTensor.Functions
             for (int k = 1; k < n; k++)
             for (int j = k; j < m; j++)
             {
-                var с = default(TWrapper).Divide(
+                var c = default(TWrapper).Divide(
                     elemMatrix.GetValueNoCheck(j, k - 1),
                     elemMatrix.GetValueNoCheck(k - 1, k - 1)
                 );
-                for (int i = 0; i < n; i++)
-                {
-                    var curr = elemMatrix.GetValueNoCheck(j, i);
-                    elemMatrix.SetValueNoCheck(default(TWrapper).Subtract(
-                        curr,
-                        default(TWrapper).Multiply(
-                            с,
-                            elemMatrix.GetValueNoCheck(k - 1, i)
-                        )
-                    ), j, i);
-                }
+                elemMatrix.RowAdd(j, k - 1, default(TWrapper).Negate(c));
             }
 
             return elemMatrix;
