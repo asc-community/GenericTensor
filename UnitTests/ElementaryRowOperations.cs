@@ -92,12 +92,12 @@ namespace UnitTests
                     { 4, 8 },
                 }
             );
-            m.RowAdd(1, 2, 1);
+            m.RowAdd(0, 1, 1);
             var exp = GenTensor<int, IntWrapper>.CreateMatrix(
                 new[,]
                 {
                     { 1 + 4, 2 + 5 },
-                    { 4, 5 },
+                    { 4, 5 }, 
                     { 4, 8 },
                 }
             );

@@ -53,7 +53,7 @@ namespace GenericTensor.Functions
             for (int i = 0; i < t.Shape[1]; i++)
                 t.SetValueNoCheck(
                     default(TWrapper).Add(
-                        t.GetValueNoCheck(srcRowId, i),
+                        t.GetValueNoCheck(dstRowId, i),
                         default(TWrapper).Multiply(coef, t.GetValueNoCheck(srcRowId, i))
                         ), 
                     dstRowId, i);
