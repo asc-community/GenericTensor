@@ -178,6 +178,24 @@ namespace GenericTensor.Core
 
         #endregion
 
+        #region Echelon forms
+        /// <summary>
+        /// Decomposes a matrix into a triangular one avoiding division until
+        /// the result is returned.
+        /// </summary>
+        public GenTensor<T, TWrapper> GaussianEliminationSafeDivision()
+            => EchelonForm<T, TWrapper>.GaussianEliminationSafeDivision(this);
+
+        /// <summary>
+        /// Decomposes a matrix into a triangular one
+        /// </summary>
+        public GenTensor<T, TWrapper> GaussianEliminationSimple()
+            => EchelonForm<T, TWrapper>.GaussianEliminationSimple(this);
+
+        public GenTensor<T, TWrapper> ReducedRowEchelonFormSimple()
+            => EchelonForm<T, TWrapper>.ReducedRowEchelonFormSimple(this);
+        #endregion
+
         #region Determinant
 
         /// <summary>
@@ -199,19 +217,6 @@ namespace GenericTensor.Core
         /// </summary>
         public T DeterminantGaussianSafeDivision()
             => Determinant<T, TWrapper>.DeterminantGaussianSafeDivision(this);
-
-        /// <summary>
-        /// Decomposes a matrix into a triangular one avoiding division until
-        /// the result is returned.
-        /// </summary>
-        public GenTensor<T, TWrapper> GaussianEliminationSafeDivision()
-            => EchelonForm<T, TWrapper>.GaussianEliminationSafeDivision(this);
-
-        /// <summary>
-        /// Decomposes a matrix into a triangular one
-        /// </summary>
-        public GenTensor<T, TWrapper> GaussianEliminationSimple()
-            => EchelonForm<T, TWrapper>.GaussianEliminationSimple(this);
 
         /// <summary>
         /// Performs simple Gaussian elimination method on a tensor

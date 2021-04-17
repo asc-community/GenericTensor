@@ -12,6 +12,7 @@ var m2 = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
 
 Console.WriteLine(m2.GaussianEliminationSimple());
 Console.WriteLine(m2.GaussianEliminationSafeDivision());
+Console.WriteLine(m2.ReducedRowEchelonFormSimple());
 return;
 
 var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.1.2.2</Version>
     <Authors>WhiteBlackGoose</Authors>
@@ -15,7 +16,6 @@
     <PackageReleaseNotes>Fixed bug with Copying. Docs added</PackageReleaseNotes>
     <PackageIcon>ico1.png</PackageIcon>
     <PackageTags>tensor, generic, matrix, vector, performance</PackageTags>
-    <LangVersion>8.0</LangVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>keypair.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>

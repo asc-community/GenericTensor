@@ -180,15 +180,45 @@ namespace GenericTensor.Functions
 
         #region Reduced row echelon form
 
-        // public static GenTensor<T, TWrapper> ReducedRowEchelonFormSimple(GenTensor<T, TWrapper> t)
-        // {
-        //      #if ALLOW_EXCEPTIONS
-        //     if (!t.IsSquareMatrix)
-        //         throw new InvalidShapeException("this should be square matrix");
-        //     #endif
-        //     var upper = InnerGaussianEliminationSimple(t, t.Shape[0]);
-        //     
-        // }
+        private static GenTensor<T, TWrapper> InnerReducedRowEchelonFormSimple(GenTensor<T, TWrapper> t)
+        {
+            var upper = InnerGaussianEliminationSimple(t, t.Shape[0], t.Shape[1]);
+            for (int r = t.Shape[0]; r >= 0; r--)
+            {
+                if (LeadingElement(t, r) is not { } leading)
+                    continue;
+                for (int i = 0; i < r; i++)
+                    upper.RowAdd(i, r, default(TWrapper).Negate(
+                                            default(TWrapper).Divide(
+                                                upper.GetValueNoCheck(i, leading.id),
+                                                leading.value
+                                            )
+                                       )
+                    );
+            }
+
+            return upper;
+
+            static (int id, T value)? LeadingElement(GenTensor<T, TWrapper> t, int row)
+            {
+                for (int i = 0; i < t.Shape[1]; i++)
+                {
+                    var value = t.GetValueNoCheck(row, i);
+                    if (!default(TWrapper).IsZero(value))
+                        return (i, value);
+                }
+                return null;
+            }
+        }
+
+        public static GenTensor<T, TWrapper> ReducedRowEchelonFormSimple(GenTensor<T, TWrapper> t)
+        {
+            #if ALLOW_EXCEPTIONS
+            if (!t.IsMatrix)
+                throw new InvalidShapeException("this should be matrix");
+            #endif
+            return InnerReducedRowEchelonFormSimple(t);
+        }
 
         #endregion
     }
