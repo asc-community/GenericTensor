@@ -200,10 +200,17 @@ namespace GenericTensor.Core
             => Determinant<T, TWrapper>.DeterminantGaussianSafeDivision(this);
 
         /// <summary>
-        /// Decomposes a matrix into a triangular one
+        /// Decomposes a matrix into a triangular one avoiding division until
+        /// the result is returned.
         /// </summary>
         public GenTensor<T, TWrapper> GaussianEliminationSafeDivision()
-            => Determinant<T, TWrapper>.GaussianEliminationSafeDivision(this);
+            => EchelonForm<T, TWrapper>.GaussianEliminationSafeDivision(this);
+
+        /// <summary>
+        /// Decomposes a matrix into a triangular one
+        /// </summary>
+        public GenTensor<T, TWrapper> GaussianEliminationSimple()
+            => EchelonForm<T, TWrapper>.GaussianEliminationSimple(this);
 
         // TODO: how to avoid code duplication?
         /// <summary>

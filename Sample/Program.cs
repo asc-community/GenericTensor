@@ -3,6 +3,20 @@ using GenericTensor.Core;
 using GenericTensor.Functions;
 using Sample;
 
+var m2 = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
+    {
+        { 4, 2, 3 },
+        { 1, 3, 3 },
+        { 6, 7, 8 }
+    }
+);
+
+var d = m2.DeterminantGaussianSimple();
+Console.WriteLine(m2.GaussianEliminationSafeDivision());
+Console.WriteLine(m2.GaussianEliminationSimple());
+
+return;
+
 var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
     {
         { 1, 2, 3 },
