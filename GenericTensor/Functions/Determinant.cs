@@ -2,7 +2,7 @@
 /*
  * MIT License
  * 
- * Copyright (c) 2020 WhiteBlackGoose
+ * Copyright (c) 2020-2021 WhiteBlackGoose
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -87,7 +87,7 @@ namespace GenericTensor.Functions
                 return t.GetValueNoCheck(0, 0);
 
             var n = diagLength;
-            var elemMatrix = EchelonForm<T, TWrapper>.InnerGaussianEliminationSafeDivision(t, n);
+            var elemMatrix = EchelonForm<T, TWrapper>.InnerGaussianEliminationSafeDivision(t, n, n);
 
             var det = default(EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>).CreateOne();
             for (int i = 0; i < n; i++)

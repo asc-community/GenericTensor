@@ -2,7 +2,7 @@
 /*
  * MIT License
  * 
- * Copyright (c) 2020 WhiteBlackGoose
+ * Copyright (c) 2020-2021 WhiteBlackGoose
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 #endregion
+
 
 using GenericTensor.Core;
 using System;
@@ -130,13 +131,13 @@ namespace GenericTensor.Functions
             }
         }
 
-        internal static GenTensor<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>> InnerGaussianEliminationSafeDivision(GenTensor<T, TWrapper> t, int n)
+        internal static GenTensor<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>> InnerGaussianEliminationSafeDivision(GenTensor<T, TWrapper> t, int m, int n)
         {
             var elemMatrix = GenTensor<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>
-                .CreateMatrix(n, n,
+                .CreateMatrix(m, n,
                     (x, y) => new SafeDivisionWrapper<T, TWrapper>(t.GetValueNoCheck(x, y))
                 );
-            return EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>.InnerGaussianEliminationSimple(elemMatrix, n);
+            return EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>.InnerGaussianEliminationSimple(elemMatrix, m, n);
         }
 
         public static GenTensor<T, TWrapper> GaussianEliminationSafeDivision(GenTensor<T, TWrapper> t)
@@ -144,21 +145,19 @@ namespace GenericTensor.Functions
             #if ALLOW_EXCEPTIONS
             if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
-            if (t.Shape[0] != t.Shape[1])
-                throw new InvalidShapeException("this should be square matrix");
             #endif
-            var wrp = InnerGaussianEliminationSafeDivision(t, t.Shape[0]);
+            var wrp = InnerGaussianEliminationSafeDivision(t, t.Shape[0], t.Shape[1]);
             return GenTensor<T, TWrapper>.CreateMatrix(t.Shape[0], t.Shape[1], (x, y) => wrp.GetValueNoCheck(x, y).Count());
         }
 
-        internal static GenTensor<T, TWrapper> InnerGaussianEliminationSimple(GenTensor<T, TWrapper> t, int n)
+        internal static GenTensor<T, TWrapper> InnerGaussianEliminationSimple(GenTensor<T, TWrapper> t, int m, int n)
         {
             var elemMatrix = t.Copy(copyElements: false);
 
             for (int k = 1; k < n; k++)
-            for (int j = k; j < n; j++)
+            for (int j = k; j < m; j++)
             {
-                var m = default(TWrapper).Divide(
+                var с = default(TWrapper).Divide(
                     elemMatrix.GetValueNoCheck(j, k - 1),
                     elemMatrix.GetValueNoCheck(k - 1, k - 1)
                 );
@@ -168,7 +167,7 @@ namespace GenericTensor.Functions
                     elemMatrix.SetValueNoCheck(default(TWrapper).Subtract(
                         curr,
                         default(TWrapper).Multiply(
-                            m,
+                            с,
                             elemMatrix.GetValueNoCheck(k - 1, i)
                         )
                     ), j, i);
@@ -183,11 +182,23 @@ namespace GenericTensor.Functions
             #if ALLOW_EXCEPTIONS
             if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
-            if (t.Shape[0] != t.Shape[1])
-                throw new InvalidShapeException("this should be square matrix");
             #endif
-            return InnerGaussianEliminationSimple(t, t.Shape[0]);
+            return InnerGaussianEliminationSimple(t, t.Shape[0], t.Shape[1]);
         }
+
+        #endregion
+
+        #region Reduced row echelon form
+
+        // public static GenTensor<T, TWrapper> ReducedRowEchelonFormSimple(GenTensor<T, TWrapper> t)
+        // {
+        //      #if ALLOW_EXCEPTIONS
+        //     if (!t.IsSquareMatrix)
+        //         throw new InvalidShapeException("this should be square matrix");
+        //     #endif
+        //     var upper = InnerGaussianEliminationSimple(t, t.Shape[0]);
+        //     
+        // }
 
         #endregion
     }

@@ -2,7 +2,7 @@
 /*
  * MIT License
  * 
- * Copyright (c) 2020 WhiteBlackGoose
+ * Copyright (c) 2020-2021 WhiteBlackGoose
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 #endregion
+
 
 using System;
 using System.Runtime.CompilerServices;
@@ -212,7 +213,6 @@ namespace GenericTensor.Core
         public GenTensor<T, TWrapper> GaussianEliminationSimple()
             => EchelonForm<T, TWrapper>.GaussianEliminationSimple(this);
 
-        // TODO: how to avoid code duplication?
         /// <summary>
         /// Performs simple Gaussian elimination method on a tensor
         ///
@@ -268,6 +268,31 @@ namespace GenericTensor.Core
         /// </summary>
         public void TensorMatrixInvert()
             => Inversion<T, TWrapper>.TensorMatrixInvert(this);
+        #endregion
+
+        #region Elementary matrix operations
+
+        /// <summary>
+        /// Multiples the given row by the given coefficient.
+        /// Modifies the matrix.
+        /// </summary>
+        public void RowMultiply(int rowId, T coef)
+            => ElementaryRowOperations<T, TWrapper>.RowMultiply(this, rowId, coef);
+
+        /// <summary>
+        /// To the first row adds the second row multiplied by the coef.
+        /// Modifies the matrix.
+        /// </summary>
+        public void RowAdd(int dstRowId, int srcRowId, T coef)
+            => ElementaryRowOperations<T, TWrapper>.RowAdd(this, dstRowId, srcRowId, coef);
+
+        /// <summary>
+        /// Swaps the given two rows.
+        /// Modifies the matrix.
+        /// </summary>
+        public void RowSwap(int row1Id, int row2Id)
+            => ElementaryRowOperations<T, TWrapper>.RowSwap(this, row1Id, row2Id);
+
         #endregion
 
         #region Matrix multiplication & division
@@ -480,8 +505,7 @@ namespace GenericTensor.Core
 
         #endregion
 
-
-
+        #region Serialization
         /*
          * Serialization protocol:
          *
@@ -515,5 +539,6 @@ namespace GenericTensor.Core
         /// </returns>
         public static GenTensor<T, TWrapper> Deserialize(byte[] data)
             => Serializer<T, TWrapper>.Deserialize(data);
+        #endregion
     }
 }

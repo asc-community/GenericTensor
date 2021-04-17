@@ -7,14 +7,11 @@ var m2 = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
     {
         { 4, 2, 3 },
         { 1, 3, 3 },
-        { 6, 7, 8 }
     }
 );
 
-var d = m2.DeterminantGaussianSimple();
-Console.WriteLine(m2.GaussianEliminationSafeDivision());
 Console.WriteLine(m2.GaussianEliminationSimple());
-
+Console.WriteLine(m2.GaussianEliminationSafeDivision());
 return;
 
 var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
