@@ -1,10 +1,12 @@
+
+
+# GenericTensor
+
 ﻿![Test](https://github.com/WhiteBlackGoose/GenericTensor/workflows/Test/badge.svg)
 [![GitHub](https://img.shields.io/github/license/WhiteBlackGoose/GenericTensor?color=blue)](https://github.com/asc-community/GenericTensor/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/642350046213439489?color=orange&label=Discord)](https://discord.gg/YWJEX7a)
 [![NuGet](https://img.shields.io/nuget/vpre/GenericTensor?label=NuGet)](https://www.nuget.org/packages/GenericTensor/)
 [![Coverage](https://codecov.io/gh/asc-community/GenericTensor/branch/master/graph/badge.svg?token=IU6LAY3B9F)](https://codecov.io/gh/asc-community/GenericTensor)
-
-# GenericTensor
 
 <img src="./ico1.png" align="right" width="25%"/>
 
@@ -16,7 +18,7 @@ you could use not only built-in types like int, float, etc., but also your own t
 
 ### Installation
 
-GT is available on [Nuget](https://www.nuget.org/packages/GenericTensor/).
+GT is available on [NuGet](https://www.nuget.org/packages/GenericTensor/).
 
 ### How do I work with GenericTensor?
 
@@ -234,6 +236,41 @@ Works for O(V)
 </p></details>
 
 #### Matrix operations
+
+<details><summary><strong>Elementary row operations</strong></summary><p>
+    
+```cs
+public void RowMultiply(int rowId, T coef);  
+public void RowAdd(int dstRowId, int srcRowId, T coef);
+public void RowSubtract(int dstRowId, int srcRowId, T coef);
+public void RowSwap(int row1Id, int row2Id)
+```
+
+Performs elementary row operations on a matrix. `this` must be a matrix (otherwise, an exception is thrown). The operations modify the matrix (without making copies).
+
+Works for O(N)
+</p></details>
+
+<details><summary><strong>Echelon forms</strong></summary><p>
+
+```cs
+public GenTensor<T, TWrapper> RowEchelonFormSimple();
+public GenTensor<T, TWrapper> RowEchelonFormSafeDivision();
+public GenTensor<T, TWrapper> RowEchelonFormLeadingOnesSimple();
+public GenTensor<T, TWrapper> RowEchelonFormLeadingOnesSafeDivision();
+public GenTensor<T, TWrapper> ReducedRowEchelonFormSimple();
+public GenTensor<T, TWrapper> ReducedRowEchelonFormSafeDivision();
+```
+
+Finds the requested form of a matrix. Due to different definitions of row echelon forms, we provide both forms: the one with leading ones and the one
+with arbitrary leading elements. There is also reduced row echelon form.
+
+They are implemented via Gaussian elimination. Every of these three methods has two variants: Simple and SafeDivision. In SafeDivision it will postpone
+the actual division of numbers up to the end of the algorithm, while Simple will perform division immediately. SafeDivision provides a higher precision,
+but it requires a high upper/lower bound of a number, because while computing even simple matrices, it might exceed billions.
+
+Works for O(N^3)
+</p></details>
 
 <details><summary><strong>Matrix multiplication</strong></summary><p>
 
