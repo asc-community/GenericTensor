@@ -185,7 +185,7 @@ namespace GenericTensor.Functions
                 if (!default(TWrapper).IsZero(t.GetValueNoCheck(r, columnId)))
                 {
                     var currElement = t.GetValueNoCheck(r, columnId);
-                    t.RowSubtract(r, columnId, default(TWrapper).Divide(currElement, pivotValue));
+                    t.RowSubtract(r, off, default(TWrapper).Divide(currElement, pivotValue));
                 }
 
 
@@ -266,17 +266,9 @@ namespace GenericTensor.Functions
                 if (upper.RowGetLeadingElement(r) is not { } leading)
                     continue;
                 for (int i = 0; i < r; i++)
-                    upper.RowAdd(i, r, default(TWrapper).Negate(
-                                            default(TWrapper).Divide(
-                                                upper.GetValueNoCheck(i, leading.index),
-                                                leading.value
-                                            )
-                                       )
-                    );
-                upper.RowMultiply(r, default(TWrapper).Divide(
-                                        default(TWrapper).CreateOne(),
-                                        leading.value
-                            ));
+                    upper.RowSubtract(i, r, default(TWrapper).Divide(upper.GetValueNoCheck(i, leading.index), leading.value));
+
+                upper.RowMultiply(r, default(TWrapper).Divide(default(TWrapper).CreateOne(), leading.value));
             }
 
             return upper;

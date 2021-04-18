@@ -29,6 +29,7 @@ using GenericTensor.Functions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace UnitTests
@@ -186,5 +187,245 @@ namespace UnitTests
                 });
             Assert.AreEqual(e, reForm);
         }
+
+        [TestMethod]
+        public void REFOnes5()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 1,  3,  0,  9 },
+                    { 0,  0,  0,  1 },
+                    { 3, 11,  0, 25 },
+                });
+            var reForm = m.RowEchelonFormLeadingOnesSimple();
+            var e = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 1, 3, 0,  9 },
+                    { 0, 1, 0, -1 },
+                    { 0, 0, 0,  1 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void REFOnes6()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 0, 0, 0, 0, 0 },
+                    { 1, 2, 0, 3, 5 },
+                    { 0, 0, 0, 0, 0 }
+                });
+            var reForm = m.RowEchelonFormLeadingOnesSimple();
+            var e = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 1, 2, 0, 3, 5 },
+                    { 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void REFOnes7()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 0, 0, 0, 0, 1 },
+                    { 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 1 }
+                });
+            var reForm = m.RowEchelonFormLeadingOnesSimple();
+            var e = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 0, 0, 0, 0, 1 },
+                    { 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void RREF1()
+        {
+            var m = GenTensor<float, FloatWrapper>.CreateMatrix(
+                new float[,]
+                {
+                    { 1,  3,  1,  9 },
+                    { 1,  1, -1,  1 },
+                    { 3, 11,  5, 35 }
+                });
+            var reForm = m.ReducedRowEchelonFormSimple();
+            var e = GenTensor<float, FloatWrapper>.CreateMatrix(
+                new float[,]
+                {
+                    { 1,  0, -2, -3 },
+                    { 0,  1,  1,  4 },
+                    { 0,  0,  0,  0 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void RREF2()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 1,  3,  1,  9 },
+                    { 1,  1, -1,  1 },
+                    { 3, 11,  5, 25 },
+                    { 5, 6,  78, 23 }
+                });
+            var reForm = m.ReducedRowEchelonFormSimple();
+            var e = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 1,  0,  0,  0 },
+                    { 0,  1,  0,  0 },
+                    { 0,  0,  1,  0 },
+                    { 0,  0,  0,  1 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void REFF3()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 2,  3 },
+                    { 4,  6 },
+                    { 6,  3 },
+                    { 5,  7 }
+                });
+            var reForm = m.ReducedRowEchelonFormSimple();
+            var e = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 1,  0 },
+                    { 0,  1 },
+                    { 0,  0 },
+                    { 0,  0 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void REFF4()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 0, 0, 1, 0 },
+                    { 0, 1, 0, 0 },
+                    { 0, 4, 1, 0 },
+                });
+            var reForm = m.ReducedRowEchelonFormSimple();
+            var e = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 0, 1, 0, 0 },
+                    { 0, 0, 1, 0 },
+                    { 0, 0, 0, 0 },
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void RREF1SD()
+        {
+            var m = GenTensor<int, IntWrapper>.CreateMatrix(
+                new[,]
+                {
+                    { 1,  3,  1,  9 },
+                    { 1,  1, -1,  1 },
+                    { 3, 11,  5, 35 }
+                });
+            var reForm = m.ReducedRowEchelonFormSafeDivision();
+            var e = GenTensor<int, IntWrapper>.CreateMatrix(
+                new[,]
+                {
+                    { 1,  0, -2, -3 },
+                    { 0,  1,  1,  4 },
+                    { 0,  0,  0,  0 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void RREF2SD()
+        {
+            var m = GenTensor<BigInteger, BigIntWrapper>.CreateMatrix(
+                new BigInteger[,]
+                {
+                    { 1,  3,  1,  9 },
+                    { 1,  1, -1,  1 },
+                    { 3, 11,  5, 25 },
+                    { 5, 6,  78, 23 }
+                });
+            var reForm = m.ReducedRowEchelonFormSafeDivision();
+            var e = GenTensor<BigInteger, BigIntWrapper>.CreateMatrix(
+                new BigInteger[,]
+                {
+                    { 1,  0,  0,  0 },
+                    { 0,  1,  0,  0 },
+                    { 0,  0,  1,  0 },
+                    { 0,  0,  0,  1 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void REFF3SD()
+        {
+            var m = GenTensor<int, IntWrapper>.CreateMatrix(
+                new[,]
+                {
+                    { 2,  3 },
+                    { 4,  6 },
+                    { 6,  3 },
+                    { 5,  7 }
+                });
+            var reForm = m.ReducedRowEchelonFormSafeDivision();
+            var e = GenTensor<int, IntWrapper>.CreateMatrix(
+                new[,]
+                {
+                    { 1,  0 },
+                    { 0,  1 },
+                    { 0,  0 },
+                    { 0,  0 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void REFF4SD()
+        {
+            var m = GenTensor<int, IntWrapper>.CreateMatrix(
+                new[,]
+                {
+                    { 0, 0, 1, 0 },
+                    { 0, 1, 0, 0 },
+                    { 0, 4, 1, 0 },
+                });
+            var reForm = m.ReducedRowEchelonFormSafeDivision();
+            var e = GenTensor<int, IntWrapper>.CreateMatrix(
+                new[,]
+                {
+                    { 0, 1, 0, 0 },
+                    { 0, 0, 1, 0 },
+                    { 0, 0, 0, 0 },
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
     }
 }
