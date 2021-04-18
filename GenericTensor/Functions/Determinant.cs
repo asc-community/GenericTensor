@@ -2,7 +2,7 @@
 /*
  * MIT License
  * 
- * Copyright (c) 2020 WhiteBlackGoose
+ * Copyright (c) 2020-2021 WhiteBlackGoose
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -70,105 +70,7 @@ namespace GenericTensor.Functions
 
         #region Gaussian
 
-        #region Safe division wrapper
-        internal struct SafeDivisionWrapper<W, TW> where TW : struct, IOperations<W>
-        {
-            internal W num;
-            internal W den;
-
-            public SafeDivisionWrapper(W val)
-            {
-                num = val;
-                den = default(TW).CreateOne();
-            }
-
-            public SafeDivisionWrapper(W num, W den)
-            {
-                this.num = num;
-                this.den = den;
-            }
-            
-            public W Count() => default(TW).Divide(num, den);
-        }
-
-        internal struct WrapperSafeDivisionWrapper<W, TW> : IOperations<SafeDivisionWrapper<W, TW>> where TW : struct, IOperations<W>
-        {
-
-            public SafeDivisionWrapper<W, TW> Add(SafeDivisionWrapper<W, TW> a, SafeDivisionWrapper<W, TW> b)
-            {
-                return new SafeDivisionWrapper<W, TW>(default(TW).Add(default(TW).Multiply(a.num, b.den), default(TW).Multiply(b.num, a.den)),
-                    default(TW).Multiply(a.den, b.den));
-            }
-
-            public SafeDivisionWrapper<W, TW> Subtract(SafeDivisionWrapper<W, TW> a, SafeDivisionWrapper<W, TW> b)
-            {
-                return new SafeDivisionWrapper<W, TW>(default(TW).Subtract(default(TW).Multiply(a.num, b.den), default(TW).Multiply(b.num, a.den)),
-                    default(TW).Multiply(a.den, b.den));
-            }
-
-            public SafeDivisionWrapper<W, TW> Multiply(SafeDivisionWrapper<W, TW> a, SafeDivisionWrapper<W, TW> b)
-            {
-                return new SafeDivisionWrapper<W, TW>(default(TW).Multiply(a.num, b.num), default(TW).Multiply(a.den, b.den));
-            }
-
-            public SafeDivisionWrapper<W, TW> Negate(SafeDivisionWrapper<W, TW> a)
-            {
-                return new SafeDivisionWrapper<W, TW>(default(TW).Negate(a.num), a.den);
-            }
-
-            public SafeDivisionWrapper<W, TW> Divide(SafeDivisionWrapper<W, TW> a, SafeDivisionWrapper<W, TW> b)
-            {
-                return new SafeDivisionWrapper<W, TW>(default(TW).Multiply(a.num, b.den), default(TW).Multiply(a.den, b.num));
-            }
-
-            public SafeDivisionWrapper<W, TW> CreateOne()
-            {
-                return new SafeDivisionWrapper<W, TW>(default(TW).CreateOne());
-            }
-
-            public SafeDivisionWrapper<W, TW> CreateZero()
-            {
-                return new SafeDivisionWrapper<W, TW>(default(TW).CreateZero());
-            }
-
-            public SafeDivisionWrapper<W, TW> Copy(SafeDivisionWrapper<W, TW> a)
-            {
-                return new SafeDivisionWrapper<W, TW>(default(TW).Copy(a.num), default(TW).Copy(a.den));
-            }
-
-            public SafeDivisionWrapper<W, TW> Forward(SafeDivisionWrapper<W, TW> a)
-            {
-                return a;
-            }
-
-            public bool AreEqual(SafeDivisionWrapper<W, TW> a, SafeDivisionWrapper<W, TW> b)
-            {
-                return default(TW).AreEqual(a.num, b.num) && default(TW).AreEqual(a.den, b.den);
-            }
-
-            public bool IsZero(SafeDivisionWrapper<W, TW> a)
-            {
-                return default(TW).IsZero(a.num);
-            }
-
-            public string ToString(SafeDivisionWrapper<W, TW> a)
-            {
-                return default(TW).ToString(a.num) + " / " + default(TW).ToString(a.den);
-            }
-
-            public byte[] Serialize(SafeDivisionWrapper<W, TW> a)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public SafeDivisionWrapper<W, TW> Deserialize(byte[] data)
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        #endregion
-
+        
         public static T DeterminantGaussianSafeDivision(GenTensor<T, TWrapper> t)
             => DeterminantGaussianSafeDivision(t, t.Shape[0]);
 
@@ -185,58 +87,17 @@ namespace GenericTensor.Functions
                 return t.GetValueNoCheck(0, 0);
 
             var n = diagLength;
-            var elemMatrix = InnerGaussianEliminationSafeDivision(t, n);
+            var elemMatrix = EchelonForm<T, TWrapper>.InnerGaussianEliminationSafeDivision(t, n, n);
 
-            var det = default(WrapperSafeDivisionWrapper<T, TWrapper>).CreateOne();
+            var det = default(EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>).CreateOne();
             for (int i = 0; i < n; i++)
             {
-                det = default(WrapperSafeDivisionWrapper<T, TWrapper>).Multiply(det, elemMatrix.GetValueNoCheck(i, i));
+                det = default(EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>).Multiply(det, elemMatrix.GetValueNoCheck(i, i));
             }
 
             if (default(TWrapper).IsZero(det.den))
                 return default(TWrapper).CreateZero();
             return det.Count();
-        }
-
-        private static GenTensor<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>> InnerGaussianEliminationSafeDivision(GenTensor<T, TWrapper> t, int n)
-        {
-            var elemMatrix = GenTensor<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>
-                .CreateMatrix(n, n,
-                    (x, y) => new SafeDivisionWrapper<T, TWrapper>(t.GetValueNoCheck(x, y))
-                );
-            for (int k = 1; k < n; k++)
-            for (int j = k; j < n; j++)
-            {
-                var m = default(WrapperSafeDivisionWrapper<T, TWrapper>).Divide(
-                    elemMatrix.GetValueNoCheck(j, k - 1),
-                    elemMatrix.GetValueNoCheck(k - 1, k - 1)
-                );
-                for (int i = 0; i < n; i++)
-                {
-                    var curr = elemMatrix.GetValueNoCheck(j, i);
-                    elemMatrix.SetValueNoCheck(default(WrapperSafeDivisionWrapper<T, TWrapper>).Subtract(
-                        curr,
-                        default(WrapperSafeDivisionWrapper<T, TWrapper>).Multiply(
-                            m,
-                            elemMatrix.GetValueNoCheck(k - 1, i)
-                        )
-                    ), j, i);
-                }
-            }
-
-            return elemMatrix;
-        }
-
-        public static GenTensor<T, TWrapper> GaussianEliminationSafeDivision(GenTensor<T, TWrapper> t)
-        {
-            #if ALLOW_EXCEPTIONS
-            if (!t.IsMatrix)
-                throw new InvalidShapeException("this should be matrix");
-            if (t.Shape[0] != t.Shape[1])
-                throw new InvalidShapeException("this should be square matrix");
-            #endif
-            var wrp = InnerGaussianEliminationSafeDivision(t, t.Shape[0]);
-            return GenTensor<T, TWrapper>.CreateMatrix(t.Shape[0], t.Shape[1], (x, y) => wrp.GetValueNoCheck(x, y).Count());
         }
 
         public static T DeterminantGaussianSimple(GenTensor<T, TWrapper> t)

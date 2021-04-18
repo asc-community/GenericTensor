@@ -2,7 +2,7 @@
 /*
  * MIT License
  * 
- * Copyright (c) 2020 WhiteBlackGoose
+ * Copyright (c) 2020-2021 WhiteBlackGoose
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ namespace GenericTensor.Core
         /// </summary>
         public override bool Equals(object obj)
         {
-            if (obj is null || !(obj is GenTensor<T, TWrapper> ten))
+            if (obj is null || obj is not GenTensor<T, TWrapper> ten)
                 return false;
             return Equals(ten);
         }

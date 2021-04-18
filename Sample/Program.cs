@@ -3,6 +3,18 @@ using GenericTensor.Core;
 using GenericTensor.Functions;
 using Sample;
 
+var m2 = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
+    {
+        { 4, 2, 3 },
+        { 1, 3, 3 },
+    }
+);
+
+Console.WriteLine(m2.RowEchelonFormLeadingOnesSimple());
+Console.WriteLine(m2.RowEchelonFormLeadingOnesSafeDivision());
+Console.WriteLine(m2.ReducedRowEchelonFormSimple());
+return;
+
 var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
     {
         { 1, 2, 3 },
@@ -29,7 +41,7 @@ var M = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
 }
 );
 
-Console.WriteLine(M.GaussianEliminationSafeDivision());
+Console.WriteLine(M.RowEchelonFormLeadingOnesSafeDivision());
 return;
 
 var A = new MyMatrix(3, 2);

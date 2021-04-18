@@ -3,13 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericTensor", "./GenericTensor/GenericTensor.csproj", "{D4ED9D4A-82AB-419C-B3AD-BF35104A6613}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericTensor", "GenericTensor\GenericTensor.csproj", "{D4ED9D4A-82AB-419C-B3AD-BF35104A6613}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "./Sample/Sample.csproj", "{DF4C5CB0-7D93-4126-B967-5BA2A2BB6489}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "Sample\Sample.csproj", "{DF4C5CB0-7D93-4126-B967-5BA2A2BB6489}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "./UnitTests/UnitTests.csproj", "{3104462C-7792-4003-AC2A-A34F74F52701}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{3104462C-7792-4003-AC2A-A34F74F52701}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmark", "./Benchmark/Benchmark.csproj", "{E307577A-08C0-468E-BC6A-79398B1D6AAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmark", "Benchmark\Benchmark.csproj", "{E307577A-08C0-468E-BC6A-79398B1D6AAD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3DD9FA32-C26B-4630-ADB1-4DE2E36AA672}"
+	ProjectSection(SolutionItems) = preProject
+		GenericTensor.sln.licenseheader = GenericTensor.sln.licenseheader
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,7 +2,7 @@
 /*
  * MIT License
  * 
- * Copyright (c) 2020 WhiteBlackGoose
+ * Copyright (c) 2020-2021 WhiteBlackGoose
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 #endregion
+
 
 using System;
 using System.Runtime.CompilerServices;
@@ -177,6 +178,58 @@ namespace GenericTensor.Core
 
         #endregion
 
+        #region Echelon forms
+
+        /// <summary>
+        /// Decomposes a matrix into a triangular one.
+        /// Is of the Row Echelon Form (leading elements might be differ from ones).
+        /// </summary>
+        public GenTensor<T, TWrapper> RowEchelonFormSimple()
+            => EchelonForm<T, TWrapper>.RowEchelonFormSimple(this);
+
+        /// <summary>
+        /// Decomposes a matrix into a triangular one.
+        /// Is of the Row Echelon Form (leading elements might be differ from ones).
+        /// Uses safe division, i. e. perform division only when computing the final result.
+        /// </summary>
+        public GenTensor<T, TWrapper> RowEchelonFormSafeDivision()
+            => EchelonForm<T, TWrapper>.RowEchelonFormSafeDivision(this);
+
+
+
+        /// <summary>
+        /// Decomposes a matrix into a triangular one.
+        /// Is of the Row Echelon Form (leading elements are ones).
+        /// </summary>
+        /// <returns></returns>
+        public GenTensor<T, TWrapper> RowEchelonFormLeadingOnesSimple()
+            => EchelonForm<T, TWrapper>.RowEchelonFormLeadingOnesSimple(this);
+
+        /// <summary>
+        /// Decomposes a matrix into a triangular one.
+        /// Is of the Row Echelon Form (leading elements are ones).
+        /// Uses safe division, i. e. perform division only when computing the final result.
+        /// </summary>
+        /// <returns></returns>
+        public GenTensor<T, TWrapper> RowEchelonFormLeadingOnesSafeDivision()
+            => EchelonForm<T, TWrapper>.RowEchelonFormLeadingOnesSafeDivision(this);
+
+
+
+        /// <summary>
+        /// Finds the reduced echelon form of a matrix.
+        /// </summary>
+        public GenTensor<T, TWrapper> ReducedRowEchelonFormSimple()
+            => EchelonForm<T, TWrapper>.ReducedRowEchelonFormSimple(this);
+
+        /// <summary>
+        /// Finds the reduced echelon form of a matrix.
+        /// Uses safe division, i. e. perform division only when computing the final result.
+        /// </summary>
+        public GenTensor<T, TWrapper> ReducedRowEchelonFormSafeDivision()
+            => EchelonForm<T, TWrapper>.ReducedRowEchelonFormSafeDivision(this);
+        #endregion
+
         #region Determinant
 
         /// <summary>
@@ -199,13 +252,6 @@ namespace GenericTensor.Core
         public T DeterminantGaussianSafeDivision()
             => Determinant<T, TWrapper>.DeterminantGaussianSafeDivision(this);
 
-        /// <summary>
-        /// Decomposes a matrix into a triangular one
-        /// </summary>
-        public GenTensor<T, TWrapper> GaussianEliminationSafeDivision()
-            => Determinant<T, TWrapper>.GaussianEliminationSafeDivision(this);
-
-        // TODO: how to avoid code duplication?
         /// <summary>
         /// Performs simple Gaussian elimination method on a tensor
         ///
@@ -261,6 +307,48 @@ namespace GenericTensor.Core
         /// </summary>
         public void TensorMatrixInvert()
             => Inversion<T, TWrapper>.TensorMatrixInvert(this);
+        #endregion
+
+        #region Elementary matrix operations
+
+        /// <summary>
+        /// Multiples the given row by the given coefficient.
+        /// Modifies the matrix.
+        /// </summary>
+        public void RowMultiply(int rowId, T coef)
+            => ElementaryRowOperations<T, TWrapper>.RowMultiply(this, rowId, coef);
+
+        /// <summary>
+        /// To the first row adds the second row multiplied by the coef.
+        /// Modifies the matrix.
+        /// </summary>
+        public void RowAdd(int dstRowId, int srcRowId, T coef)
+            => ElementaryRowOperations<T, TWrapper>.RowAdd(this, dstRowId, srcRowId, coef);
+
+        /// <summary>
+        /// From the first row subtracts the second row multiplied by the coef.
+        /// Modifies the matrix.
+        /// </summary>
+        public void RowSubtract(int dstRowId, int srcRowId, T coef)
+            => ElementaryRowOperations<T, TWrapper>.RowSubtract(this, dstRowId, srcRowId, coef);
+
+        /// <summary>
+        /// Swaps the given two rows.
+        /// Modifies the matrix.
+        /// </summary>
+        public void RowSwap(int row1Id, int row2Id)
+            => ElementaryRowOperations<T, TWrapper>.RowSwap(this, row1Id, row2Id);
+
+        /// <summary>
+        /// Finds the leading element of the row (the first non-zero element).
+        /// </summary>
+        /// <returns>
+        /// Null if all elements are zero,
+        /// Tuple of index and value of the first non-zero element otherwise
+        /// </returns>
+        public (int index, T value)? RowGetLeadingElement(int rowId)
+            => ElementaryRowOperations<T, TWrapper>.LeadingElement(this, rowId);
+
         #endregion
 
         #region Matrix multiplication & division
@@ -473,8 +561,7 @@ namespace GenericTensor.Core
 
         #endregion
 
-
-
+        #region Serialization
         /*
          * Serialization protocol:
          *
@@ -508,5 +595,6 @@ namespace GenericTensor.Core
         /// </returns>
         public static GenTensor<T, TWrapper> Deserialize(byte[] data)
             => Serializer<T, TWrapper>.Deserialize(data);
+        #endregion
     }
 }
