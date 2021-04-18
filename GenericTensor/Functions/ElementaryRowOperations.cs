@@ -72,6 +72,9 @@ namespace GenericTensor.Functions
                 t.SetValueNoCheck(tmp, row2Id, i);
             }
         }
+        
+        public static void RowSubtract(GenTensor<T, TWrapper> t, int dstRowId, int srcRowId, T coef)
+            => RowAdd(t, dstRowId, srcRowId, default(TWrapper).Negate(coef));
 
         public static (int id, T value)? LeadingElement(GenTensor<T, TWrapper> t, int row)
         {

@@ -326,6 +326,13 @@ namespace GenericTensor.Core
             => ElementaryRowOperations<T, TWrapper>.RowAdd(this, dstRowId, srcRowId, coef);
 
         /// <summary>
+        /// From the first row subtracts the second row multiplied by the coef.
+        /// Modifies the matrix.
+        /// </summary>
+        public void RowSubtract(int dstRowId, int srcRowId, T coef)
+            => ElementaryRowOperations<T, TWrapper>.RowSubtract(this, dstRowId, srcRowId, coef);
+
+        /// <summary>
         /// Swaps the given two rows.
         /// Modifies the matrix.
         /// </summary>

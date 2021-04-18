@@ -159,21 +159,25 @@ namespace GenericTensor.Functions
             return wrp.SafeDivisionToSimple();
         }
 
-        internal static GenTensor<T, TWrapper> InnerGaussianEliminationSimple(GenTensor<T, TWrapper> t, int m, int n)
+        internal static GenTensor<T, TWrapper> InnerGaussianEliminationSimple(GenTensor<T, TWrapper> t, int n, int m)
         {
             var elemMatrix = t.Copy(copyElements: false);
 
-            for (int k = 1; k < n; k++)
-            for (int j = k; j < m; j++)
+            for (int c = 0; c < Math.Min(elemMatrix.Shape[1], elemMatrix.Shape[0]); c++)
+            for (int r = c + 1; r < elemMatrix.Shape[0]; r++)
             {
-                var c = default(TWrapper).Divide(
-                    elemMatrix.GetValueNoCheck(j, k - 1),
-                    elemMatrix.GetValueNoCheck(k - 1, k - 1)
-                );
-                elemMatrix.RowAdd(j, k - 1, default(TWrapper).Negate(c));
+                var curr = elemMatrix.GetValueNoCheck(r, c);
+                var main = elemMatrix.GetValueNoCheck(c, c);
+                var coef = default(TWrapper).Divide(curr, main);
+                elemMatrix.RowSubtract(r, c, coef);
+                if (GetLeadingId(elemMatrix, r) > GetLeadingId(elemMatrix, c) && GetLeadingId(elemMatrix, r) > c + 1)
+                    elemMatrix.RowSwap(r, c);
             }
 
             return elemMatrix;
+
+            static int GetLeadingId(GenTensor<T, TWrapper> t, int r)
+                => t.RowGetLeadingElement(r) is { } leading ? leading.index : t.Shape[1];
         }
 
         public static GenTensor<T, TWrapper> RowEchelonFormSimple(GenTensor<T, TWrapper> t)

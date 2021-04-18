@@ -152,6 +152,29 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void RowSubtract1()
+        {
+            var m = GenTensor<int, IntWrapper>.CreateMatrix(
+                new[,]
+                {
+                    { 1, 2 },
+                    { 4, 5 },
+                    { 4, 8 },
+                }
+            );
+            m.RowSubtract(0, 1, 1);
+            var exp = GenTensor<int, IntWrapper>.CreateMatrix(
+                new[,]
+                {
+                    { 1 - 4, 2 - 5 },
+                    { 4, 5 }, 
+                    { 4, 8 },
+                }
+            );
+            Assert.AreEqual(exp, m);
+        }
+
+        [TestMethod]
         public void RowSwap1()
         {
             var m = GenTensor<int, IntWrapper>.CreateMatrix(

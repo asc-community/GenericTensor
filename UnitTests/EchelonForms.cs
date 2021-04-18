@@ -140,5 +140,51 @@ namespace UnitTests
                 });
             Assert.AreEqual(e, reForm);
         }
+
+        [TestMethod]
+        public void REFOnes3()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 1,  3,  1,  9 },
+                    { 1,  1, -1,  1 },
+                    { 3, 11,  5, 25 },
+                    { 5, 6,  78, 23 }
+                });
+            var reForm = m.RowEchelonFormLeadingOnesSimple();
+            var e = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 1,  3,  1,  9 },
+                    { 0,  1,  1,  4 },
+                    { 0,  0,  1,  7.0/41 },
+                    { 0,  0,  0,  1 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
+
+        [TestMethod]
+        public void REFOnes4()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 8,  3 },
+                    { 9,  1 },
+                    { 3,  7 },
+                    { 5,  6 }
+                });
+            var reForm = m.RowEchelonFormLeadingOnesSimple();
+            var e = GenTensor<double, DoubleWrapper>.CreateMatrix(
+                new double[,]
+                {
+                    { 1,  3.0 / 8 },
+                    { 0,  1 },
+                    { 0,  0 },
+                    { 0,  0 }
+                });
+            Assert.AreEqual(e, reForm);
+        }
     }
 }
