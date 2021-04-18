@@ -41,7 +41,7 @@ var M = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
 }
 );
 
-Console.WriteLine(M.GaussianEliminationSafeDivision());
+Console.WriteLine(M.RowEchelonFormLeadingOnesSafeDivision());
 return;
 
 var A = new MyMatrix(3, 2);
