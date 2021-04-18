@@ -72,5 +72,16 @@ namespace GenericTensor.Functions
                 t.SetValueNoCheck(tmp, row2Id, i);
             }
         }
+
+        public static (int id, T value)? LeadingElement(GenTensor<T, TWrapper> t, int row)
+        {
+            for (int i = 0; i < t.Shape[1]; i++)
+            {
+                var value = t.GetValueNoCheck(row, i);
+                if (!default(TWrapper).IsZero(value))
+                    return (i, value);
+            }
+            return null;
+        }
     }
 }

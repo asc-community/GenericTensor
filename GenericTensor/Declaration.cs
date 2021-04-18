@@ -179,21 +179,55 @@ namespace GenericTensor.Core
         #endregion
 
         #region Echelon forms
-        /// <summary>
-        /// Decomposes a matrix into a triangular one avoiding division until
-        /// the result is returned.
-        /// </summary>
-        public GenTensor<T, TWrapper> GaussianEliminationSafeDivision()
-            => EchelonForm<T, TWrapper>.GaussianEliminationSafeDivision(this);
 
         /// <summary>
-        /// Decomposes a matrix into a triangular one
+        /// Decomposes a matrix into a triangular one.
+        /// Is of the Row Echelon Form (leading elements might be differ from ones).
         /// </summary>
-        public GenTensor<T, TWrapper> GaussianEliminationSimple()
-            => EchelonForm<T, TWrapper>.GaussianEliminationSimple(this);
+        public GenTensor<T, TWrapper> RowEchelonFormSimple()
+            => EchelonForm<T, TWrapper>.RowEchelonFormSimple(this);
 
+        /// <summary>
+        /// Decomposes a matrix into a triangular one.
+        /// Is of the Row Echelon Form (leading elements might be differ from ones).
+        /// Uses safe division, i. e. perform division only when computing the final result.
+        /// </summary>
+        public GenTensor<T, TWrapper> RowEchelonFormSafeDivision()
+            => EchelonForm<T, TWrapper>.RowEchelonFormSafeDivision(this);
+
+
+
+        /// <summary>
+        /// Decomposes a matrix into a triangular one.
+        /// Is of the Row Echelon Form (leading elements are ones).
+        /// </summary>
+        /// <returns></returns>
+        public GenTensor<T, TWrapper> RowEchelonFormLeadingOnesSimple()
+            => EchelonForm<T, TWrapper>.RowEchelonFormLeadingOnesSimple(this);
+
+        /// <summary>
+        /// Decomposes a matrix into a triangular one.
+        /// Is of the Row Echelon Form (leading elements are ones).
+        /// Uses safe division, i. e. perform division only when computing the final result.
+        /// </summary>
+        /// <returns></returns>
+        public GenTensor<T, TWrapper> RowEchelonFormLeadingOnesSafeDivision()
+            => EchelonForm<T, TWrapper>.RowEchelonFormLeadingOnesSafeDivision(this);
+
+
+
+        /// <summary>
+        /// Finds the reduced echelon form of a matrix.
+        /// </summary>
         public GenTensor<T, TWrapper> ReducedRowEchelonFormSimple()
             => EchelonForm<T, TWrapper>.ReducedRowEchelonFormSimple(this);
+
+        /// <summary>
+        /// Finds the reduced echelon form of a matrix.
+        /// Uses safe division, i. e. perform division only when computing the final result.
+        /// </summary>
+        public GenTensor<T, TWrapper> ReducedRowEchelonFormSafeDivision()
+            => EchelonForm<T, TWrapper>.ReducedRowEchelonFormSafeDivision(this);
         #endregion
 
         #region Determinant
@@ -297,6 +331,16 @@ namespace GenericTensor.Core
         /// </summary>
         public void RowSwap(int row1Id, int row2Id)
             => ElementaryRowOperations<T, TWrapper>.RowSwap(this, row1Id, row2Id);
+
+        /// <summary>
+        /// Finds the leading element of the row (the first non-zero element).
+        /// </summary>
+        /// <returns>
+        /// Null if all elements are zero,
+        /// Tuple of index and value of the first non-zero element otherwise
+        /// </returns>
+        public (int index, T value)? RowGetLeadingElement(int rowId)
+            => ElementaryRowOperations<T, TWrapper>.LeadingElement(this, rowId);
 
         #endregion
 

@@ -50,7 +50,7 @@ namespace GenericTensor.Core
         /// </summary>
         public override bool Equals(object obj)
         {
-            if (obj is null || !(obj is GenTensor<T, TWrapper> ten))
+            if (obj is null || obj is not GenTensor<T, TWrapper> ten)
                 return false;
             return Equals(ten);
         }

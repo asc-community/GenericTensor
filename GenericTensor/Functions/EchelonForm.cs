@@ -32,6 +32,18 @@ using System.Text;
 
 namespace GenericTensor.Functions
 {
+    internal static class EchelonFormExtensions
+    {
+        internal static GenTensor<T, TWrapper> SafeDivisionToSimple<T, TWrapper>(this GenTensor<EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>, EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>> t) where TWrapper : struct, IOperations<T>
+            => GenTensor<T, TWrapper>.CreateMatrix(t.Shape[0], t.Shape[1], (x, y) => t.GetValueNoCheck(x, y).Count());
+
+        internal static GenTensor<EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>, EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>> SimpleToSafeDivision<T, TWrapper>(this GenTensor<T, TWrapper> t) where TWrapper : struct, IOperations<T>
+            => GenTensor<EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>, EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>>
+                .CreateMatrix(t.Shape[0], t.Shape[1],
+                    (x, y) => new EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>(t.GetValueNoCheck(x, y))
+                );
+    }
+
     internal static class EchelonForm<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
         #region Gaussian elimination safe division
@@ -133,21 +145,18 @@ namespace GenericTensor.Functions
 
         internal static GenTensor<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>> InnerGaussianEliminationSafeDivision(GenTensor<T, TWrapper> t, int m, int n)
         {
-            var elemMatrix = GenTensor<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>
-                .CreateMatrix(m, n,
-                    (x, y) => new SafeDivisionWrapper<T, TWrapper>(t.GetValueNoCheck(x, y))
-                );
+            var elemMatrix = t.SimpleToSafeDivision();
             return EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>.InnerGaussianEliminationSimple(elemMatrix, m, n);
         }
 
-        public static GenTensor<T, TWrapper> GaussianEliminationSafeDivision(GenTensor<T, TWrapper> t)
+        public static GenTensor<T, TWrapper> RowEchelonFormSafeDivision(GenTensor<T, TWrapper> t)
         {
             #if ALLOW_EXCEPTIONS
             if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
             #endif
             var wrp = InnerGaussianEliminationSafeDivision(t, t.Shape[0], t.Shape[1]);
-            return GenTensor<T, TWrapper>.CreateMatrix(t.Shape[0], t.Shape[1], (x, y) => wrp.GetValueNoCheck(x, y).Count());
+            return wrp.SafeDivisionToSimple();
         }
 
         internal static GenTensor<T, TWrapper> InnerGaussianEliminationSimple(GenTensor<T, TWrapper> t, int m, int n)
@@ -167,7 +176,7 @@ namespace GenericTensor.Functions
             return elemMatrix;
         }
 
-        public static GenTensor<T, TWrapper> GaussianEliminationSimple(GenTensor<T, TWrapper> t)
+        public static GenTensor<T, TWrapper> RowEchelonFormSimple(GenTensor<T, TWrapper> t)
         {
             #if ALLOW_EXCEPTIONS
             if (!t.IsMatrix)
@@ -178,37 +187,60 @@ namespace GenericTensor.Functions
 
         #endregion
 
+        #region Row echelon form leading ones
+        private static GenTensor<T, TWrapper> InnerRowEchelonFormLeadingOnes(GenTensor<T, TWrapper> t)
+        {
+            var rowForm = InnerGaussianEliminationSimple(t, t.Shape[0], t.Shape[1]);
+            for (int r = 0; r < t.Shape[0]; r++)
+                if (rowForm.RowGetLeadingElement(r) is { } leading)
+                    rowForm.RowMultiply(r, default(TWrapper).Divide(default(TWrapper).CreateOne(), leading.value));
+            return rowForm;
+        }
+
+        public static GenTensor<T, TWrapper> RowEchelonFormLeadingOnesSimple(GenTensor<T, TWrapper> t)
+        {
+            #if ALLOW_EXCEPTIONS
+            if (!t.IsMatrix)
+                throw new InvalidShapeException("this should be matrix");
+            #endif
+            return InnerRowEchelonFormLeadingOnes(t);
+        }
+
+        public static GenTensor<T, TWrapper> RowEchelonFormLeadingOnesSafeDivision(GenTensor<T, TWrapper> t)
+        {
+            #if ALLOW_EXCEPTIONS
+            if (!t.IsMatrix)
+                throw new InvalidShapeException("this should be matrix");
+            #endif
+            return EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>.InnerRowEchelonFormLeadingOnes(t.SimpleToSafeDivision()).SafeDivisionToSimple();
+        }
+
+        #endregion
+
         #region Reduced row echelon form
 
-        private static GenTensor<T, TWrapper> InnerReducedRowEchelonFormSimple(GenTensor<T, TWrapper> t)
+        private static GenTensor<T, TWrapper> InnerReducedRowEchelonForm(GenTensor<T, TWrapper> t)
         {
             var upper = InnerGaussianEliminationSimple(t, t.Shape[0], t.Shape[1]);
-            for (int r = t.Shape[0]; r >= 0; r--)
+            for (int r = t.Shape[0] - 1; r >= 0; r--)
             {
-                if (LeadingElement(t, r) is not { } leading)
+                if (upper.RowGetLeadingElement(r) is not { } leading)
                     continue;
                 for (int i = 0; i < r; i++)
                     upper.RowAdd(i, r, default(TWrapper).Negate(
                                             default(TWrapper).Divide(
-                                                upper.GetValueNoCheck(i, leading.id),
+                                                upper.GetValueNoCheck(i, leading.index),
                                                 leading.value
                                             )
                                        )
                     );
+                upper.RowMultiply(r, default(TWrapper).Divide(
+                                        default(TWrapper).CreateOne(),
+                                        leading.value
+                            ));
             }
 
             return upper;
-
-            static (int id, T value)? LeadingElement(GenTensor<T, TWrapper> t, int row)
-            {
-                for (int i = 0; i < t.Shape[1]; i++)
-                {
-                    var value = t.GetValueNoCheck(row, i);
-                    if (!default(TWrapper).IsZero(value))
-                        return (i, value);
-                }
-                return null;
-            }
         }
 
         public static GenTensor<T, TWrapper> ReducedRowEchelonFormSimple(GenTensor<T, TWrapper> t)
@@ -217,7 +249,16 @@ namespace GenericTensor.Functions
             if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
             #endif
-            return InnerReducedRowEchelonFormSimple(t);
+            return InnerReducedRowEchelonForm(t);
+        }
+
+        public static GenTensor<T, TWrapper> ReducedRowEchelonFormSafeDivision(GenTensor<T, TWrapper> t)
+        {
+            #if ALLOW_EXCEPTIONS
+            if (!t.IsMatrix)
+                throw new InvalidShapeException("this should be matrix");
+            #endif
+            return EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>.InnerReducedRowEchelonForm(t.SimpleToSafeDivision()).SafeDivisionToSimple();
         }
 
         #endregion
