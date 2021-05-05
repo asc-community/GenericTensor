@@ -65,7 +65,7 @@ namespace GenericTensor.Core.Expressions
                 a, b
             );
 #pragma warning restore CA2211 // Non-constant fields should not be visible
-        public static Expression CreateLoop(ParameterExpression var, Expression until, Expression onIter)
+        private static Expression CreateLoop(ParameterExpression var, Expression until, Expression onIter)
         {
             var label = Expression.Label();
 
@@ -92,7 +92,7 @@ namespace GenericTensor.Core.Expressions
                 );
         }
 
-        public static Expression CompileNestedLoops(Expression[] shapes, Func<ParameterExpression[], Expression> onIter) 
+        private static Expression CompileNestedLoops(Expression[] shapes, Func<ParameterExpression[], Expression> onIter) 
         {
             var acts = new List<Expression>();
 
@@ -123,7 +123,7 @@ namespace GenericTensor.Core.Expressions
             return Expression.Block(localVariables, Expression.Block(acts));
         }
 
-        public static Expression CompileNestedLoops(Expression[] shapes, Func<ParameterExpression[], Expression> onIter,
+        private static Expression CompileNestedLoops(Expression[] shapes, Func<ParameterExpression[], Expression> onIter,
             bool parallel, ParameterExpression[] localsToPass)
         {
             if (!parallel)
@@ -173,7 +173,7 @@ namespace GenericTensor.Core.Expressions
             }
         }
 
-        public static Expression BuildIndexToData(ParameterExpression[] vars, ParameterExpression[] blocks)
+        private static Expression BuildIndexToData(ParameterExpression[] vars, ParameterExpression[] blocks)
         {
             if (vars.Length != blocks.Length)
                 throw new InvalidShapeException();
@@ -183,7 +183,7 @@ namespace GenericTensor.Core.Expressions
             return res;
         }
 
-        static (ParameterExpression[] locals, Expression[] assignes) CompileLocalBlocks(ParameterExpression arr, int N, string pref)
+        private static (ParameterExpression[] locals, Expression[] assignes) CompileLocalBlocks(ParameterExpression arr, int N, string pref)
         {
             var blocks = new ParameterExpression[N];
             for (int i = 0; i < N; i++)
@@ -202,7 +202,7 @@ namespace GenericTensor.Core.Expressions
             return (blocks, assignes);
         }
 
-        static Action<GenTensor<T, TWrapper>, GenTensor<T, TWrapper>, GenTensor<T, TWrapper>> CompileForNDimensions(int N, Func<Expression, Expression, Expression> operation, bool parallel)
+        private static Action<GenTensor<T, TWrapper>, GenTensor<T, TWrapper>, GenTensor<T, TWrapper>> CompileForNDimensions(int N, Func<Expression, Expression, Expression> operation, bool parallel)
         {
             var a = Expression.Parameter(typeof(GenTensor<T, TWrapper>), "a");
             var b = Expression.Parameter(typeof(GenTensor<T, TWrapper>), "b");
