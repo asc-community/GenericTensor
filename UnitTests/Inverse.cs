@@ -310,7 +310,53 @@ namespace UnitTests
             });
 
             Assert.ThrowsException<NotSupportedException>(() => GenTensor<string, GenericWrapper<string>>.MatrixDivide(A, B));
-            
+        }
+
+
+
+        [TestMethod]
+        public void InverseIssue22()
+        {
+            var a = GenTensor<int, IntWrapper>.CreateMatrix(new [,]
+                {
+                    { 1, 0, 70 },
+                    { 0, 1,  0 },
+                    { 0, 0,  1 }
+                }
+            );
+            a.InvertMatrix();
+            Assert.AreEqual(GenTensor<int, IntWrapper>.CreateMatrix(new [,]
+                {
+                    { 1, 0, -70 },
+                    { 0, 1,  0 },
+                    { 0, 0,  1 }
+                }
+            ), a);
+        }
+
+        [DataTestMethod]
+        [DataRow(2)]
+        [DataRow(3)]
+        [DataRow(4)]
+        [DataRow(5)]
+        [DataRow(6)]
+        [DataRow(7)]
+        public void TestInverse(int size)
+        {
+            for (int x = 0; x < size; x++)
+                for (int y = 0; y < size; y++)
+                {
+                    if (x == y)
+                        continue;
+                    var actual = GenTensor<int, IntWrapper>.CreateIdentityMatrix(size);
+                    actual[x, y] = 2007;
+                    actual.InvertMatrix();
+
+                    var expected = GenTensor<int, IntWrapper>.CreateIdentityMatrix(size);
+                    expected[x, y] = -2007;
+
+                    Assert.AreEqual(expected, actual);
+                }
         }
     }
 }

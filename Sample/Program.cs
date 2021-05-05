@@ -3,16 +3,28 @@ using GenericTensor.Core;
 using GenericTensor.Functions;
 using Sample;
 
-var m2 = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
+var sdfoks = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
     {
-        { 4, 2, 3 },
-        { 1, 3, 3 },
+        { 0, 70 },
+        { 1,  0 },
     }
 );
 
-Console.WriteLine(m2.RowEchelonFormLeadingOnesSimple());
-Console.WriteLine(m2.RowEchelonFormLeadingOnesSafeDivision());
-Console.WriteLine(m2.ReducedRowEchelonFormSimple());
+Console.WriteLine(sdfoks.DeterminantGaussianSafeDivision());
+return;
+var m2 = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
+    {
+        { 1, 0, 70 },
+        { 0, 1,  0 },
+        { 0, 0,  1 }
+    }
+);
+
+// Console.WriteLine(m2.RowEchelonFormLeadingOnesSimple());
+// Console.WriteLine(m2.RowEchelonFormLeadingOnesSafeDivision());
+// Console.WriteLine(m2.ReducedRowEchelonFormSimple());
+m2.InvertMatrix();
+Console.WriteLine(m2);
 return;
 
 var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]

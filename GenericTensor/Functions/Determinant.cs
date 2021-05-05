@@ -42,7 +42,7 @@ namespace GenericTensor.Functions
             var temp = SquareMatrixFactory<T, TWrapper>.GetMatrix(diagLength);
             for (int i = 0; i < diagLength; i++)
             {
-                Inversion<T, TWrapper>.GetCofactor(t, temp, 0, i, diagLength);
+                Inversion<T, TWrapper>.GetCofactorMatrix(t, temp, 0, i, diagLength);
                 det = default(TWrapper).Add(det,
                     default(TWrapper).Multiply(
                         sign,
@@ -87,7 +87,7 @@ namespace GenericTensor.Functions
                 return t.GetValueNoCheck(0, 0);
 
             var n = diagLength;
-            var elemMatrix = EchelonForm<T, TWrapper>.InnerGaussianEliminationSafeDivision(t, n, n);
+            var elemMatrix = EchelonForm<T, TWrapper>.InnerGaussianEliminationSafeDivision(t, n, n, out var swapCount);
 
             var det = default(EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>).CreateOne();
             for (int i = 0; i < n; i++)
@@ -97,7 +97,7 @@ namespace GenericTensor.Functions
 
             if (default(TWrapper).IsZero(det.den))
                 return default(TWrapper).CreateZero();
-            return det.Count();
+            return swapCount % 2 is 0 ? det.Count() : default(TWrapper).Negate(det.Count());
         }
 
         public static T DeterminantGaussianSimple(GenTensor<T, TWrapper> t)

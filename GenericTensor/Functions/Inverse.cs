@@ -38,7 +38,7 @@ namespace GenericTensor.Functions
         /// O(N^2)
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void GetCofactor(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> temp, int rowId,
+        internal static void GetCofactorMatrix(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> temp, int rowId,
             int colId, int diagLength)
         {
             int i = 0, j = 0;
@@ -81,12 +81,14 @@ namespace GenericTensor.Functions
             for (int x = 0; x < diagLength; x++)
             for (int y = 0; y < diagLength; y++)
             {
-                GetCofactor(t, temp, x, y, diagLength);
+                GetCofactorMatrix(t, temp, x, y, diagLength);                
 
+                var cofactor = Determinant<T, TWrapper>.DeterminantGaussianSafeDivision(temp, diagLength - 1);
                 // TODO: is this statement correct?
                 toNegate = (x + y) % 2 == 1;
-                var det = Determinant<T, TWrapper>.DeterminantGaussianSafeDivision(temp, diagLength - 1);
-                res.SetValueNoCheck(toNegate ? default(TWrapper).Negate(det) : det, y, x);
+                var minor = toNegate ? default(TWrapper).Negate(cofactor) : cofactor;
+
+                res.SetValueNoCheck(minor, y, x);
             }
 
             return res;
