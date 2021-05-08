@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Authors>WhiteBlackGoose</Authors>
     <Company>Angouri</Company>
     <Description>The only .NET tensor &amp; matrix library for generic types. It is also faster than other generic-typed matrix libraries.</Description>
@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/WhiteBlackGoose/GenericTensor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/asc-community/GenericTensor</RepositoryUrl>
     <RepositoryType>public</RepositoryType>
-    <PackageReleaseNotes>Single-element matrices return valid inverses, adjoint, and determinant. GT is no more dependent on CompilerServices.Unsafe.</PackageReleaseNotes>
+    <PackageReleaseNotes>Internal error related to factory fixed</PackageReleaseNotes>
     <PackageIcon>ico1.png</PackageIcon>
     <PackageTags>tensor, generic, matrix, vector, performance</PackageTags>
     <SignAssembly>true</SignAssembly>

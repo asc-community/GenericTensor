@@ -5,7 +5,8 @@ using Sample;
 
 var sdfoks = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
     {
-        { 3 }
+        { 6, 3 },
+        { 7, 5 }
     }
 );
 

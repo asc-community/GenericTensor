@@ -27,8 +27,9 @@
 
 using System.Collections.Generic;
 using GenericTensor.Core;
+using GenericTensor.Functions;
 
-namespace GenericTensor.Functions
+namespace GenericTensor.Core
 {
     internal static class SquareMatrixFactory<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
@@ -44,5 +45,12 @@ namespace GenericTensor.Functions
                             tensorTempFactorySquareMatrices.Add(new GenTensor<T, TWrapper>(i, i));
             return tensorTempFactorySquareMatrices[diagLength - 1];
         }
+    }
+
+    // It is here just for a test to avoid InternalsToVisible
+    internal static class TestSquareMatrixFactoryExposed
+    {
+        internal static GenTensor<int, IntWrapper> TestGetMatrixExposed(int diagLength)
+            => SquareMatrixFactory<int, IntWrapper>.GetMatrix(diagLength);
     }
 }

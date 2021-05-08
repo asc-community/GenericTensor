@@ -39,7 +39,7 @@ namespace GenericTensor.Functions
                 return t.GetValueNoCheck(0, 0);
             var det = default(TWrapper).CreateZero();
             var sign = default(TWrapper).CreateOne();
-            var temp = SquareMatrixFactory<T, TWrapper>.GetMatrix(diagLength);
+            var temp = SquareMatrixFactory<T, TWrapper>.GetMatrix(diagLength - 1);
             for (int i = 0; i < diagLength; i++)
             {
                 Inversion<T, TWrapper>.GetCofactorMatrix(t, temp, 0, i, diagLength);

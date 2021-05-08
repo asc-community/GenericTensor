@@ -48,7 +48,8 @@ namespace GenericTensor.Functions
                 {
                     if (row != rowId && col != colId)
                     {
-                        temp.SetValueNoCheck(a.GetValueNoCheck(row, col), i, j++);
+                        temp.SetValueNoCheck(a.GetValueNoCheck(row, col), i, j);
+                        j++;
                         if (j == diagLength - 1)
                         {
                             j = 0;
@@ -68,7 +69,7 @@ namespace GenericTensor.Functions
             #endif
             var diagLength = t.Shape.shape[0];
             var res = GenTensor<T, TWrapper>.CreateSquareMatrix(diagLength);
-            var temp = SquareMatrixFactory<T, TWrapper>.GetMatrix(diagLength);
+            var temp = SquareMatrixFactory<T, TWrapper>.GetMatrix(diagLength - 1);
 
             if (diagLength == 1)
             {
