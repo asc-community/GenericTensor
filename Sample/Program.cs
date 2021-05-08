@@ -10,7 +10,8 @@ var sdfoks = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
     }
 );
 
-Console.WriteLine(sdfoks.DeterminantGaussianSafeDivision());
+sdfoks.InvertMatrix();
+//Console.WriteLine(sdfoks.DeterminantGaussianSafeDivision());
 return;
 var m2 = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
     {
