@@ -358,5 +358,20 @@ namespace UnitTests
                     Assert.AreEqual(expected, actual);
                 }
         }
+
+        [TestMethod]
+        public void TestInverseOfOneMatrix()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new[,]{{-0.25d}});
+            m.InvertMatrix();
+            Assert.AreEqual(GenTensor<double, DoubleWrapper>.CreateMatrix(new[,]{{-4d}}), m);
+        }
+
+        [TestMethod]
+        public void TestAdjointOfOneMatrix()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new[,]{{1d}});
+            Assert.AreEqual(GenTensor<double, DoubleWrapper>.CreateMatrix(new[,]{{1d}}), m.Adjoint());
+        }
     }
 }

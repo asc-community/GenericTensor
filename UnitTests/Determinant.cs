@@ -180,6 +180,7 @@ namespace UnitTests
             );
         }
 
+        [TestMethod]
         public void SimpleGaussianGWInt()
         {
             var M = GenTensor<int, GenericWrapper<int>>.CreateMatrix(new int[,]
@@ -188,9 +189,10 @@ namespace UnitTests
                 {4, -2, 5},
                 {2,  8, 7}
             });
-            Assert.AreEqual(-306, M.DeterminantGaussianSimple());
+            Assert.AreEqual(-306, M.DeterminantGaussianSafeDivision());
         }
 
+        [TestMethod]
         public void SimpleGaussianGWFloat()
         {
             var M = GenTensor<float, GenericWrapper<float>>.CreateMatrix(new float[,]
@@ -202,6 +204,7 @@ namespace UnitTests
             Assert.AreEqual(-306, M.DeterminantGaussianSimple());
         }
 
+        [TestMethod]
         public void SimpleGaussianGWDouble()
         {
             var M = GenTensor<double, GenericWrapper<double>>.CreateMatrix(new double[,]
@@ -213,6 +216,7 @@ namespace UnitTests
             Assert.AreEqual(-306, M.DeterminantGaussianSimple());
         }
 
+        [TestMethod]
         public void SimpleGaussianGWComplex()
         {
             var M = GenTensor<Complex, GenericWrapper<Complex>>.CreateMatrix(new Complex[,]
@@ -222,6 +226,13 @@ namespace UnitTests
                 {2,  8, 7}
             });
             Assert.AreEqual(-306, M.DeterminantGaussianSimple());
+        }
+
+        [TestMethod]
+        public void TestDeterminantOfOneMatrix()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new[,]{{3d}});
+            Assert.AreEqual(3d, m.DeterminantGaussianSafeDivision());
         }
     }
 }

@@ -5,13 +5,12 @@ using Sample;
 
 var sdfoks = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
     {
-        { 0, 70 },
-        { 1,  0 },
+        { 3 }
     }
 );
 
 sdfoks.InvertMatrix();
-//Console.WriteLine(sdfoks.DeterminantGaussianSafeDivision());
+Console.WriteLine(sdfoks);
 return;
 var m2 = GenTensor<double, DoubleWrapper>.CreateMatrix(new double[,]
     {
