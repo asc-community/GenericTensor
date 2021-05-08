@@ -68,6 +68,10 @@ namespace GenericTensor.Functions
                 throw new InvalidShapeException("Matrix should be square");
             #endif
             var diagLength = t.Shape.shape[0];
+
+            if (diagLength is 1)
+                return GenTensor<T, TWrapper>.CreateIdentityMatrix(1);
+
             var res = GenTensor<T, TWrapper>.CreateSquareMatrix(diagLength);
             var temp = SquareMatrixFactory<T, TWrapper>.GetMatrix(diagLength - 1);
 
@@ -103,6 +107,16 @@ namespace GenericTensor.Functions
             #endif
 
             var diagLength = t.Shape.shape[0];
+
+            if (diagLength is 1)
+            {
+                t.SetValueNoCheck(
+                    default(TWrapper).Divide(
+                    default(TWrapper).CreateOne(),
+                    t.GetValueNoCheck(0, 0)
+                    ), 0, 0);
+                return;
+            }
 
             var det = Determinant<T, TWrapper>.DeterminantGaussianSafeDivision(t);
             #if ALLOW_EXCEPTIONS

@@ -229,10 +229,17 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void TestDeterminantOfOneMatrix()
+        public void TestDeterminantOfOneMatrix1()
         {
             var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new[,]{{3d}});
             Assert.AreEqual(3d, m.DeterminantGaussianSafeDivision());
+        }
+
+        [TestMethod]
+        public void TestDeterminantOfOneMatrix2()
+        {
+            var m = GenTensor<double, DoubleWrapper>.CreateMatrix(new[,]{{3d}});
+            Assert.AreEqual(3d, m.DeterminantGaussianSimple());
         }
     }
 }
