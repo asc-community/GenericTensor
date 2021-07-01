@@ -69,6 +69,26 @@ namespace GenericTensor.Functions
         }
     }
 
+    // Span<byte> is the only thing used from
+    // System.Memory, so why not to replace
+    // it with my own ByteSpan, since I use one
+    // single method of Span<byte>, which makes it
+    // not worth making an external dependency.
+    internal struct ByteSpan
+    {
+        private readonly byte[] arr;
+        private readonly int start;
+        private readonly int length;
+        public ByteSpan(byte[] arr, int start, int length)
+            => (this.arr, this.start, this.length) = (arr, start, length);
+        public byte[] ToArray()
+        {
+            var res = new byte[length];
+            Array.Copy(arr, start, res, 0, length);
+            return res;
+        }
+    }
+
     internal static class SerializationUtils
     {
         // TODO: replace with an existing solution
@@ -100,7 +120,7 @@ namespace GenericTensor.Functions
             {
                 try
                 {
-                    var bytesInt = new Span<byte>(bytes, currId, 4);
+                    var bytesInt = new ByteSpan(bytes, currId, 4);
                     var res = BitConverter.ToInt32(bytesInt.ToArray(), 0);
                     currId += sizeof(int);
                     return res;
@@ -115,7 +135,7 @@ namespace GenericTensor.Functions
             {
                 try
                 {
-                    var bytesn = new Span<byte>(bytes, currId, numberOfBytes);
+                    var bytesn = new ByteSpan(bytes, currId, numberOfBytes);
                     currId += numberOfBytes;
                     return bytesn.ToArray();
                 }
@@ -138,8 +158,8 @@ namespace GenericTensor.Functions
         // TODO: There surely is a faster method than that
         public static Complex DeserializeComplex(byte[] data)
         {
-            var realBytes = new Span<byte>(data, 0, sizeof(double));
-            var imagBytes = new Span<byte>(data, sizeof(double), sizeof(double));
+            var realBytes = new ByteSpan(data, 0, sizeof(double));
+            var imagBytes = new ByteSpan(data, sizeof(double), sizeof(double));
             return new Complex(
                 BitConverter.ToDouble(realBytes.ToArray(), 0),
                 BitConverter.ToDouble(imagBytes.ToArray(), 0)
