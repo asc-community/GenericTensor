@@ -87,7 +87,7 @@ namespace GenericTensor.Functions
                 return t.GetValueNoCheck(0, 0);
 
             var n = diagLength;
-            var elemMatrix = EchelonForm<T, TWrapper>.InnerGaussianEliminationSafeDivision(t, n, n, out var swapCount);
+            var elemMatrix = EchelonForm<T, TWrapper>.InnerGaussianEliminationSafeDivision(t, n, n, null, out var swapCount);
 
             var det = default(EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>).CreateOne();
             for (int i = 0; i < n; i++)

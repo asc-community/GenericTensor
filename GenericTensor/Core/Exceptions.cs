@@ -55,4 +55,13 @@ namespace GenericTensor.Core
         internal InvalidDeterminantException(string msg) : base(msg) {}
         internal InvalidDeterminantException() : base() {}
     }
+    
+    /// <summary>
+    /// Thrown when there is no decomposition for provided matrix
+    /// </summary>
+    public class ImpossibleDecomposition : DataException
+    {
+        internal ImpossibleDecomposition(string msg) : base(msg) {}
+        internal ImpossibleDecomposition() : base() {}
+    }
 }

@@ -1,4 +1,5 @@
 ﻿#region copyright
+
 /*
  * MIT License
  * 
@@ -22,6 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 #endregion
 
 
@@ -34,11 +36,18 @@ namespace GenericTensor.Functions
 {
     internal static class EchelonFormExtensions
     {
-        internal static GenTensor<T, TWrapper> SafeDivisionToSimple<T, TWrapper>(this GenTensor<EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>, EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>> t) where TWrapper : struct, IOperations<T>
+        internal static GenTensor<T, TWrapper> SafeDivisionToSimple<T, TWrapper>(
+            this GenTensor<EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>,
+                EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>> t)
+            where TWrapper : struct, IOperations<T>
             => GenTensor<T, TWrapper>.CreateMatrix(t.Shape[0], t.Shape[1], (x, y) => t.GetValueNoCheck(x, y).Count());
 
-        internal static GenTensor<EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>, EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>> SimpleToSafeDivision<T, TWrapper>(this GenTensor<T, TWrapper> t) where TWrapper : struct, IOperations<T>
-            => GenTensor<EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>, EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>>
+        internal static
+            GenTensor<EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>,
+                EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>>
+            SimpleToSafeDivision<T, TWrapper>(this GenTensor<T, TWrapper> t) where TWrapper : struct, IOperations<T>
+            => GenTensor<EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>,
+                    EchelonForm<T, TWrapper>.WrapperSafeDivisionWrapper<T, TWrapper>>
                 .CreateMatrix(t.Shape[0], t.Shape[1],
                     (x, y) => new EchelonForm<T, TWrapper>.SafeDivisionWrapper<T, TWrapper>(t.GetValueNoCheck(x, y))
                 );
@@ -47,6 +56,7 @@ namespace GenericTensor.Functions
     internal static class EchelonForm<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
         #region Gaussian elimination safe division
+
         internal struct SafeDivisionWrapper<W, TW> where TW : struct, IOperations<W>
         {
             internal W num;
@@ -63,28 +73,31 @@ namespace GenericTensor.Functions
                 this.num = num;
                 this.den = den;
             }
-            
+
             public W Count() => default(TW).Divide(num, den);
         }
 
-        internal struct WrapperSafeDivisionWrapper<W, TW> : IOperations<SafeDivisionWrapper<W, TW>> where TW : struct, IOperations<W>
+        internal struct WrapperSafeDivisionWrapper<W, TW> : IOperations<SafeDivisionWrapper<W, TW>>
+            where TW : struct, IOperations<W>
         {
-
             public SafeDivisionWrapper<W, TW> Add(SafeDivisionWrapper<W, TW> a, SafeDivisionWrapper<W, TW> b)
             {
-                return new SafeDivisionWrapper<W, TW>(default(TW).Add(default(TW).Multiply(a.num, b.den), default(TW).Multiply(b.num, a.den)),
+                return new SafeDivisionWrapper<W, TW>(
+                    default(TW).Add(default(TW).Multiply(a.num, b.den), default(TW).Multiply(b.num, a.den)),
                     default(TW).Multiply(a.den, b.den));
             }
 
             public SafeDivisionWrapper<W, TW> Subtract(SafeDivisionWrapper<W, TW> a, SafeDivisionWrapper<W, TW> b)
             {
-                return new SafeDivisionWrapper<W, TW>(default(TW).Subtract(default(TW).Multiply(a.num, b.den), default(TW).Multiply(b.num, a.den)),
+                return new SafeDivisionWrapper<W, TW>(
+                    default(TW).Subtract(default(TW).Multiply(a.num, b.den), default(TW).Multiply(b.num, a.den)),
                     default(TW).Multiply(a.den, b.den));
             }
 
             public SafeDivisionWrapper<W, TW> Multiply(SafeDivisionWrapper<W, TW> a, SafeDivisionWrapper<W, TW> b)
             {
-                return new SafeDivisionWrapper<W, TW>(default(TW).Multiply(a.num, b.num), default(TW).Multiply(a.den, b.den));
+                return new SafeDivisionWrapper<W, TW>(default(TW).Multiply(a.num, b.num),
+                    default(TW).Multiply(a.den, b.den));
             }
 
             public SafeDivisionWrapper<W, TW> Negate(SafeDivisionWrapper<W, TW> a)
@@ -94,7 +107,8 @@ namespace GenericTensor.Functions
 
             public SafeDivisionWrapper<W, TW> Divide(SafeDivisionWrapper<W, TW> a, SafeDivisionWrapper<W, TW> b)
             {
-                return new SafeDivisionWrapper<W, TW>(default(TW).Multiply(a.num, b.den), default(TW).Multiply(a.den, b.num));
+                return new SafeDivisionWrapper<W, TW>(default(TW).Multiply(a.num, b.den),
+                    default(TW).Multiply(a.den, b.num));
             }
 
             public SafeDivisionWrapper<W, TW> CreateOne()
@@ -143,31 +157,33 @@ namespace GenericTensor.Functions
             }
         }
 
-        internal static GenTensor<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>> InnerGaussianEliminationSafeDivision(GenTensor<T, TWrapper> t, int m, int n, out int swapCount)
+        internal static GenTensor<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>
+            InnerGaussianEliminationSafeDivision(GenTensor<T, TWrapper> t, int m, int n, int[]? permutations, out int swapCount)
         {
             var elemMatrix = t.SimpleToSafeDivision();
             swapCount = 0;
-            EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>.InnerGaussianEliminationSimple(elemMatrix, 0, ref swapCount);
+            EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>
+                .InnerGaussianEliminationSimple(elemMatrix, 0, permutations, ref swapCount);
             return elemMatrix;
         }
 
         public static GenTensor<T, TWrapper> RowEchelonFormSafeDivision(GenTensor<T, TWrapper> t)
         {
-            #if ALLOW_EXCEPTIONS
+#if ALLOW_EXCEPTIONS
             if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
-            #endif
-            var wrp = InnerGaussianEliminationSafeDivision(t, t.Shape[0], t.Shape[1], out _);
+#endif
+            var wrp = InnerGaussianEliminationSafeDivision(t, t.Shape[0], t.Shape[1], null, out _);
             return wrp.SafeDivisionToSimple();
         }
 
         internal static void InnerGaussianEliminationSimpleDiscardSwapCount(GenTensor<T, TWrapper> t, int off)
         {
             var intoNowhere = 0;
-            InnerGaussianEliminationSimple(t, off, ref intoNowhere);
+            InnerGaussianEliminationSimple(t, off, null, ref intoNowhere);
         }
 
-        internal static void InnerGaussianEliminationSimple(GenTensor<T, TWrapper> t, int off, ref int swapCount)
+        internal static void InnerGaussianEliminationSimple(GenTensor<T, TWrapper> t, int off, int[]? permutations, ref int swapCount)
         {
             // Here we are sticking to the algorithm,
             // provided here: https://www.math.purdue.edu/~shao92/documents/Algorithm%20REF.pdf
@@ -185,6 +201,9 @@ namespace GenericTensor.Functions
             {
                 t.RowSwap(off, pivotId);
                 swapCount++;
+
+                if (permutations is not null)
+                    (permutations[off], permutations[pivotId]) = (permutations[pivotId], permutations[off]);
             }
 
 
@@ -200,7 +219,7 @@ namespace GenericTensor.Functions
 
 
             // VI. Let us apply the algorithm for the inner matrix
-            InnerGaussianEliminationSimple(t, off + 1, ref swapCount);
+            InnerGaussianEliminationSimple(t, off + 1, permutations, ref swapCount);
 
 
             static int? NonZeroColumn(GenTensor<T, TWrapper> t, int c, int off)
@@ -223,18 +242,47 @@ namespace GenericTensor.Functions
 
         public static GenTensor<T, TWrapper> RowEchelonFormSimple(GenTensor<T, TWrapper> t)
         {
-            #if ALLOW_EXCEPTIONS
+#if ALLOW_EXCEPTIONS
             if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
-            #endif
+#endif
             var res = t.Copy(copyElements: false);
             InnerGaussianEliminationSimpleDiscardSwapCount(res, 0);
             return res;
         }
 
+        public static (GenTensor<T, TWrapper>, int[]) RowEchelonFormPermuteSimple(GenTensor<T, TWrapper> t)
+        {
+#if ALLOW_EXCEPTIONS
+            if (!t.IsMatrix)
+                throw new InvalidShapeException("this should be matrix");
+#endif
+            var res = t.Copy(copyElements: false);
+            var permute = new int[t.Shape[0]];
+            for (var i = 0; i < permute.Length; i++) permute[i] = i + 1;
+
+            var _ = 0;
+            InnerGaussianEliminationSimple(res, 0, permute, ref _);
+            return (res, permute);
+        }
+
+        public static (GenTensor<T, TWrapper>, int[]) RowEchelonFormPermuteSafeDivision(GenTensor<T, TWrapper> t)
+        {
+#if ALLOW_EXCEPTIONS
+            if (!t.IsMatrix)
+                throw new InvalidShapeException("this should be matrix");
+#endif
+            var permutations = new int[t.Shape[0]];
+            for (var i = 0; i < permutations.Length; i++) permutations[i] = i + 1;
+
+            var wrp = InnerGaussianEliminationSafeDivision(t, t.Shape[0], t.Shape[1], permutations, out _);
+            return (wrp.SafeDivisionToSimple(), permutations);
+        }
+
         #endregion
 
         #region Row echelon form leading ones
+
         private static GenTensor<T, TWrapper> InnerRowEchelonFormLeadingOnes(GenTensor<T, TWrapper> t)
         {
             var rowForm = t.Copy(copyElements: false);
@@ -247,37 +295,39 @@ namespace GenericTensor.Functions
 
         public static GenTensor<T, TWrapper> RowEchelonFormLeadingOnesSimple(GenTensor<T, TWrapper> t)
         {
-            #if ALLOW_EXCEPTIONS
+#if ALLOW_EXCEPTIONS
             if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
-            #endif
+#endif
             return InnerRowEchelonFormLeadingOnes(t);
         }
 
         public static GenTensor<T, TWrapper> RowEchelonFormLeadingOnesSafeDivision(GenTensor<T, TWrapper> t)
         {
-            #if ALLOW_EXCEPTIONS
+#if ALLOW_EXCEPTIONS
             if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
-            #endif
-            return EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>.InnerRowEchelonFormLeadingOnes(t.SimpleToSafeDivision()).SafeDivisionToSimple();
+#endif
+            return EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>
+                .InnerRowEchelonFormLeadingOnes(t.SimpleToSafeDivision()).SafeDivisionToSimple();
         }
 
         #endregion
 
         #region Reduced row echelon form
 
-        private static GenTensor<T, TWrapper> InnerReducedRowEchelonForm(GenTensor<T, TWrapper> t, out int swapCount)
+        private static GenTensor<T, TWrapper> InnerReducedRowEchelonForm(GenTensor<T, TWrapper> t, int[]? permutations, out int swapCount)
         {
             var upper = t.Copy(copyElements: false);
             swapCount = 0;
-            InnerGaussianEliminationSimple(upper, 0, ref swapCount);
+            InnerGaussianEliminationSimple(upper, 0, permutations, ref swapCount);
             for (int r = t.Shape[0] - 1; r >= 0; r--)
             {
                 if (upper.RowGetLeadingElement(r) is not { } leading)
                     continue;
                 for (int i = 0; i < r; i++)
-                    upper.RowSubtract(i, r, default(TWrapper).Divide(upper.GetValueNoCheck(i, leading.index), leading.value));
+                    upper.RowSubtract(i, r,
+                        default(TWrapper).Divide(upper.GetValueNoCheck(i, leading.index), leading.value));
 
                 upper.RowMultiply(r, default(TWrapper).Divide(default(TWrapper).CreateOne(), leading.value));
             }
@@ -287,20 +337,36 @@ namespace GenericTensor.Functions
 
         public static GenTensor<T, TWrapper> ReducedRowEchelonFormSimple(GenTensor<T, TWrapper> t)
         {
-            #if ALLOW_EXCEPTIONS
+#if ALLOW_EXCEPTIONS
             if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
-            #endif
-            return InnerReducedRowEchelonForm(t, out _);
+#endif
+            return InnerReducedRowEchelonForm(t, null, out _);
         }
 
         public static GenTensor<T, TWrapper> ReducedRowEchelonFormSafeDivision(GenTensor<T, TWrapper> t)
+        {
+#if ALLOW_EXCEPTIONS
+            if (!t.IsMatrix)
+                throw new InvalidShapeException("this should be matrix");
+#endif
+            return EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>
+                .InnerReducedRowEchelonForm(t.SimpleToSafeDivision(), null, out var _).SafeDivisionToSimple();
+        }
+
+        public static (GenTensor<T, TWrapper> result, int[] permutations) ReducedRowEchelonFormPermuteSafeDivision(GenTensor<T, TWrapper> t)
         {
             #if ALLOW_EXCEPTIONS
             if (!t.IsMatrix)
                 throw new InvalidShapeException("this should be matrix");
             #endif
-            return EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>.InnerReducedRowEchelonForm(t.SimpleToSafeDivision(), out var _).SafeDivisionToSimple();
+            
+            var permutation = new int[t.Shape[0]];
+            for (var i = 0; i < permutation.Length; i++) permutation[i] = i + 1;
+
+            return (EchelonForm<SafeDivisionWrapper<T, TWrapper>, WrapperSafeDivisionWrapper<T, TWrapper>>
+                    .InnerReducedRowEchelonForm(t.SimpleToSafeDivision(), permutation, out var _).SafeDivisionToSimple(),
+                permutation);
         }
 
         #endregion
