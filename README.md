@@ -352,6 +352,32 @@ Finds the power of a matrix.
 Works for O(log(N) * N^3)
 </p></details>
 
+#### Decompositions
+
+<details><summary><strong>PLU decomposision</strong></summary><p>
+
+```cs     
+public (GenTensor<T, TWrapper> p, GenTensor<T, TWrapper> l, GenTensor<T, TWrapper> u) PluDecomposition()
+```
+
+Find PLU decomposition: matrices P, L, U such that for original matrix A: PA = LU.
+
+Works for O(n^3)
+
+</details>
+
+<details><summary><strong>LU decomposision</strong></summary><p>
+
+```cs
+public (GenTensor<T, TWrapper>, GenTensor<T, TWrapper>) LuDecomposition()   
+```
+
+Find LU decomposition: matrices L, U such that for original matrix A: A = LU.
+
+Works for O(n^3)
+
+</details>
+
 #### Piecewise arithmetics
 
 <details><summary><strong>Tensor and Tensor</strong></summary><p>

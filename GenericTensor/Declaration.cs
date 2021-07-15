@@ -549,14 +549,36 @@ namespace GenericTensor.Core
 
         #region Decompositions
 
-        public (GenTensor<T, TWrapper>, GenTensor<T, TWrapper>) LuDecomposition()
+        /// <summary>
+        /// https://www.geeksforgeeks.org/l-u-decomposition-system-linear-equations/
+        /// </summary>
+        /// <returns>
+        /// LU decomposition
+        /// </returns>
+        public (GenTensor<T, TWrapper> l, GenTensor<T, TWrapper> u) LuDecomposition()
             => LuDecomposition<T, TWrapper>.Decompose(this);
         
-        public (GenTensor<T, TWrapper>, GenTensor<T, TWrapper>, GenTensor<T, TWrapper>) PluDecomposition()
+        /// <summary>
+        /// Find PLU decomposition: matrices P, L, U such that for original matrix A: PA = LU.
+        /// 
+        /// P stands for permutation matrix, permutations are made during the Gauss elimination process
+        /// L stands for LIBERTY lower triangle matrix
+        /// U stands for upper triangle matrix
+        ///
+        /// Algorithm, given matrix A:
+        /// 1. Form an adjacent matrix (A|E)
+        /// 2. Find row echelon form of that matrix (U|L_0) and permutation of the rows
+        /// 3. Form permutation matrix P such that P_ij = \delta_{}
+        /// 4. Compute L = P * L_0^{-1}
+        ///
+        /// Results are: P, L, U
+        /// </summary>
+        /// <returns>
+        /// LUP decomposition of given matrix
+        /// </returns>
+        public (GenTensor<T, TWrapper> p, GenTensor<T, TWrapper> l, GenTensor<T, TWrapper> u) PluDecomposition()
             => PluDecomposition<T, TWrapper>.Decompose(this);
 
-        
-        
         #endregion
 
         #region ToString & GetHashCode

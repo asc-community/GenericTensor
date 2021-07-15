@@ -202,7 +202,7 @@ namespace GenericTensor.Functions
                 t.RowSwap(off, pivotId);
                 swapCount++;
 
-                if (permutations != null)
+                if (permutations is not null)
                     (permutations[off], permutations[pivotId]) = (permutations[pivotId], permutations[off]);
             }
 
