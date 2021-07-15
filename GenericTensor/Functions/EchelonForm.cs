@@ -273,11 +273,8 @@ namespace GenericTensor.Functions
                 throw new InvalidShapeException("this should be matrix");
 #endif
             var permutations = new int[t.Shape[0]];
-            for (var i = 0; i < permutations.Length; i++)
-            {
-                permutations[i] = i + 1;
-            }
-            
+            for (var i = 0; i < permutations.Length; i++) permutations[i] = i + 1;
+
             var wrp = InnerGaussianEliminationSafeDivision(t, t.Shape[0], t.Shape[1], permutations, out _);
             return (wrp.SafeDivisionToSimple(), permutations);
         }
