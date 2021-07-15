@@ -26,6 +26,7 @@
 
 #endregion
 
+using System;
 using GenericTensor.Core;
 using GenericTensor.Functions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -57,6 +58,8 @@ namespace UnitTests
         {
             var m = GenTensor<T, TW>.CreateMatrix(data);
             var (lower, upper) = m.LuDecomposition();
+            Console.Out.WriteLine("Original: " + m + "\nL = " + lower + "\nU = " + upper);
+            
             AssertMatrixIsLowerTriangular(lower);
             AssertMatrixIsUpperTriangular(upper);
 
@@ -67,6 +70,8 @@ namespace UnitTests
         {
             var m = GenTensor<T, TW>.CreateMatrix(data);
             var (p, l, u) = m.PluDecomposition();
+            Console.Out.WriteLine("Original: " + m + "\nL = " + l + "\nU = " + u + "\nP = " + p);
+            
             AssertMatrixIsLowerTriangular(l);
             AssertMatrixIsUpperTriangular(u);
 

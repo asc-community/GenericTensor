@@ -149,37 +149,31 @@ namespace GenericTensor.Core
         /// (its only argument is an array of integers which are indices of the tensor)
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T, TWrapper> CreateTensor(TensorShape shape, Func<int[], T> operation,
-            Threading threading = Threading.Single)
-            => Constructors<T, TWrapper>.CreateTensor(shape, operation, threading);
+        public static GenTensor<T, TWrapper> CreateTensor(TensorShape shape, Func<int[], T> operation, Threading threading = Threading.Single) => Constructors<T, TWrapper>.CreateTensor(shape, operation, threading);
 
         /// <summary>
         /// Creates a tensor from an array
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T, TWrapper> CreateTensor(T[] data)
-            => Constructors<T, TWrapper>.CreateTensor(data);
+        public static GenTensor<T, TWrapper> CreateTensor(T[] data) => Constructors<T, TWrapper>.CreateTensor(data);
 
         /// <summary>
         /// Creates a tensor from a two-dimensional array
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T, TWrapper> CreateTensor(T[,] data)
-            => Constructors<T, TWrapper>.CreateTensor(data);
+        public static GenTensor<T, TWrapper> CreateTensor(T[,] data) => Constructors<T, TWrapper>.CreateTensor(data);
 
         /// <summary>
         /// Creates a tensor from a three-dimensional array
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T, TWrapper> CreateTensor(T[,,] data)
-            => Constructors<T, TWrapper>.CreateTensor(data);
+        public static GenTensor<T, TWrapper> CreateTensor(T[,,] data) => Constructors<T, TWrapper>.CreateTensor(data);
 
         /// <summary>
         /// Creates a tensor from an n-dimensional array
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static GenTensor<T, TWrapper> CreateTensor(Array data)
-            => Constructors<T, TWrapper>.CreateTensor(data);
+        public static GenTensor<T, TWrapper> CreateTensor(Array data) => Constructors<T, TWrapper>.CreateTensor(data);
 
         #endregion
 
@@ -207,8 +201,8 @@ namespace GenericTensor.Core
         ///
         /// It can be useful performing decompositions
         /// </summary>
-        public (GenTensor<T, TWrapper>, int[]) RowEchelonFormPermute()
-            => EchelonForm<T, TWrapper>.RowEchelonFormPermute(this);
+        public (GenTensor<T, TWrapper>, int[]) RowEchelonFormPermuteSimple()
+            => EchelonForm<T, TWrapper>.RowEchelonFormPermuteSimple(this);
         
         /// <summary>
         /// Decomposes a matrix into a triangular one.
@@ -428,8 +422,7 @@ namespace GenericTensor.Core
         ///
         /// O(N^3)
         /// </summary>
-        public static GenTensor<T, TWrapper> MatrixMultiply(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b,
-            Threading threading = Threading.Single)
+        public static GenTensor<T, TWrapper> MatrixMultiply(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b, Threading threading = Threading.Single)
             => MatrixMultiplication<T, TWrapper>.Multiply(a, b, threading);
 
         /// <summary>
@@ -438,8 +431,7 @@ namespace GenericTensor.Core
         ///
         /// O(N^3)
         /// </summary>
-        public static GenTensor<T, TWrapper> TensorMatrixMultiply(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b,
-            Threading threading = Threading.Single)
+        public static GenTensor<T, TWrapper> TensorMatrixMultiply(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b, Threading threading = Threading.Single)
             => MatrixMultiplication<T, TWrapper>.TensorMultiply(a, b, threading);
 
         #endregion

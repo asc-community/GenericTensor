@@ -37,8 +37,25 @@ namespace GenericTensor.Functions
 {
     internal static class PluDecomposition<T, TWrapper> where TWrapper : struct, IOperations<T>
     {
-        public static (GenTensor<T, TWrapper>, GenTensor<T, TWrapper>, GenTensor<T, TWrapper>) Decompose(
-            GenTensor<T, TWrapper> original)
+        /// <summary>
+        /// Find PLU decomposition: matrices P, L, U such that for original matrix A: PA = LU.
+        /// 
+        /// P stands for permutation matrix, permutations are made during the Gauss elimination process
+        /// L stands for LIBERTY lower triangle matrix
+        /// U stands for upper triangle matrix
+        ///
+        /// Algorithm, given matrix A:
+        /// 1. Form an adjacent matrix (A|E)
+        /// 2. Find row echelon form of that matrix (U|L_0) and permutation of the rows
+        /// 3. Form permutation matrix P such that P_ij = \delta_{}
+        /// 4. Compute L = P * L_0^{-1}
+        ///
+        /// Results are: L, U, P
+        /// </summary>
+        /// <returns>
+        /// LUP decomposition of given matrix
+        /// </returns>
+        public static (GenTensor<T, TWrapper>, GenTensor<T, TWrapper>, GenTensor<T, TWrapper>) Decompose(GenTensor<T, TWrapper> original)
         {
             var t = original.Copy(copyElements: true);
 
@@ -64,8 +81,7 @@ namespace GenericTensor.Functions
             lowerZero.InvertMatrix();
 
             var permuteMatrix =
-                GenTensor<T, TWrapper>.CreateMatrix(m, m,
-                    (i, j) => j == permute[i] - 1 ? tw.CreateOne() : tw.CreateZero());
+                GenTensor<T, TWrapper>.CreateMatrix(m, m, (i, j) => j == permute[i] - 1 ? tw.CreateOne() : tw.CreateZero());
 
             var lower = GenTensor<T, TWrapper>.MatrixMultiply(permuteMatrix, lowerZero);
             return (permuteMatrix, lower, upper);
