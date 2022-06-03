@@ -162,14 +162,24 @@ namespace UnitTests
             AssertTensor(Enumerable.Range(1, 48), x);
             Assert.AreEqual(x.Shape.DimensionCount, 5);
         }
-        [TestMethod]
-        public void CreateTensor6D()
+        [DataTestMethod]
+        [DataRow(0, 0, 0, 0, 0, 0)]
+        [DataRow(1, 0, 0, 0, 0, 0)]
+        [DataRow(1, 0, 0, 0, 0, 1)]
+        [DataRow(1, 0, 0, 9, 0, 1)]
+        [DataRow(0, 0, 0, 0, 0, 1)]
+        [DataRow(9, 0, 0, 0, 0, 0)]
+        [DataRow(9, 0, 0, 0, 0, 9)]
+        [DataRow(9, 0, 0, 1, 0, 9)]
+        [DataRow(0, 0, 0, 0, 0, 9)]
+        [DataRow(9, 1, 0, 1, 1, 9)]
+        public void CreateTensor6DEmpty(int d1, int d2, int d3, int d4, int d5, int d6)
         {
-            var x = GenTensor<int, IntWrapper>.CreateTensor(new int[0, 0, 0, 0, 0, 0]);
+            var x = GenTensor<int, IntWrapper>.CreateTensor(new int[d1, d2, d3, d4, d5, d6]);
             Assert.IsFalse(x.IsVector);
             Assert.IsFalse(x.IsMatrix);
             Assert.IsFalse(x.IsSquareMatrix);
-            CollectionAssert.AreEqual(new[] { 0, 0, 0, 0, 0, 0 }, x.Shape.ToArray());
+            CollectionAssert.AreEqual(new[] { d1, d2, d3, d4, d5, d6 }, x.Shape.ToArray());
             Assert.AreEqual(0, x.Volume);
         }
         [TestMethod]
