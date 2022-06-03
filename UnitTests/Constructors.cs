@@ -242,29 +242,57 @@ namespace UnitTests
             AssertTensor(Enumerable.Repeat(Complex.Zero, 5), x);
         }
         
-        [TestMethod]
-        public void IndexingAndAssigning2D()
+        [DataTestMethod]
+        [DataRow(0, 0)]
+        [DataRow(0, 4)]
+        [DataRow(3, 0)]
+        [DataRow(3, 4)]
+        public void IndexingAndAssigning2D(int d1, int d2)
         {
-            var t2Actual = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4), ids => 0);
-            var t2Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4), ids => ids[0] + ids[1]);
+            var t2Actual = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(d1, d2), ids => 0);
+            var t2Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(d1, d2), ids => ids[0] + ids[1]);
             t2Actual.IterateOver2((a, b) => { t2Actual[a, b] = a + b; });
             Assert.AreEqual(t2Expected, t2Actual);
         }
 
-        [TestMethod]
-        public void IndexingAndAssigning3D()
+        [DataTestMethod]
+        [DataRow(0, 0, 0)]
+        [DataRow(0, 0, 5)]
+        [DataRow(0, 4, 0)]
+        [DataRow(0, 4, 5)]
+        [DataRow(3, 0, 0)]
+        [DataRow(3, 0, 5)]
+        [DataRow(3, 4, 0)]
+        [DataRow(3, 4, 5)]
+        public void IndexingAndAssigning3D(int d1, int d2, int d3)
         {
-            var t3Actual = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5), ids => 0);
-            var t3Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5), ids => ids[0] + ids[1] + ids[2]);
+            var t3Actual = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(d1, d2, d3), ids => 0);
+            var t3Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(d1, d2, d3), ids => ids[0] + ids[1] + ids[2]);
             t3Actual.IterateOver3((a, b, c) => { t3Actual[a, b, c] = a + b + c; });
             Assert.AreEqual(t3Expected, t3Actual);
         }
 
-        [TestMethod]
-        public void IndexingAndAssigning4D()
+        [DataTestMethod]
+        [DataRow(0, 0, 0, 0)]
+        [DataRow(0, 0, 0, 6)]
+        [DataRow(0, 0, 5, 0)]
+        [DataRow(0, 0, 5, 6)]
+        [DataRow(0, 4, 0, 0)]
+        [DataRow(0, 4, 0, 6)]
+        [DataRow(0, 4, 5, 0)]
+        [DataRow(0, 4, 5, 6)]
+        [DataRow(3, 0, 0, 0)]
+        [DataRow(3, 0, 0, 6)]
+        [DataRow(3, 0, 5, 0)]
+        [DataRow(3, 0, 5, 6)]
+        [DataRow(3, 4, 0, 0)]
+        [DataRow(3, 4, 0, 6)]
+        [DataRow(3, 4, 5, 0)]
+        [DataRow(3, 4, 5, 6)]
+        public void IndexingAndAssigning4D(int d1, int d2, int d3, int d4)
         {
-            var t4Actual = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5, 6), ids => 0);
-            var t4Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 4, 5, 6), ids => ids[0] + ids[1] + ids[2] + ids[3]);
+            var t4Actual = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(d1, d2, d3, d4), ids => 0);
+            var t4Expected = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(d1, d2, d3, d4), ids => ids[0] + ids[1] + ids[2] + ids[3]);
             foreach (var (ids, _) in t4Actual.Iterate())
                 t4Actual[ids[0], ids[1], ids[2], ids[3]] = ids.Sum();
             Assert.AreEqual(t4Expected, t4Actual);

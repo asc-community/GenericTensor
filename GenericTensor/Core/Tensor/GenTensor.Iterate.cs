@@ -279,6 +279,7 @@ namespace GenericTensor.Core
                 return false;
             }
 
+            if (Volume == 0) yield break;
             var indices = new int[Shape.Count - offsetFromLeft];
             do
             {
