@@ -84,12 +84,12 @@ namespace GenericTensor.Functions
         {
             var width = data.GetLength(0);
             #if ALLOW_EXCEPTIONS
-            if (width <= 0)
+            if (width < 0)
                 throw new InvalidShapeException();
             #endif
             var height = data.GetLength(1);
             #if ALLOW_EXCEPTIONS
-            if (height <= 0)
+            if (height < 0)
                 throw new InvalidShapeException();
             #endif
             return (width, height);
