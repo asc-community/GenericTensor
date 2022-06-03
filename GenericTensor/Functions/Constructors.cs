@@ -185,6 +185,7 @@ namespace GenericTensor.Functions
             for (int i = 0; i < data.Rank; i++)
                 dimensions[i] = data.GetLength(i);
             var res = new GenTensor<T, TWrapper>(dimensions);
+            if (res.Volume == 0) return res;
 
             dimensions = new int[data.Rank]; // Don't modify res
             var normalizedIndices = new int[data.Rank];
