@@ -92,7 +92,7 @@ namespace GenericTensor.Functions
             where UWrapper : struct, IOperations<U>
         {
             for (int i = axis; i > 0; i--)
-                t.Transpose(i, i - 1);
+                t.Transpose(i, i - 1); // Move the axis we want to reduce to the front for GetSubtensor. Order is important since it is directly reflected in the output shape.
             for (int i = 0; i < t.Shape[0]; i++)
             {
                 var sub = t.GetSubtensor(i);
