@@ -67,6 +67,35 @@ namespace GenericTensor.Core
         public static GenTensor<T, TWrapper> Concat(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b)
             => Composition<T, TWrapper>.Concat(a, b);
 
+
+        /// <summary>
+        /// Works similarly to Linq's <see cref="System.Linq.Enumerable.Aggregate{TSource,TAccumulate}"/>, but aggregates over the given <paramref name="axis"/>
+        /// and mutates the given <paramref name="accumulated"/> value.
+        /// </summary>
+        /// <param name="tensor">
+        /// The tensor to aggregate over.
+        /// <br/>Shape: N1 x N2 x N3 x ... Nn
+        /// </param>
+        /// <param name="accumulated">
+        /// The starting value of the aggregation,
+        /// simultaneously being the destination tensor
+        /// for accumulation so this method
+        /// does not return a new tensor, but instead
+        /// modifies the accumulated value.
+        /// <br/>Shape: N1 x ... x N[<paramref name="axis"/>-1] x N[<paramref name="axis"/>+1] x ... x Nn
+        /// </param>
+        /// <param name="accumulator">
+        /// Function which maps the accumulated value
+        /// and the current one to the new value.
+        /// </param>
+        /// <param name="axis">
+        /// The index of the axis (dimension) to aggregate over.
+        /// </param>
+        public static void Aggregate<TAggregatorFunc, U, UWrapper>(GenTensor<T, TWrapper> tensor, GenTensor<U, UWrapper> accumulated, TAggregatorFunc accumulator, int axis)
+            where TAggregatorFunc : struct, HonkPerf.NET.Core.IValueDelegate<U, T, U>
+            where UWrapper : struct, IOperations<U>
+            => Composition<T, TWrapper>.Aggregate(tensor, accumulated, accumulator, axis);
+
         #endregion
 
         #region Constructors
