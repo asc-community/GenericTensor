@@ -85,8 +85,8 @@ namespace GenericTensor.Core
         /// <br/>Shape: N1 x ... x N[<paramref name="axis"/>-1] x N[<paramref name="axis"/>+1] x ... x Nn
         /// </param>
         /// <param name="accumulator">
-        /// Function which maps accumulated value and the current one
-        /// to the new value.
+        /// Function which maps the accumulated value
+        /// and the current one to the new value.
         /// </param>
         /// <param name="axis">
         /// The index of the axis (dimension) to aggregate over.
