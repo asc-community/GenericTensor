@@ -87,7 +87,9 @@ namespace GenericTensor.Functions
             }
         }
         
-        public static void Fold<TCollapse>(TCollapse collapse, GenTensor<T, TWrapper> acc, GenTensor<T, TWrapper> t, int axis) where TCollapse : struct, HonkPerf.NET.Core.IValueDelegate<T, T, T>
+        public static void Fold<TCollapse, U, UWrapper>(TCollapse collapse, GenTensor<U, UWrapper> acc, GenTensor<T, TWrapper> t, int axis)
+            where TCollapse : struct, HonkPerf.NET.Core.IValueDelegate<U, T, U>
+            where UWrapper : struct, IOperations<U>
         {
             for (int i = axis; i > 0; i--)
                 t.Transpose(i, i - 1);
@@ -102,3 +104,4 @@ namespace GenericTensor.Functions
         }
     }
 }
+    

@@ -35,7 +35,7 @@ namespace UnitTests
     public class Fold
     {
         // 3 x 2 x 2 x 2
-        private readonly GenTensor<int, IntWrapper> frog = GenTensor<int, IntWrapper>.CreateTensor(new[,,,] {
+        private static readonly GenTensor<int, IntWrapper> frog = GenTensor<int, IntWrapper>.CreateTensor(new[,,,] {
                 {
                     { { 1, 2 }, { 3, 4 } },
                     { { 10, 20 }, { 30, 40 } },
@@ -50,6 +50,8 @@ namespace UnitTests
                 }
             });
 
+        private static readonly GenTensor<int, IntWrapper> frogCopy = frog.Copy(true);
+
         [TestMethod]
         public void SumAx0()
         {
@@ -61,6 +63,7 @@ namespace UnitTests
                     { { 101010, 202020 }, { 303030, 404040 } },
                 });
             Assert.AreEqual(expected, acc);
+            Assert.AreEqual(frogCopy, frog);
         }
 
         [TestMethod]
@@ -81,6 +84,7 @@ namespace UnitTests
                     }
                 });
             Assert.AreEqual(expected, acc);
+            Assert.AreEqual(frogCopy, frog);
         }
 
         [TestMethod]
@@ -104,6 +108,7 @@ namespace UnitTests
                     }
                 });
             Assert.AreEqual(expected, acc);
+            Assert.AreEqual(frogCopy, frog);
         }
 
         [TestMethod]
@@ -127,6 +132,7 @@ namespace UnitTests
                     }
                 });
             Assert.AreEqual(expected, acc);
+            Assert.AreEqual(frogCopy, frog);
         }
     }
 }
