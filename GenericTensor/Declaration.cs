@@ -79,7 +79,7 @@ namespace GenericTensor.Core
         /// <param name="accumulated">
         /// The base value of the aggregation,
         /// simultaneously being the destination tensor
-        /// for accumulation (so <see cref="Aggregate{TAggregatorFunc, U, UWrapper}(GenTensor{T, TWrapper}, GenTensor{U, UWrapper}, TAggregatorFunc, int)"/>
+        /// for accumulation so this method
         /// does not return a new tensor, but instead
         /// modifies the accumulated value.
         /// Shape: N1 x ... x N[<paramref name="axis"/>-1] x N[<paramref name="axis"/>+1] x ... x Nn
