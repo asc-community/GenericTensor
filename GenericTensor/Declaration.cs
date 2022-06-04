@@ -78,7 +78,7 @@ namespace GenericTensor.Core
         /// </param>
         /// <param name="accumulated">
         /// The base value of the aggregation,
-        /// it is also the destination tensor
+        /// simultaneously being the destination tensor
         /// for accumulation (so <see cref="Aggregate{TAggregatorFunc, U, UWrapper}(GenTensor{T, TWrapper}, GenTensor{U, UWrapper}, TAggregatorFunc, int)"/>
         /// does not return a new tensor, but instead
         /// modifiers the accumulated value.
