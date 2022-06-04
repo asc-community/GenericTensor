@@ -89,7 +89,7 @@ namespace GenericTensor.Core
         /// to the new value.
         /// </param>
         /// <param name="axis">
-        /// The number of axis to aggregate over.
+        /// The index of the axis (dimension) to aggregate over.
         /// </param>
         public static void Aggregate<TAggregatorFunc, U, UWrapper>(GenTensor<T, TWrapper> tensor, GenTensor<U, UWrapper> accumulated, TAggregatorFunc accumulator, int axis)
             where TAggregatorFunc : struct, HonkPerf.NET.Core.IValueDelegate<U, T, U>
