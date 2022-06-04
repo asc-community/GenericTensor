@@ -77,7 +77,7 @@ namespace GenericTensor.Core
         /// <br/>Shape: N1 x N2 x N3 x ... Nn
         /// </param>
         /// <param name="accumulated">
-        /// The base value of the aggregation,
+        /// The starting value of the aggregation,
         /// simultaneously being the destination tensor
         /// for accumulation so this method
         /// does not return a new tensor, but instead
