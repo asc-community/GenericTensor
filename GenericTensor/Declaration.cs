@@ -82,7 +82,7 @@ namespace GenericTensor.Core
         /// for accumulation so this method
         /// does not return a new tensor, but instead
         /// modifies the accumulated value.
-        /// Shape: N1 x ... x N[<paramref name="axis"/>-1] x N[<paramref name="axis"/>+1] x ... x Nn
+        /// <br/>Shape: N1 x ... x N[<paramref name="axis"/>-1] x N[<paramref name="axis"/>+1] x ... x Nn
         /// </param>
         /// <param name="accumulator">
         /// Function which maps accumulated value and the current one
