@@ -34,11 +34,8 @@ namespace UnitTests
     [TestClass]
     public class Fold
     {
-        [TestMethod]
-        public void Sum()
-        {
-            // 3 x 2 x 2 x 2
-            var a = GenTensor<int, IntWrapper>.CreateTensor(new [,,,] {
+        // 3 x 2 x 2 x 2
+        private readonly GenTensor<int, IntWrapper> frog = GenTensor<int, IntWrapper>.CreateTensor(new[,,,] {
                 {
                     { { 1, 2 }, { 3, 4 } },
                     { { 10, 20 }, { 30, 40 } },
@@ -52,8 +49,45 @@ namespace UnitTests
                     { { 100000, 200000 }, { 300000, 400000 } },
                 }
             });
+
+        [TestMethod]
+        public void SumAx0()
+        {
+            var acc = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(2, 2, 2), id => 0);
+            GenTensor<int, IntWrapper>.Fold(new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), acc, frog, axis: 0);
+            var expected =
+                GenTensor<int, IntWrapper>.CreateTensor(new[,,] {
+                    { { 10101, 20202 }, { 30303, 40404 } },
+                    { { 101010, 202020 }, { 303030, 404040 } },
+                });
+            Assert.AreEqual(expected, acc);
+        }
+
+        [TestMethod]
+        public void SumAx1()
+        {
             var acc = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 2, 2), id => 0);
-            GenTensor<int, IntWrapper>.Fold((a, b) => a + b, acc, a, 2);
+            GenTensor<int, IntWrapper>.Fold(new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), acc, frog, axis: 1);
+            var expected =
+                GenTensor<int, IntWrapper>.CreateTensor(new[, ,] {
+                    {
+                        { 11, 22 }, { 33, 44 }
+                    },
+                    {
+                        { 1100, 2200 }, { 3300, 4400 }
+                    },
+                    {
+                        { 110000, 220000 }, { 330000, 440000 }
+                    }
+                });
+            Assert.AreEqual(expected, acc);
+        }
+
+        [TestMethod]
+        public void SumAx2()
+        {
+            var acc = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 2, 2), id => 0);
+            GenTensor<int, IntWrapper>.Fold(new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), acc, frog, axis: 2);
             var expected = 
                 GenTensor<int, IntWrapper>.CreateTensor(new [,,] {
                     {
@@ -67,6 +101,29 @@ namespace UnitTests
                     {
                         { 40000, 60000 },
                         { 400000, 600000 }
+                    }
+                });
+            Assert.AreEqual(expected, acc);
+        }
+
+        [TestMethod]
+        public void SumAx3()
+        {
+            var acc = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 2, 2), id => 0);
+            GenTensor<int, IntWrapper>.Fold(new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), acc, frog, axis: 3);
+            var expected =
+                GenTensor<int, IntWrapper>.CreateTensor(new[, ,] {
+                    {
+                        { 3, 7 },
+                        { 30, 70 }
+                    },
+                    {
+                        { 300, 700 },
+                        { 3000, 7000 }
+                    },
+                    {
+                        { 30000, 70000 },
+                        { 300000, 700000 }
                     }
                 });
             Assert.AreEqual(expected, acc);

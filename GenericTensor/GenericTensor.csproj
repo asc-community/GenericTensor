@@ -46,4 +46,8 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HonkPerf.NET.Core" Version="1.0.0" />
+  </ItemGroup>
 </Project>
