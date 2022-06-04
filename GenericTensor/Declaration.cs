@@ -69,17 +69,32 @@ namespace GenericTensor.Core
 
 
         /// <summary>
-        /// Folds the tensor over given axis
-        /// axis : int - the axis' number
-        /// collapse : (acc : T) x (step : T) -> unit
-        /// acc : T[N1 x ... x N[axis-1] x N[axis+1] x ... x Nn]
-        /// t : T[N1 x N2 x N3 x ... Nn]
-        /// Modifies acc
+        /// Works similary to Linq's Aggregate, but aggregates over the given axis
+        /// and mutates the given accumulated value.
         /// </summary>
-        public static void Aggregate<TAggregatorFunc, U, UWrapper>(GenTensor<T, TWrapper> t, GenTensor<U, UWrapper> acc, TAggregatorFunc collapse, int axis)
+        /// <param name="tensor">
+        /// The tensor to aggregate over.
+        /// Shape: N1 x N2 x N3 x ... Nn
+        /// </param>
+        /// <param name="accumulated">
+        /// The base value of the aggregation,
+        /// it is also the destination tensor
+        /// for accumulation (so <see cref="Aggregate{TAggregatorFunc, U, UWrapper}(GenTensor{T, TWrapper}, GenTensor{U, UWrapper}, TAggregatorFunc, int)"/>
+        /// does not return a new tensor, but instead
+        /// modifiers the accumulated value.
+        /// Shape: N1 x ... x N[<paramref name="axis"/>-1] x N[<paramref name="axis"/>+1] x ... x Nn
+        /// </param>
+        /// <param name="accumulator">
+        /// Function which maps accumulated value and the current one
+        /// to the new value.
+        /// </param>
+        /// <param name="axis">
+        /// The number of axis to aggregate over.
+        /// </param>
+        public static void Aggregate<TAggregatorFunc, U, UWrapper>(GenTensor<T, TWrapper> tensor, GenTensor<U, UWrapper> accumulated, TAggregatorFunc accumulator, int axis)
             where TAggregatorFunc : struct, HonkPerf.NET.Core.IValueDelegate<U, T, U>
             where UWrapper : struct, IOperations<U>
-            => Composition<T, TWrapper>.Aggregate(t, acc, collapse, axis);
+            => Composition<T, TWrapper>.Aggregate(tensor, accumulated, accumulator, axis);
 
         #endregion
 
