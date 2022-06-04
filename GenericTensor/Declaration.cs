@@ -74,7 +74,7 @@ namespace GenericTensor.Core
         /// </summary>
         /// <param name="tensor">
         /// The tensor to aggregate over.
-        /// Shape: N1 x N2 x N3 x ... Nn
+        /// <br/>Shape: N1 x N2 x N3 x ... Nn
         /// </param>
         /// <param name="accumulated">
         /// The base value of the aggregation,
