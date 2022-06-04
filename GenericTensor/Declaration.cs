@@ -67,6 +67,17 @@ namespace GenericTensor.Core
         public static GenTensor<T, TWrapper> Concat(GenTensor<T, TWrapper> a, GenTensor<T, TWrapper> b)
             => Composition<T, TWrapper>.Concat(a, b);
 
+
+        /// <summary>
+        /// Folds the tensor over given axis
+        /// axis : int - the axis' number
+        /// collapse : (acc : T[N1 x ... x N[axis-1] x N[axis+1] x ... x Nn]) x (step : T[N1 x ... x N[axis-1] x N[axis+1] x ... x Nn]) -> unit
+        /// acc : T[N1 x ... x N[axis-1] x N[axis+1] x ... x Nn]
+        /// t : T[N1 x N2 x N3 x ... Nn] -> ()
+        /// </summary>
+        public static void Fold(System.Func<T, T, T> collapse, GenTensor<T, TWrapper> acc, GenTensor<T, TWrapper> t, int axis)
+            => Composition<T, TWrapper>.Fold(collapse, acc, t, axis);
+
         #endregion
 
         #region Constructors

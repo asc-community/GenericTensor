@@ -86,5 +86,19 @@ namespace GenericTensor.Functions
                 return res;
             }
         }
+
+        public static void Fold(System.Func<T, T, T> collapse, GenTensor<T, TWrapper> acc, GenTensor<T, TWrapper> t, int axis)
+        {
+            for (int i = axis; i >= 0; i--)
+                t.Transpose(i, i - 1);
+            for (int i = 0; i < t.Shape[0]; i++)
+            {
+                var sub = t.GetSubtensor(i);
+                foreach (var (id, value) in sub.Iterate())
+                    acc[id] = collapse(acc[id], value);
+            }
+            for (int i = 0; i < axis; i++)
+                t.Transpose(i, i + 1);
+        }
     }
 }
