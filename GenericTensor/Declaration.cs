@@ -70,7 +70,7 @@ namespace GenericTensor.Core
 
         /// <summary>
         /// Works similarly to Linq's <see cref="System.Linq.Enumerable.Aggregate{TSource,TAccumulate}"/>, but aggregates over the given <paramref name="axis"/>
-        /// and mutates the given accumulated value.
+        /// and mutates the given <paramref name="accumulated"/> value.
         /// </summary>
         /// <param name="tensor">
         /// The tensor to aggregate over.
