@@ -32,7 +32,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests
 {
     [TestClass]
-    public class Fold
+    public class Aggregate
     {
         // 3 x 2 x 2 x 2
         private static readonly GenTensor<int, IntWrapper> frog = GenTensor<int, IntWrapper>.CreateTensor(new[,,,] {
@@ -56,7 +56,7 @@ namespace UnitTests
         public void SumAx0()
         {
             var acc = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(2, 2, 2), id => 0);
-            GenTensor<int, IntWrapper>.Fold(new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), acc, frog, axis: 0);
+            GenTensor<int, IntWrapper>.Aggregate(frog, acc, new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), axis: 0);
             var expected =
                 GenTensor<int, IntWrapper>.CreateTensor(new[,,] {
                     { { 10101, 20202 }, { 30303, 40404 } },
@@ -70,7 +70,7 @@ namespace UnitTests
         public void SumAx1()
         {
             var acc = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 2, 2), id => 0);
-            GenTensor<int, IntWrapper>.Fold(new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), acc, frog, axis: 1);
+            GenTensor<int, IntWrapper>.Aggregate(frog, acc, new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), axis: 1);
             var expected =
                 GenTensor<int, IntWrapper>.CreateTensor(new[, ,] {
                     {
@@ -91,7 +91,7 @@ namespace UnitTests
         public void SumAx2()
         {
             var acc = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 2, 2), id => 0);
-            GenTensor<int, IntWrapper>.Fold(new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), acc, frog, axis: 2);
+            GenTensor<int, IntWrapper>.Aggregate(frog, acc, new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), axis: 2);
             var expected = 
                 GenTensor<int, IntWrapper>.CreateTensor(new [,,] {
                     {
@@ -115,7 +115,7 @@ namespace UnitTests
         public void SumAx3()
         {
             var acc = GenTensor<int, IntWrapper>.CreateTensor(new TensorShape(3, 2, 2), id => 0);
-            GenTensor<int, IntWrapper>.Fold(new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), acc, frog, axis: 3);
+            GenTensor<int, IntWrapper>.Aggregate(frog, acc, new HonkPerf.NET.Core.PureValueDelegate<int, int, int>((a, b) => a + b), axis: 3);
             var expected =
                 GenTensor<int, IntWrapper>.CreateTensor(new[, ,] {
                     {

@@ -76,10 +76,10 @@ namespace GenericTensor.Core
         /// t : T[N1 x N2 x N3 x ... Nn]
         /// Modifies acc
         /// </summary>
-        public static void Fold<TCollapse, U, UWrapper>(TCollapse collapse, GenTensor<U, UWrapper> acc, GenTensor<T, TWrapper> t, int axis)
-            where TCollapse : struct, HonkPerf.NET.Core.IValueDelegate<U, T, U>
+        public static void Aggregate<TAggregatorFunc, U, UWrapper>(GenTensor<T, TWrapper> t, GenTensor<U, UWrapper> acc, TAggregatorFunc collapse, int axis)
+            where TAggregatorFunc : struct, HonkPerf.NET.Core.IValueDelegate<U, T, U>
             where UWrapper : struct, IOperations<U>
-            => Composition<T, TWrapper>.Fold(collapse, acc, t, axis);
+            => Composition<T, TWrapper>.Aggregate(t, acc, collapse, axis);
 
         #endregion
 

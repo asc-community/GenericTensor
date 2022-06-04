@@ -87,18 +87,15 @@ namespace GenericTensor.Functions
             }
         }
         
-        public static void Fold<TCollapse, U, UWrapper>(TCollapse collapse, GenTensor<U, UWrapper> acc, GenTensor<T, TWrapper> t, int axis)
-            where TCollapse : struct, HonkPerf.NET.Core.IValueDelegate<U, T, U>
+        public static void Aggregate<TAggregatorFunc, U, UWrapper>(GenTensor<T, TWrapper> t, GenTensor<U, UWrapper> acc, TAggregatorFunc collapse, int axis)
+            where TAggregatorFunc : struct, HonkPerf.NET.Core.IValueDelegate<U, T, U>
             where UWrapper : struct, IOperations<U>
         {
             for (int i = axis; i > 0; i--)
                 t.Transpose(i, i - 1); // Move the axis we want to reduce to the front for GetSubtensor. Order is important since it is directly reflected in the output shape.
             for (int i = 0; i < t.Shape[0]; i++)
-            {
-                var sub = t.GetSubtensor(i);
-                foreach (var (id, value) in sub.Iterate())
+                foreach (var (id, value) in t.GetSubtensor(i).Iterate())
                     acc[id] = collapse.Invoke(acc[id], value);
-            }
             for (int i = 0; i < axis; i++)
                 t.Transpose(i, i + 1);
         }
