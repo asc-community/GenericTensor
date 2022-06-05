@@ -25,6 +25,7 @@
 #endregion
 
 
+using HonkPerf.NET.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,96 @@ namespace GenericTensor.Core
             {
                 indices[id] = 0;
                 NextIndex(indices, id - 1);
+            }
+        }
+
+        public void ForEach<TIterator>(TIterator iterator) where TIterator : struct, IValueAction<int[], T>
+        {
+            static void ForEach1D(GenTensor<T, TWrapper> t, TIterator iterator)
+            {
+                var index = new int[1];
+                for (int i = 0; i < t.Shape[0]; i++)
+                {
+                    iterator.Invoke(index, t.GetValueNoCheck(i));
+                    index[0] = i;
+                }
+            }
+            static void ForEach2D(GenTensor<T, TWrapper> t, TIterator iterator)
+            {
+                var index = new int[2];
+                for (int x = 0; x < t.Shape[0]; x++)
+                {
+                    index[0] = x;
+                    for (int y = 0; y < t.Shape[1]; y++)
+                    {
+                        index[1] = y;
+                        iterator.Invoke(index, t.GetValueNoCheck(index));
+                    }
+                }
+            }
+            static void ForEach3D(GenTensor<T, TWrapper> t, TIterator iterator)
+            {
+                var index = new int[3];
+                for (int x = 0; x < t.Shape[0]; x++)
+                {
+                    index[0] = x;
+                    for (int y = 0; y < t.Shape[1]; y++)
+                    {
+                        index[1] = y;
+                        for (int z = 0; z < t.Shape[2]; z++)
+                        {
+                            index[2] = z;
+                            iterator.Invoke(index, t.GetValueNoCheck(index));
+                        }
+                    }
+                }
+            }
+            static void ForEach4D(GenTensor<T, TWrapper> t, TIterator iterator)
+            {
+                var index = new int[4];
+                for (int x = 0; x < t.Shape[0]; x++)
+                {
+                    index[0] = x;
+                    for (int y = 0; y < t.Shape[1]; y++)
+                    {
+                        index[1] = y;
+                        for (int z = 0; z < t.Shape[2]; z++)
+                        {
+                            index[2] = z;
+                            for (int w = 0; w < t.Shape[3]; w++)
+                            {
+                                index[3] = w;
+                                iterator.Invoke(index, t.GetValueNoCheck(index));
+                            }
+                        }
+                    }
+                }
+            }
+            static bool Next(int[] index, int[] shape)
+            {
+                index[0]++;
+                var i = 0;
+                while (index[i] == shape[i])
+                {
+                    index[i] = 0;
+                    if (i == shape.Length - 1)
+                        return false;
+                    i++;
+                }
+                return true;
+            }
+
+            if (Shape.DimensionCount == 0) return;
+            if (Shape.DimensionCount == 1) ForEach1D(this, iterator);
+            else if (Shape.DimensionCount == 2) ForEach2D(this, iterator);
+            else if (Shape.DimensionCount == 3) ForEach3D(this, iterator);
+            else if (Shape.DimensionCount == 4) ForEach4D(this, iterator);
+            else
+            {
+                var index = new int[Shape.DimensionCount];
+                index[0] = -1;
+                while (Next(index, Shape.shape))
+                    iterator.Invoke(index, GetValueNoCheck(index));
             }
         }
 
