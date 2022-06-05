@@ -47,6 +47,16 @@ namespace GenericTensor.Core
             }
         }
 
+        /// <summary>
+        /// Similar to <see cref="System.Collections.Generic.List{T}.ForEach(Action{T})" />.
+        /// </summary>
+        /// <param name="iterator">
+        /// Value function, which takes two parameters:
+        /// index array and value of the tensor in this point.
+        /// </param>
+        /// <remarks>
+        /// When used properly, it is much faster than similar <see cref="GenTensor{T, IntWrapper}.Iterate" />.
+        /// </remarks>
         public void ForEach<TIterator>(TIterator iterator) where TIterator : struct, IValueAction<int[], T>
         {
             static void ForEach1D(GenTensor<T, TWrapper> t, TIterator iterator)
