@@ -54,8 +54,8 @@ namespace GenericTensor.Core
                 var index = new int[1];
                 for (int i = 0; i < t.Shape[0]; i++)
                 {
-                    iterator.Invoke(index, t.GetValueNoCheck(i));
                     index[0] = i;
+                    iterator.Invoke(index, t.GetValueNoCheck(i));
                 }
             }
             static void ForEach2D(GenTensor<T, TWrapper> t, TIterator iterator)
@@ -119,6 +119,7 @@ namespace GenericTensor.Core
                     if (i == shape.Length - 1)
                         return false;
                     i++;
+                    index[i]++;
                 }
                 return true;
             }
