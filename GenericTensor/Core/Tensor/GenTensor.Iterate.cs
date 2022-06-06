@@ -134,7 +134,7 @@ namespace GenericTensor.Core
                 return true;
             }
 
-            if (Shape.DimensionCount == 0) return;
+            if (Shape.DimensionCount == 0 || Volume == 0) return;
             if (Shape.DimensionCount == 1) ForEach1D(this, iterator);
             else if (Shape.DimensionCount == 2) ForEach2D(this, iterator);
             else if (Shape.DimensionCount == 3) ForEach3D(this, iterator);
