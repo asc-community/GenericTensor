@@ -26,6 +26,7 @@
 
 
 using GenericTensor.Core;
+using HonkPerf.NET.Core;
 
 namespace GenericTensor.Functions
 {
@@ -86,6 +87,23 @@ namespace GenericTensor.Functions
                 return res;
             }
         }
+
+        private struct AggregateFunctor<U, UWrapper, TAggregatorFunc> : IValueAction<int[], T>
+            where TAggregatorFunc : struct, HonkPerf.NET.Core.IValueDelegate<U, T, U>
+            where UWrapper : struct, IOperations<U>
+        {
+            private TAggregatorFunc collapse;
+            private GenTensor<U, UWrapper> acc;
+            public AggregateFunctor(TAggregatorFunc collapse, GenTensor<U, UWrapper> acc)
+            {
+                this.collapse = collapse;
+                this.acc = acc;
+            }
+            public void Invoke(int[] arg1, T arg2)
+            {
+                acc.SetValueNoCheck(collapse.Invoke(acc.GetValueNoCheck(arg1), arg2), arg1);
+            }
+        }
         
         public static void Aggregate<TAggregatorFunc, U, UWrapper>(GenTensor<T, TWrapper> t, GenTensor<U, UWrapper> acc, TAggregatorFunc collapse, int axis)
             where TAggregatorFunc : struct, HonkPerf.NET.Core.IValueDelegate<U, T, U>
@@ -93,9 +111,15 @@ namespace GenericTensor.Functions
         {
             for (int i = axis; i > 0; i--)
                 t.Transpose(i, i - 1); // Move the axis we want to reduce to the front for GetSubtensor. Order is important since it is directly reflected in the output shape.
+            /*
+            // old code with iterate
+            // not removing for now
             for (int i = 0; i < t.Shape[0]; i++)
                 foreach (var (id, value) in t.GetSubtensor(i).Iterate())
                     acc[id] = collapse.Invoke(acc[id], value);
+            */
+            for (int i = 0; i < t.Shape[0]; i++)
+                t.GetSubtensor(i).ForEach(new AggregateFunctor<U, UWrapper, TAggregatorFunc>(collapse, acc));
             for (int i = 0; i < axis; i++)
                 t.Transpose(i, i + 1);
         }
