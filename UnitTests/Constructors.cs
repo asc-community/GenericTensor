@@ -104,14 +104,14 @@ namespace UnitTests
             Check(1);
             x = GenTensor<int, IntWrapper>.Deserialize(new byte[] { 0, 0, 0, 0, 4, 0, 0, 0, 9, 0, 0, 0 });
             Check(9);
-            //x = GenTensor<int, IntWrapper>.PiecewiseAdd(x, x);
-            //Check(18);
-            //x = GenTensor<int, IntWrapper>.PiecewiseMultiply(x, x);
-            //Check(324);
-            //x = GenTensor<int, IntWrapper>.PiecewiseDivide(x, x);
-            //Check(1);
-            //x = GenTensor<int, IntWrapper>.PiecewiseSubtract(x, x);
-            //Check(0);
+            x = GenTensor<int, IntWrapper>.PiecewiseMultiply(x, x);
+            Check(81);
+            x = GenTensor<int, IntWrapper>.PiecewiseAdd(x, x);
+            Check(162);
+            x = GenTensor<int, IntWrapper>.PiecewiseDivide(x, x);
+            Check(1);
+            x = GenTensor<int, IntWrapper>.PiecewiseSubtract(x, x);
+            Check(0);
         }
         [TestMethod]
         public void CreateTensor1D()
