@@ -1,4 +1,4 @@
-﻿#region copyright
+#region copyright
 /*
  * MIT License
  * 

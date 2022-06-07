@@ -363,6 +363,8 @@ namespace GenericTensor.Core.Expressions
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
             #endif
+            if (a.Shape.Length == 0)
+                return GenTensor<T, TWrapper>.CreateTensor(a.Shape, _ => default(TWrapper).Add(a.data[a.LinOffset], b.data[b.LinOffset]));
             var res = new GenTensor<T, TWrapper>(a.Shape);
             GetFunc(a.Shape.Length, Addition, parallel, OperationType.Addition)(a, b, res);
             return res;
@@ -374,6 +376,8 @@ namespace GenericTensor.Core.Expressions
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
             #endif
+            if (a.Shape.Length == 0)
+                return GenTensor<T, TWrapper>.CreateTensor(a.Shape, _ => default(TWrapper).Subtract(a.data[a.LinOffset], b.data[b.LinOffset]));
             var res = new GenTensor<T, TWrapper>(a.Shape);
             GetFunc(a.Shape.Length, Subtraction, parallel, OperationType.Subtraction)(a, b, res);
             return res;
@@ -385,6 +389,8 @@ namespace GenericTensor.Core.Expressions
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
             #endif
+            if (a.Shape.Length == 0)
+                return GenTensor<T, TWrapper>.CreateTensor(a.Shape, _ => default(TWrapper).Multiply(a.data[a.LinOffset], b.data[b.LinOffset]));
             var res = new GenTensor<T, TWrapper>(a.Shape);
             GetFunc(a.Shape.Length, Multiplication, parallel, OperationType.Multiplication)(a, b, res);
             return res;
@@ -396,6 +402,8 @@ namespace GenericTensor.Core.Expressions
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
             #endif
+            if (a.Shape.Length == 0)
+                return GenTensor<T, TWrapper>.CreateTensor(a.Shape, _ => default(TWrapper).Divide(a.data[a.LinOffset], b.data[b.LinOffset]));
             var res = new GenTensor<T, TWrapper>(a.Shape);
             GetFunc(a.Shape.Length, Division, parallel, OperationType.Division)(a, b, res);
             return res;

@@ -65,6 +65,7 @@ namespace GenericTensor.Core
                 goto More2;
             if (blocks.Length >= 1)
                 goto More1;
+            return;
             More3:
             cached_blocks2 = blocks[2];
             More2:
