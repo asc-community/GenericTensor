@@ -70,6 +70,49 @@ namespace UnitTests
             Assert.AreEqual(4, x.Volume);
             AssertTensor(Enumerable.Range(1, 4), x);
         }
+        
+        [TestMethod]
+        public void CreateTensor0D()
+        {
+            var x = new GenTensor<int, IntWrapper>(new TensorShape(System.Array.Empty<int>()));
+            void Check(int value)
+            {
+                Assert.IsFalse(x.IsVector);
+                Assert.IsFalse(x.IsMatrix);
+                Assert.IsFalse(x.IsSquareMatrix);
+                CollectionAssert.AreEqual(System.Array.Empty<int>(), x.Shape.ToArray());
+                Assert.AreEqual(1, x.Volume);
+                AssertTensor(Enumerable.Range(value, 1), x);
+                Assert.AreEqual(value, x[System.Array.Empty<int>()]);
+                Assert.AreEqual(value, x.GetCell(System.Array.Empty<int>()));
+                Assert.AreEqual(value, x.GetValueNoCheck(System.Array.Empty<int>()));
+                CollectionAssert.AreEqual(System.Array.Empty<int>(), x.blocks);
+                CollectionAssert.AreEqual(new[] { value }, x.data);
+                Assert.AreEqual(0, x.LinOffset);
+                CollectionAssert.AreEqual(new byte[] { 0, 0, 0, 0, 4, 0, 0, 0, (byte)value, 0, 0, 0 }, x.Serialize());
+            }
+            Check(0);
+            x[System.Array.Empty<int>()] = 3;
+            Check(3);
+            x.SetValueNoCheck(2, System.Array.Empty<int>());
+            Check(2);
+            x.SetCell(1, System.Array.Empty<int>());
+            Check(1);
+            x = x.Forward();
+            Check(1);
+            x = (GenTensor<int, IntWrapper>)x.Clone();
+            Check(1);
+            x = GenTensor<int, IntWrapper>.Deserialize(new byte[] { 0, 0, 0, 0, 4, 0, 0, 0, 9, 0, 0, 0 });
+            Check(9);
+            //x = GenTensor<int, IntWrapper>.PiecewiseAdd(x, x);
+            //Check(18);
+            //x = GenTensor<int, IntWrapper>.PiecewiseMultiply(x, x);
+            //Check(324);
+            //x = GenTensor<int, IntWrapper>.PiecewiseDivide(x, x);
+            //Check(1);
+            //x = GenTensor<int, IntWrapper>.PiecewiseSubtract(x, x);
+            //Check(0);
+        }
         [TestMethod]
         public void CreateTensor1D()
         {
