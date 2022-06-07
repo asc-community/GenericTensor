@@ -362,7 +362,7 @@ namespace GenericTensor.Core.Expressions
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
-#endif
+            #endif
             if (a.Shape.Length == 0)
                 return GenTensor<T, TWrapper>.CreateTensor(a.Shape, _ => default(TWrapper).Add(a.data[a.LinOffset], b.data[b.LinOffset]));
             var res = new GenTensor<T, TWrapper>(a.Shape);
@@ -375,7 +375,7 @@ namespace GenericTensor.Core.Expressions
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
-#endif
+            #endif
             if (a.Shape.Length == 0)
                 return GenTensor<T, TWrapper>.CreateTensor(a.Shape, _ => default(TWrapper).Subtract(a.data[a.LinOffset], b.data[b.LinOffset]));
             var res = new GenTensor<T, TWrapper>(a.Shape);
@@ -388,7 +388,7 @@ namespace GenericTensor.Core.Expressions
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
-#endif
+            #endif
             if (a.Shape.Length == 0)
                 return GenTensor<T, TWrapper>.CreateTensor(a.Shape, _ => default(TWrapper).Multiply(a.data[a.LinOffset], b.data[b.LinOffset]));
             var res = new GenTensor<T, TWrapper>(a.Shape);
@@ -401,7 +401,7 @@ namespace GenericTensor.Core.Expressions
             #if ALLOW_EXCEPTIONS
             if (a.Shape != b.Shape)
                 throw new InvalidShapeException();
-#endif
+            #endif
             if (a.Shape.Length == 0)
                 return GenTensor<T, TWrapper>.CreateTensor(a.Shape, _ => default(TWrapper).Divide(a.data[a.LinOffset], b.data[b.LinOffset]));
             var res = new GenTensor<T, TWrapper>(a.Shape);
